@@ -64,8 +64,8 @@ jobs:
           git submodule init
           git submodule update
           ./gradlew test
-          echo ./gradlew -PparserType=earley :coffeefilter:testSuite
-          echo ./gradlew -PparserType=gll :coffeefilter:testSuite
+          ./gradlew -PparserType=earley :coffeefilter:testSuite
+          ./gradlew -PparserType=gll :coffeefilter:testSuite
           ./gradlew dist website
 
       - name: Deploy coffeegrinder documentation to gh-pages
