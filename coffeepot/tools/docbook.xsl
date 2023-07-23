@@ -20,14 +20,7 @@
 <xsl:template match="db:productname" mode="m:titlepage"
               expand-text="yes">
   <div class="versions">
-    <p class="app">CoffeePot version {../db:productnumber/string()}</p>
-    <p class="lib">
-      <xsl:text>(Based on CoffeeGrinder </xsl:text>
-      <xsl:sequence select="../db:bibliomisc[@role='coffeegrinder']/string()"/>
-      <xsl:text> and CoffeeFilter </xsl:text>
-      <xsl:sequence select="../db:bibliomisc[@role='coffeefilter']/string()"/>
-      <xsl:text>.)</xsl:text>
-    </p>
+    <p class="app">CoffeePot version {$ninemlVersion}</p>
   </div>
 </xsl:template>
 

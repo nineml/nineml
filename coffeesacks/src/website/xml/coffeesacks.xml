@@ -16,9 +16,7 @@
 <copyright><year>2022</year><year>2023</year>
 <holder>Norm Tovey-Walsh</holder></copyright>
 <productname>CoffeeSacks</productname>
-<productnumber><?coffeesacks-version?></productnumber>
-<bibliomisc role="coffeegrinder"><?coffeegrinder-version?></bibliomisc>
-<bibliomisc role="coffeefilter"><?coffeefilter-version?></bibliomisc>
+<productnumber>@@VERSION@@</productnumber>
 </info>
 
 <preface>

@@ -24,12 +24,7 @@
   <div class="versions">
     <p class="app">
       <xsl:text>CoffeeFilter </xsl:text>
-      <a href="/test-report/">version {../db:productnumber/string()}</a>
-    </p>
-    <p class="lib">
-      <xsl:text>(Based on CoffeeGrinder </xsl:text>
-      <xsl:sequence select="../db:bibliomisc[@role='coffeegrinder']/string()"/>
-      <xsl:text>.)</xsl:text>
+      <a href="/test-report/">version {$ninemlVersion}</a>
     </p>
   </div>
 </xsl:template>
