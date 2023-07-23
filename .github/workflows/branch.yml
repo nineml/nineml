@@ -73,7 +73,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           repository-name: nineml/coffeegrinder
-          folder: coffeepot/build/website
+          folder: coffeegrinder/build/website
           token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages
           target-folder: /
@@ -108,7 +108,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           repository-name: nineml/coffeefilter
-          folder: coffeepot/build/website
+          folder: coffeefilter/build/website
           token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages
           target-folder: /
@@ -131,7 +131,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           repository-name: nineml/coffeesacks
-          folder: coffeepot/build/website
+          folder: coffeesacks/build/website
           token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages
           target-folder: /
