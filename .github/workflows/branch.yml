@@ -1,0 +1,185 @@
+name: build-nineml
+on: push
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.check_step.outputs.branch }}
+      reponame: ${{ steps.check_step.outputs.reponame }}
+      newrelease: ${{ steps.check_step.outputs.newrelease }}
+      tag: ${{ steps.check_step.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get branch name, etc.
+        id: check_step
+        run: |
+          raw=${{ github.repository }}
+          reponame=${raw##*/}
+          echo "reponame=$reponame" >> $GITHUB_OUTPUT
+          raw=$(git branch -r --contains ${{ github.ref }})
+          branch=${raw##*/}
+          echo "branch=$branch" >> $GITHUB_OUTPUT
+          raw=`cat gradle.properties|grep ninemlVersion`
+          ninemlversion=${raw##*=}
+          if [[ ${ninemlversion:${#ninemlversion}-1:1} =~ [0-9] ]]; then
+            echo "newrelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "newrelease=false" >> $GITHUB_OUTPUT
+          fi
+          tag=""
+          if [ ${{ github.ref_type }} = "tag" ]; then
+            tag=${{ github.ref_name }}
+            echo "Running in $reponame on $branch for $tag"
+          else
+            echo "Running in $reponame on $branch"
+          fi
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: check_branch
+    env:
+      HAVE_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN != '' }}
+      HAVE_GPGKEYURI: ${{ secrets.ACCESS_TOKEN != '' && secrets.GPGKEYURI != '' }}
+      CAN_PUBLISH: ${{ secrets.ACCESS_TOKEN != '' && secrets.GPGKEYURI != '' }}
+      PRERELEASE: ${{ needs.check_branch.outputs.newrelease != 'true' }}
+      CIWORKFLOW: yes
+      CI_SHA1: ${{ github.sha }}
+      CI_BUILD_NUM: ${{ github.run_number }}
+      CI_PROJECT_USERNAME: ${{ github.repository_owner }}
+      CI_PROJECT_REPONAME: ${{ needs.check_branch.outputs.reponame }}
+      CI_BRANCH: ${{ needs.check_branch.outputs.branch }}
+      CI_TAG: ${{ needs.check_branch.outputs.tag }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Build and test
+        run: |
+          git submodule init
+          git submodule update
+          ./gradlew test
+          echo ./gradlew -PparserType=earley :coffeefilter:testSuite
+          echo ./gradlew -PparserType=gll :coffeefilter:testSuite
+          ./gradlew dist website
+
+      - name: Deploy coffeegrinder documentation to gh-pages
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: nineml/coffeegrinder
+          folder: coffeepot/build/website
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          target-folder: /
+
+      - name: Publish coffeegrinder release
+        uses: softprops/action-gh-release@v1
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
+        with:
+          repository: nineml/coffeegrinder
+          token: ${{ secrets.ACCESS_TOKEN }}
+          draft: false
+          prerelease: ${{ env.PRERELEASE }}
+          fail_on_unmatched_files: true
+          body_path: coffeegrinder/build/changelog.txt
+          files: |
+            coffeegrinder/build/distributions/coffeegrinder-${{ env.CI_TAG }}.zip
+
+      - name: Publish to Sonatype
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
+        run: |
+          curl -s -o `pwd`/secret.gpg ${{ secrets.GPGKEYURI }}
+          ./gradlew -PsonatypeUsername=${{ secrets.SONATYPEUSER }} \
+                  -PsonatypePassword="${{ secrets.SONATYPEPASS }}" \
+                  -Psigning.keyId="${{ secrets.SIGNKEY }}" \
+                  -Psigning.password="${{ secrets.SIGNPSW }}" \
+                  -Psigning.secretKeyRingFile=`pwd`/secret.gpg \
+                  publish
+          rm -f `pwd`/secret.gpg
+
+      - name: Deploy coffeefilter documentation to gh-pages
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: nineml/coffeefilter
+          folder: coffeepot/build/website
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          target-folder: /
+
+      - name: Publish coffeefilter release
+        uses: softprops/action-gh-release@v1
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
+        with:
+          repository: nineml/coffeefilter
+          token: ${{ secrets.ACCESS_TOKEN }}
+          draft: false
+          prerelease: ${{ env.PRERELEASE }}
+          fail_on_unmatched_files: true
+          body_path: coffeefilter/build/changelog.txt
+          files: |
+            coffeefilter/build/distributions/coffeefilter-${{ env.CI_TAG }}.zip
+
+      - name: Deploy coffeesacks documentation to gh-pages
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: nineml/coffeesacks
+          folder: coffeepot/build/website
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          target-folder: /
+
+      - name: Publish coffeesacks release
+        uses: softprops/action-gh-release@v1
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
+        with:
+          repository: nineml/coffeesacks
+          token: ${{ secrets.ACCESS_TOKEN }}
+          draft: false
+          prerelease: ${{ env.PRERELEASE }}
+          fail_on_unmatched_files: true
+          body_path: coffeesacks/build/changelog.txt
+          files: |
+            coffeesacks/build/distributions/coffeesacks-${{ env.CI_TAG }}.zip
+
+      - name: Deploy coffeepot documentation to gh-pages
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: nineml/coffeepot
+          folder: coffeepot/build/website
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          target-folder: /
+
+      - name: Publish coffeepot release
+        uses: softprops/action-gh-release@v1
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
+        with:
+          repository: nineml/coffeepot
+          token: ${{ secrets.ACCESS_TOKEN }}
+          draft: false
+          prerelease: ${{ env.PRERELEASE }}
+          fail_on_unmatched_files: true
+          body_path: coffeepot/build/changelog.txt
+          files: |
+            coffeepot/build/distributions/coffeepot-${{ env.CI_TAG }}.zip
+
+      - name: Deploy nineml.org to gh-pages
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: nineml/nineml.org
+          folder: nineml-org/build/website
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          target-folder: /
+
+

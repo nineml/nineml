@@ -1,0 +1,5 @@
+data: value++-",".
+value: pos; neg.
+-pos: +"+", digit+.
+-neg: +"-", -"(", digit+, -")".
+-digit: ["0"-"9"].

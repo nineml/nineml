@@ -1,0 +1,29 @@
+// https://stackoverflow.com/questions/26597147/how-to-share-variable-between-gradle-buildsrc-and-rest-of-project
+def props = new Properties() 
+rootDir.toPath().resolveSibling(GRADLE_PROPERTIES).toFile().withInputStream {
+    props.load(it)
+}
+props.each { key, val -> project.ext."$key" = val }
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url "https://dev.saxonica.com/maven" }
+}
+
+configurations.all {
+  resolutionStrategy {
+    force 'xml-apis:xml-apis:1.4.01',
+      "${saxonGroup}:${saxonEdition}:${saxonVersion}",
+      "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+  }
+}
+
+dependencies {
+  implementation(
+    [group: saxonGroup, name: saxonEdition, version: saxonVersion],
+    [group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion],
+    [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion],
+    [group: 'nu.validator.htmlparser', name: 'htmlparser', version: '1.4']
+  )
+}

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://nineml.org/coffeegrinder/ns/grammar/compiled" version="1.99.8">
+<meta name='coffeepot-version' value='1.99.8'/>
+<meta name='date' value='2022-06-30T17:00:27Z'/>
+<meta name='uri' value='file:/Volumes/Projects/nineml/grinder/src/test/resources/property-file.ixml'/>
+<ag xml:id="g1" name="$$" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<ag xml:id="g2" name="property-file" mark="^"/>
+<r n="$$" a="p" ag="g1"><nt n="property-file" ag="g2"/></r>
+<ag xml:id="g3" name="$2_line-plus" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="property-file" ag="g2"><nt n="$2_line-plus" a="p" ag="g3"/></r>
+<ag xml:id="g4" name="line" mark="-"/>
+<ag xml:id="g5" name="blank" mark="^"/>
+<r n="line" ag="g4"><nt n="blank" ag="g5"/></r>
+<ag xml:id="g6" name="comment" mark="^"/>
+<r n="line" ag="g4"><nt n="comment" ag="g6"/></r>
+<ag xml:id="g7" name="name-value" mark="^"/>
+<r n="line" ag="g4"><nt n="name-value" ag="g7"/></r>
+<ag xml:id="g8" name="s" mark="-"/>
+<ag xml:id="g9" name="name" mark="^"/>
+<ag xml:id="g10" tmark="-"/>
+<ag xml:id="g11"/>
+<ag xml:id="g12" name="value" mark="^"/>
+<r n="name-value" ag="g7"><nt n="s" ag="g8"/><nt n="name" ag="g9"/><nt n="s" ag="g8"/><t ag="g10"><cs ag="g11" inclusion="&quot;:=&quot;"/></t><nt n="s" ag="g8"/><nt n="value" ag="g12"/></r>
+<ag xml:id="g13" name="namestart" mark="-"/>
+<ag xml:id="g14" name="$3_namefollower-star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="name" ag="g9"><nt n="namestart" ag="g13"/><nt n="$3_namefollower-star" a="p" ag="g14"/></r>
+<ag xml:id="g15" name="simple-value" mark="-"/>
+<r n="value" ag="g12"><nt n="simple-value" ag="g15"/></r>
+<ag xml:id="g16" name="extended-value" mark="-"/>
+<r n="value" ag="g12"><nt n="extended-value" ag="g16"/></r>
+<ag xml:id="g17" name="atomic-value" mark="-"/>
+<ag xml:id="g18" name="nl" mark="-"/>
+<r n="simple-value" ag="g15"><nt n="atomic-value" ag="g17"/><nt n="nl" ag="g18"/></r>
+<ag xml:id="g19" name="$4_s-star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<ag xml:id="g20" name="value" mark="-"/>
+<r n="extended-value" ag="g16"><nt n="atomic-value" ag="g17"/><t ag="g10"><c ag="g11" v="&#x5c;"/></t><nt n="nl" ag="g18"/><nt n="$4_s-star" a="p" ag="g19"/><nt n="value" ag="g20"/></r>
+<ag xml:id="g21" name="$5_s-star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<ag xml:id="g22" name="$6_any-star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="atomic-value" ag="g17"><nt n="$5_s-star" a="p" ag="g21"/><nt n="$6_any-star" a="p" ag="g22"/></r>
+<r n="blank" ag="g5"><nt n="s" ag="g8"/><nt n="nl" ag="g18"/></r>
+<ag xml:id="g23" name="$7_star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="comment" ag="g6"><nt n="s" ag="g8"/><t ag="g10"><cs ag="g11" inclusion="&quot;!#&quot;"/></t><nt n="$7_star" a="p" ag="g23"/><nt n="nl" ag="g18"/></r>
+<ag xml:id="g24" tmark="^"/>
+<r n="namestart" ag="g13"><t ag="g24"><cs ag="g11" inclusion="&quot;_&quot;;L"/></t></r>
+<ag xml:id="g25" name="namefollower" mark="-"/>
+<r n="namefollower" ag="g25"><nt n="namestart" ag="g13"/></r>
+<r n="namefollower" ag="g25"><t ag="g24"><cs ag="g11" inclusion="&quot;⁀·-.‿&quot;;Nd;Mn"/></t></r>
+<ag xml:id="g26" name="$8_$1_alt-star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="s" ag="g8"><nt n="$8_$1_alt-star" a="p" ag="g26"/></r>
+<ag xml:id="g27" name="any" mark="-"/>
+<r n="any" ag="g27"><t ag="g24"><cs ag="g11" exclusion="&quot;&#x5c;&quot;;'&#xa;'"/></t></r>
+<r n="any" ag="g27"><t ag="g24"><c ag="g11" v="&#x5c;"/></t><t ag="g24"><c ag="g11" v="&#x5c;"/></t></r>
+<r n="any" ag="g27"><t ag="g24"><c ag="g11" v="&#x5c;"/></t><t ag="g24"><c ag="g11" v="r"/></t></r>
+<r n="any" ag="g27"><t ag="g24"><c ag="g11" v="&#x5c;"/></t><t ag="g24"><c ag="g11" v="n"/></t></r>
+<r n="any" ag="g27"><t ag="g24"><c ag="g11" v="&#x5c;"/></t><t ag="g24"><c ag="g11" v="t"/></t></r>
+<ag xml:id="g28" name="uref" mark="^"/>
+<r n="any" ag="g27"><nt n="uref" ag="g28"/></r>
+<ag xml:id="g29" name="digit" mark="-"/>
+<r n="uref" ag="g28"><t ag="g10"><c ag="g11" v="&#x5c;"/></t><t ag="g10"><c ag="g11" v="u"/></t><nt n="digit" ag="g29"/><nt n="digit" ag="g29"/><nt n="digit" ag="g29"/><nt n="digit" ag="g29"/></r>
+<r n="digit" ag="g29"><t ag="g24"><cs ag="g11" inclusion="'0'-'9';'a'-'f';'A'-'F'"/></t></r>
+<r n="nl" ag="g18"><t ag="g10"><c ag="g11" v="&#xa;"/></t></r>
+<r n="nl" ag="g18"><t ag="g10"><c ag="g11" v="&#xd;"/></t><t ag="g10"><c ag="g11" v="&#xa;"/></t></r>
+<ag xml:id="g30" name="$1_alt" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$1_alt" a="p" ag="g30"><t ag="g10"><cs ag="g11" inclusion="Zs"/></t></r>
+<r n="$1_alt" a="p" ag="g30"><t ag="g10"><c ag="g11" v="&#x9;"/></t></r>
+<r n="$1_alt" a="p" ag="g30"><t ag="g10"><c ag="g11" v="&#xd;"/></t></r>
+<ag xml:id="g31" name="$9_line-star" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$2_line-plus" a="p" ag="g3"><nt n="line" ag="g4"/><nt n="$9_line-star" a="p" ag="g31"/></r>
+<ag xml:id="g32" name="$10_namefollower-option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$3_namefollower-star" a="p" ag="g14"><nt n="$10_namefollower-option" a="p" ag="g32"/></r>
+<ag xml:id="g33" name="$11_s-option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$4_s-star" a="p" ag="g19"><nt n="$11_s-option" a="p" ag="g33"/></r>
+<ag xml:id="g34" name="$12_s-option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$5_s-star" a="p" ag="g21"><nt n="$12_s-option" a="p" ag="g34"/></r>
+<ag xml:id="g35" name="$13_any-option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$6_any-star" a="p" ag="g22"><nt n="$13_any-option" a="p" ag="g35"/></r>
+<ag xml:id="g36" name="$14_option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$7_star" a="p" ag="g23"><nt n="$14_option" a="p" ag="g36"/></r>
+<ag xml:id="g37" name="$15_$1_alt-option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$8_$1_alt-star" a="p" ag="g26"><nt n="$15_$1_alt-option" a="p" ag="g37"/></r>
+<ag xml:id="g38" name="$16_line-option" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<r n="$9_line-star" a="p" ag="g31"><nt n="$16_line-option" a="p" ag="g38"/></r>
+<r n="$10_namefollower-option" a="p" ag="g32"></r>
+<r n="$10_namefollower-option" a="p" ag="g32"><nt n="namefollower" ag="g25"/><nt n="$3_namefollower-star" a="p" ag="g14"/></r>
+<r n="$11_s-option" a="p" ag="g33"></r>
+<r n="$11_s-option" a="p" ag="g33"><nt n="s" ag="g8"/><nt n="$4_s-star" a="p" ag="g19"/></r>
+<r n="$12_s-option" a="p" ag="g34"></r>
+<r n="$12_s-option" a="p" ag="g34"><nt n="s" ag="g8"/><nt n="$5_s-star" a="p" ag="g21"/></r>
+<r n="$13_any-option" a="p" ag="g35"></r>
+<r n="$13_any-option" a="p" ag="g35"><nt n="any" ag="g27"/><nt n="$6_any-star" a="p" ag="g22"/></r>
+<r n="$14_option" a="p" ag="g36"></r>
+<r n="$14_option" a="p" ag="g36"><t ag="g24"><cs ag="g11" exclusion="'&#xa;';'&#xd;'"/></t><nt n="$7_star" a="p" ag="g23"/></r>
+<r n="$15_$1_alt-option" a="p" ag="g37"></r>
+<r n="$15_$1_alt-option" a="p" ag="g37"><nt n="$1_alt" a="p" ag="g30"/><nt n="$8_$1_alt-star" a="p" ag="g26"/></r>
+<r n="$16_line-option" a="p" ag="g38"></r>
+<r n="$16_line-option" a="p" ag="g38"><nt n="line" ag="g4"/><nt n="$9_line-star" a="p" ag="g31"/></r>
+<check sum="a9604342b6cfff52"/>
+</grammar>
+

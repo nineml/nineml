@@ -1,0 +1,71 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      version="5.2">
+<info>
+<title>NineML</title>
+<subtitle>A family of Invisible XML tools</subtitle>
+<author>
+  <personname>Norm Tovey Walsh</personname>
+</author>
+<copyright><year>2022</year><holder>Norm Tovey-Walsh</holder></copyright>
+</info>
+
+<preface>
+<title>Introduction</title>
+
+<para>NineML is a family of Invisible XML tools.</para>
+
+<itemizedlist>
+<listitem>
+<para>CoffeeGrinder implements both an
+<link xlink:href="https://en.wikipedia.org/wiki/Earley_parser">Earley parser</link>
+and a GLL parser.
+This parser forms the basis for the Invisible XML parser, but is limited to
+simple grammars. The
+<link xlink:href="https://coffeegrinder.nineml.org/apidoc/">JavaDoc</link> describes
+the API.</para>
+</listitem>
+<listitem>
+<para>CoffeeFilter is an implementation of an Invisible XML processor.
+This project provides the underlying Invisible XML parsing.
+The <link xlink:href="https://coffeefilter.nineml.org/apidoc/">JavaDoc</link> describes
+the API.</para>
+</listitem>
+<listitem>
+<para>CoffeePot is a command line tool for parsing Invisible XML grammars and transforming
+inputs with them. Consult the
+<link xlink:href="https://coffeepot.nineml.org/">user’s guide</link>
+for more information.
+</para>
+</listitem>
+<listitem>
+<para>CoffeeSacks provides a set of
+<link xlink:href="https://saxonica.com/">Saxon</link> extension functions for
+processing Invisible XML documents from with XSLT or XQuery. Consult the
+<link xlink:href="https://coffeesacks.nineml.org/">user’s guide</link>
+for more information.
+</para>
+</listitem>
+<listitem>
+<para><link xlink:href="https://github.com/ndw/coffeepress">CoffeePress</link>
+is an <link xlink:href="https://xproc.org/">XProc 3.0</link> step for
+<link xlink:href="https://github.com/ndw/xmlcalabash2">XML Calabash</link>.
+</para>
+</listitem>
+</itemizedlist>
+</preface>
+
+<chapter xml:id="howto">
+<title>How to…</title>
+<para>The “<link xlink:href="https://github.com/nineml/HOWTO/">HOWTO</link>” repository
+contains examples and recipes for using NineML tools in various ways.</para>
+<para>Feel free to contribute more, or
+<link xlink:href="https://github.com/nineml/HOWTO/issues">open an issue</link> if
+there’s an approach you’d like to see documented.
+</para>
+</chapter>
+
+</book>
+
+

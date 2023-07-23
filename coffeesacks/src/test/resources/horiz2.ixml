@@ -1,0 +1,4 @@
+{[+pragma n "https://nineml.org/ns/pragma/"]}
+S = A | {[n priority 1]} B .
+A = 'a' | B .
+B = 'a' .

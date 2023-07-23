@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://nineml.org/coffeegrinder/ns/grammar/compiled" version="1.99.8">
+<ag xml:id="g1" name="$$" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<ag xml:id="g2" name="S" mark="^"/>
+<r n="$$" a="p" ag="g1"><nt n="S" ag="g2"/></r>
+<ag xml:id="g3" tmark="^"/>
+<ag xml:id="g4"/>
+<ag xml:id="g5" name="b" mark="^"/>
+<ag xml:id="g6" name="b" mark="@"/>
+<r n="S" ag="g2"><t ag="g3"><c ag="g4" v="a"/></t><nt n="b" ag="g5"/><nt n="b" ag="g6"/><nt n="b" ag="g5"/></r>
+<ag xml:id="g7" insertion="xml" mark="+"/>
+<r n="$1_+xml" ag="g7"></r>
+<r n="b" ag="g5"><nt n="$1_+xml" ag="g7"/></r>
+<check sum="40066b3aad410c86"/>
+</grammar>

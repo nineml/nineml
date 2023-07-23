@@ -1,0 +1,8 @@
+Sum => Sum, ["+";"-"], Product
+Sum => Product
+Product => Product, ["*";"/"], Factor
+Product => Factor
+Factor => '(', Sum, ')'
+Factor => Number
+Number => ["0"-"9"], Number
+Number => ["0"-"9"]

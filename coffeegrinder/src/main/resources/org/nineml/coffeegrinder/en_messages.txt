@@ -1,0 +1,33 @@
+E001: There is no rule for the nonterminal symbol ‘%1’.
+E002: The Unicode character class ‘%1’ is invalid.
+E003: Regular expression must be the only symbol on the right hand side.
+C001: Compiler unable to create %1 hashes: %2.
+C002: Unexpected character set in grammar: %1.
+C003: Unexpected terminal token class: %1.
+C004: Invalid name escaping ‘%1’ in ‘%2’.
+C005: Failed to read grammar: %1.
+C006: Not a compiled CoffeeGrinder grammar, incorrect namespace: %1.
+C007: Invalid compiled grammar: unexpected ‘%1’ element.
+C008: Invalid compiled grammar: no version identified.
+C009: Invalid compiled grammar: unsupported version: %1.
+C010: Invalid compiled grammar: checksum failed.
+C011: Invalid compiled grammar: missing xml:id on ‘%1’.
+C012: Invalid compiled grammar: missing attribute group: %1.
+C013: Invalid compiled grammar: unexpected standard attribute flag: %1.
+C014: Invalid compiled grammar: %1.
+C015: Invalid compiled grammar: text not allowed: %1.
+G001: Cannot modify closed grammar.
+A001: OPTIONAL attribute value is invalid: %1.
+A002: PRUNING attribute value is invalid: %1.
+A003: Cannot change value of parser attribute ‘%1’ to ‘%2’. Attributes are immutable.
+T001: No trees selected.
+T002: No more trees.
+T003: Internal error in tree walk.
+T004: Invalid choice selected.
+P001: Seed not in grammar: %1.
+P002: Attempt to continue an invalid parse.
+P003: Internal error: %1.
+P004: The GLL parser can only operate on a sequence of characters.
+P005: Regular expressions can only operation on a sequence of characters.
+F001: Failed to write ‘%1’: %2.
+F002: Internal error: node not in forest: %1

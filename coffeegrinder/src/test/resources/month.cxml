@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://nineml.org/coffeegrinder/ns/grammar/compiled" version="1.99.8">
+<meta name='coffeepot-version' value='1.99.8'/>
+<meta name='date' value='2022-06-30T17:00:26Z'/>
+<meta name='uri' value='file:/Volumes/Projects/nineml/grinder/src/test/resources/month.ixml'/>
+<ag xml:id="g1" name="$$" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<ag xml:id="g2" name="month" mark="^"/>
+<r n="$$" a="p" ag="g1"><nt n="month" ag="g2"/></r>
+<ag xml:id="g3" tmark="^"/>
+<ag xml:id="g4"/>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="J"/></t><t ag="g3"><c ag="g4" v="a"/></t><t ag="g3"><c ag="g4" v="n"/></t><t ag="g3"><c ag="g4" v="u"/></t><t ag="g3"><c ag="g4" v="a"/></t><t ag="g3"><c ag="g4" v="r"/></t><t ag="g3"><c ag="g4" v="y"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="F"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="b"/></t><t ag="g3"><c ag="g4" v="r"/></t><t ag="g3"><c ag="g4" v="u"/></t><t ag="g3"><c ag="g4" v="a"/></t><t ag="g3"><c ag="g4" v="r"/></t><t ag="g3"><c ag="g4" v="y"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="M"/></t><t ag="g3"><c ag="g4" v="a"/></t><t ag="g3"><c ag="g4" v="r"/></t><t ag="g3"><c ag="g4" v="c"/></t><t ag="g3"><c ag="g4" v="h"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="A"/></t><t ag="g3"><c ag="g4" v="p"/></t><t ag="g3"><c ag="g4" v="r"/></t><t ag="g3"><c ag="g4" v="i"/></t><t ag="g3"><c ag="g4" v="l"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="M"/></t><t ag="g3"><c ag="g4" v="a"/></t><t ag="g3"><c ag="g4" v="y"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="J"/></t><t ag="g3"><c ag="g4" v="u"/></t><t ag="g3"><c ag="g4" v="n"/></t><t ag="g3"><c ag="g4" v="e"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="J"/></t><t ag="g3"><c ag="g4" v="u"/></t><t ag="g3"><c ag="g4" v="l"/></t><t ag="g3"><c ag="g4" v="y"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="A"/></t><t ag="g3"><c ag="g4" v="u"/></t><t ag="g3"><c ag="g4" v="g"/></t><t ag="g3"><c ag="g4" v="u"/></t><t ag="g3"><c ag="g4" v="s"/></t><t ag="g3"><c ag="g4" v="t"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="S"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="p"/></t><t ag="g3"><c ag="g4" v="t"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="m"/></t><t ag="g3"><c ag="g4" v="b"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="r"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="O"/></t><t ag="g3"><c ag="g4" v="c"/></t><t ag="g3"><c ag="g4" v="t"/></t><t ag="g3"><c ag="g4" v="o"/></t><t ag="g3"><c ag="g4" v="b"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="r"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="N"/></t><t ag="g3"><c ag="g4" v="o"/></t><t ag="g3"><c ag="g4" v="v"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="m"/></t><t ag="g3"><c ag="g4" v="b"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="r"/></t></r>
+<r n="month" ag="g2"><t ag="g3"><c ag="g4" v="D"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="c"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="m"/></t><t ag="g3"><c ag="g4" v="b"/></t><t ag="g3"><c ag="g4" v="e"/></t><t ag="g3"><c ag="g4" v="r"/></t></r>
+<check sum="1da9796d67502ec5"/>
+</grammar>
+

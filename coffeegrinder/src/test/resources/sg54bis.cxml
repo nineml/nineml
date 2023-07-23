@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://nineml.org/coffeegrinder/ns/grammar/compiled" version="1.99.8">
+<ag xml:id="g1" name="$$" httpsE3a.E2f.E2f.ninemlE2e.orgE2f.attrE2f.prune="allowed" mark="-"/>
+<ag xml:id="g2" name="Number" mark="^"/>
+<r n="$$" a="p" ag="g1"><nt n="Number" ag="g2"/></r>
+<ag xml:id="g3" tmark="^"/>
+<ag xml:id="g4"/>
+<r n="Number" ag="g2"><t ag="g3"><cs ag="g4" inclusion="'0'-'9'"/></t></r>
+<ag xml:id="g5" name="Integer" mark="-"/>
+<ag xml:id="g6" name="Digit" mark="-"/>
+<r n="Number" ag="g2"><nt n="Integer" ag="g5"/><nt n="Digit" ag="g6"/></r>
+<ag xml:id="g7" name="N1" mark="-"/>
+<ag xml:id="g8" name="Scale1" mark="^"/>
+<r n="Number" ag="g2"><nt n="N1" ag="g7"/><nt n="Scale1" ag="g8"/></r>
+<ag xml:id="g9" name="Integer" mark="^"/>
+<ag xml:id="g10" name="Fraction" mark="^"/>
+<r n="Number" ag="g2"><nt n="Integer" ag="g9"/><nt n="Fraction" ag="g10"/></r>
+<r n="N1" ag="g7"><nt n="Integer" ag="g9"/><nt n="Fraction" ag="g10"/></r>
+<r n="Integer" ag="g9"><t ag="g3"><cs ag="g4" inclusion="'0'-'9'"/></t></r>
+<r n="Integer" ag="g9"><nt n="Integer" ag="g5"/><nt n="Digit" ag="g6"/></r>
+<ag xml:id="g11" name="T1" mark="-"/>
+<r n="Fraction" ag="g10"><nt n="T1" ag="g11"/><nt n="Integer" ag="g5"/></r>
+<r n="T1" ag="g11"><t ag="g3"><c ag="g4" v="."/></t></r>
+<ag xml:id="g12" name="N2" mark="-"/>
+<r n="Scale1" ag="g8"><nt n="N2" ag="g12"/><nt n="Integer" ag="g9"/></r>
+<ag xml:id="g13" name="T2" mark="-"/>
+<ag xml:id="g14" name="Sign" mark="^"/>
+<r n="N2" ag="g12"><nt n="T2" ag="g13"/><nt n="Sign" ag="g14"/></r>
+<r n="T2" ag="g13"><t ag="g3"><c ag="g4" v="e"/></t></r>
+<r n="Digit" ag="g6"><t ag="g3"><cs ag="g4" inclusion="'0'-'9'"/></t></r>
+<r n="Sign" ag="g14"><t ag="g3"><cs ag="g4" inclusion="&quot;+&quot;;&quot;-&quot;"/></t></r>
+<check sum="eb3472f4c95f1599"/>
+</grammar>

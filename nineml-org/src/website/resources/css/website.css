@@ -1,0 +1,60 @@
+.book header h1 {
+    display: none;
+}
+
+.book .list-of-titles {
+    border-top: 2px solid #afafaf;
+}
+
+.book .list-of-titles .title {
+    display: none
+}
+
+.products {
+    display: flex;
+    flex-direction: column;
+}
+
+.products .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.product {
+    text-align: center;
+    width: 50%;
+}
+
+@media screen and (max-width: 1023px) {
+    .book header h2 {
+        font-size: 1.5rem;
+    }
+
+    .product h3 {
+        font-size: 1.2rem;
+    }
+
+    .product img {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .products {
+        display: block;
+    }
+
+    .products .row {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .product {
+        text-align: center;
+        width: 50%;
+    }
+}

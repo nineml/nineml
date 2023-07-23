@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+    coffeegrinder_server:
+      image: httpd:2.4
+      container_name: coffeegrinder
+      ports:
+        - 8281:80
+      working_dir: /src
+      volumes:
+        - ../build/website:/usr/local/apache2/htdocs
+      stdin_open: true
+      tty: true
+      networks:
+        - external_coffeegrinder
+
+networks:
+  external_coffeegrinder: {}

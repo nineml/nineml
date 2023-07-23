@@ -1,0 +1,207 @@
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xi='http://www.w3.org/2001/XInclude'
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xml:id="changelog"
+          version="5.2">
+<info>
+<?db filename='changelog.html'?>
+<title>Change log</title>
+</info>
+
+<revhistory>
+<revision>
+<revnumber>3.0.0j</revnumber>
+<date>2023-07-23</date>
+<revdescription>
+<para>This is a beta release for version 3.0.0. There are a lot of
+underlying changes in this release.</para>
+<para>There are no technical changes in this release. The build system
+has been complete refactored.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>3.0.0i</revnumber>
+<date>2023-07-22</date>
+<revdescription>
+<para>Updates build dependencies.
+</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0h</revnumber>
+<date>2023-07-21</date>
+<revdescription>
+<para>Updates build dependencies; improves JavaDoc, removes
+a dead class.
+</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0g</revnumber>
+<date>2023-07-20</date>
+<revdescription>
+<para>Version 3.0.0g depends on CoffeeGrinder and CoffeeFilter 3.0.0g. This
+release just updates the dependencies as a user convenience.
+</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>3.0.0f</revnumber>
+<date>2023-07-18</date>
+<revdescription>
+<para>There’s been a significant refactor in CoffeeGrinder 3.0.0f which is reflected in
+the APIs here.</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0e</revnumber>
+<date>2023-07-12</date>
+<revdescription>
+<para>Version 3.0.0e depends on CoffeeGrinder and CoffeeFilter 3.0.0e which fix
+a few bugs. Also fixed a bug in CoffeeSacks where attempting to parse a forest would raise
+a ClassCastException.</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0d</revnumber>
+<date>2023-07-11</date>
+<revdescription>
+<para>This is a beta release for version 3.0.0. There are a lot of
+underlying changes in this release.</para>
+<para>Version 3.0.0d depends on CoffeeGrinder and CoffeeFilter 3.0.0d which fix
+a few bugs and make a few improvements.</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0c</revnumber>
+<date>2023-07-09</date>
+<revdescription>
+<para>Version 3.0.0c depends on CoffeeGrinder and CoffeeFilter 3.0.0c which fix a bug
+where a regular expression pragma would not successfully parse when
+the regular expression matched the empty string.</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0b</revnumber>
+<date>2023-07-09</date>
+<revdescription>
+<orderedlist>
+<listitem><para>Includes all of the updates in CoffeeGrinder and CoffeeFilter 3.0.0b.
+</para></listitem>
+</orderedlist>
+</revdescription>
+</revision>
+<revision>
+<revnumber>3.0.0a</revnumber>
+<date>2023-07-02</date>
+<revdescription>
+<orderedlist>
+<listitem><para>Includes all of the updates in CoffeeGrinder and CoffeeFilter 3.0.0a.
+</para></listitem>
+<listitem><para>The API for <link linkend="choose-alternative">writing a selection function</link> has
+completely changed.
+</para></listitem>
+</orderedlist>
+</revdescription>
+</revision>
+
+<revision>
+  <revnumber>2.2.3</revnumber>
+  <date>2023-06-15</date>
+  <revdescription>
+    <itemizedlist>
+    <listitem>
+    <para>If a user-supplied function is called to choose an alternative, assume an
+    <emphasis>unambiguous</emphasis> choice has always been made.
+    Support the <literal>strictAmbiguity</literal> option to override this behavior.
+    </para>
+    </listitem>
+    <listitem>
+    <para>Support the <code>disablePragmas</code> and <code>enablePragmas</code> options
+    to selectively disable or enable individual pragma types.
+    </para>
+    </listitem>
+    </itemizedlist>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.2.2</revnumber>
+  <date>2023-06-15</date>
+  <revdescription>
+    <para>Never released.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.2.1</revnumber>
+  <date>2023-05-17</date>
+  <revdescription>
+    <para>Further refined the way XML is constructed for choosing alternatives. The
+    “left” and “right” sides of each alternative are now sorted so that the “left” alternative
+    always matches input tokens that precede the “right” alternative. The CoffeeGrinder update
+    also assures that the attributes associated with nonterminal symbols are correct.
+    </para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.2.0</revnumber>
+  <date>2023-05-06</date>
+  <revdescription>
+    <para>Updated the way the <link linkend="choose-alternative">choose alternative</link>
+    function is called to assure that the first element in the list is always the
+    current “best” choice.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.1.0</revnumber>
+  <date>2023-04-23</date>
+  <revdescription>
+    <para>Added <link linkend="choose-alternative">support</link>
+    for providing a function to choose among alternative parses.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.0.3</revnumber>
+  <date>2023-04-15</date>
+  <revdescription>
+    <itemizedlist>
+      <listitem>
+        <para>If a UTF-8 grammar or input file begins with a byte-order-mark (BOM), the
+        BOM is ignored. Set the “ignore BOM” option to
+        <literal>false</literal> to disable this behavior.</para>
+      </listitem>
+      <listitem>
+        <para>Updated to use CoffeeFilter version 2.0.3 which supports ignoring the BOM
+        and fixes errors in the serialization fo control characters (that’s not actually
+        relevant to CoffeeSacks which doesn’t serialize the results).
+        </para>
+      </listitem>
+      <listitem>
+        <para>The build system has been updated to use Gradle version 8.0.2.</para>
+      </listitem>
+    </itemizedlist>
+  </revdescription>
+</revision>
+
+<revision>
+  <revnumber>2.0.0</revnumber>
+  <date>2023-04-11</date>
+  <revdescription>
+    <para>Making the 2.x code base the current release.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>1.1.0</revnumber>
+  <date>2022-04-17</date>
+  <revdescription>
+    <para>Support for the 15 April 2022 specification, version 1.1.0</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>1.0.0</revnumber>
+  <date>2022-03-20</date>
+  <revremark>Initial release, version 1.0.0</revremark>
+</revision>
+</revhistory>
+</appendix>
