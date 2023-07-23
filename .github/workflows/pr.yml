@@ -69,6 +69,5 @@ jobs:
           git submodule init
           git submodule update
           ./gradlew test
-          ./gradlew -PparserType=earley :coffeefilter:testSuite
           ./gradlew -PparserType=gll :coffeefilter:testSuite
-          ./gradlew dist website
+          ./gradlew -PparserType=earley dist website

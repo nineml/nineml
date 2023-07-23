@@ -333,7 +333,7 @@ task manual_augment(type: SaxonXsltTask, dependsOn: ["manual_validate"]) {
   )
 }
 
-task website(type: SaxonXsltTask, dependsOn: ["manual_augment", "classlist"]) {
+task website(type: SaxonXsltTask, dependsOn: ["manual_augment", "classlist", "testSuiteReport"]) {
   inputs.file "${projectDir}/tools/docbook.xsl"
   outputs.files fileTree(dir: "${buildDir}/website")
 

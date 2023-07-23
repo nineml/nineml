@@ -203,12 +203,37 @@ tasks.withType(JavaCompile) {
 
 // ============================================================
 
-task website(type: SaxonXsltTask, dependsOn: ["copyResources", "classlist"]) {
+task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources"]) {
+  inputs.files fileTree(dir: "${projectDir}/src/website/xml")
+
+  input "${projectDir}/src/website/xml/coffeesacks.xml"
+  stylesheet "${projectDir}/../website/xinclude.xsl"
+  output "${buildDir}/tmp/coffeesacks.xml"
+  args(['-init:org.docbook.xsltng.extensions.Register'])
+}
+
+task manual_validate(type: RelaxNGValidateTask, dependsOn: ["manual_xinclude"]) {
+  input manual_xinclude.outputs.files.singleFile
+  output "${buildDir}/xml/coffeesacks.xml"
+  schema "${projectDir}/../website/docbook.rnc"
+  compact true
+}
+
+task manual_augment(type: SaxonXsltTask, dependsOn: ["manual_validate"]) {
+  input manual_validate.outputs.files.singleFile
+  output "${buildDir}/aug/coffeesacks.xml"
+  stylesheet "${projectDir}/tools/augment.xsl"
+  parameters (
+    'version': ninemlVersion,
+  )
+}
+
+task website(type: SaxonXsltTask, dependsOn: ["manual_augment", "classlist"]) {
   inputs.files fileTree(dir: "${projectDir}/tools", include: "*.xsl")
   inputs.files fileTree(dir: "${projectDir}/src/website/xml")
   outputs.files fileTree(dir: "${buildDir}/website")
 
-  input "${projectDir}/src/website/xml/coffeesacks.xml"
+  input manual_augment.outputs.files.singleFile
   output "${buildDir}/website/index.html"
   stylesheet "${projectDir}/tools/docbook.xsl"
   args(['-init:org.docbook.xsltng.extensions.Register'])
@@ -217,10 +242,7 @@ task website(type: SaxonXsltTask, dependsOn: ["copyResources", "classlist"]) {
     'mediaobject-input-base-uri': "file:${buildDir}/aug/",
     'mediaobject-output-base-uri': "/",
     'chunk': 'index.html',
-    'chunk-output-base-uri': "${projectDir}/build/website/",
-    'coffeesacks-version': ninemlVersion,
-    'coffeegrinder-version': ninemlVersion,
-    'coffeefilter-version': ninemlVersion
+    'chunk-output-base-uri': "${projectDir}/build/website/"
   )
 }
 

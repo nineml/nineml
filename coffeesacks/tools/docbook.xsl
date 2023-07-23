@@ -16,10 +16,6 @@
 <xsl:import href="../../website/docbook.xsl"/>
 <xsl:import href="xpath.xsl"/>
 
-<xsl:param name="coffeesacks-version" as="xs:string" required="yes"/>
-<xsl:param name="coffeefilter-version" as="xs:string" required="yes"/>
-<xsl:param name="coffeegrinder-version" as="xs:string" required="yes"/>
-
 <!-- ============================================================ -->
 
 <xsl:param name="verbatim-trim-leading-blank-lines" select="'true'"/>
@@ -32,14 +28,7 @@
     <p class="app">
       <xsl:apply-templates mode="m:titlepage"/>
       <xsl:text> version </xsl:text>
-      <xsl:apply-templates select="../db:productnumber/node()"/>
-    </p>
-    <p class="lib">
-      <xsl:text>(Based on CoffeeGrinder </xsl:text>
-      <xsl:apply-templates select="../db:bibliomisc[@role='coffeegrinder']/node()"/>
-      <xsl:text> and CoffeeFilter </xsl:text>
-      <xsl:apply-templates select="../db:bibliomisc[@role='coffeefilter']/node()"/>
-      <xsl:text>.)</xsl:text>
+      <xsl:apply-templates select="$ninemlVersion"/>
     </p>
   </div>
 </xsl:template>
@@ -62,15 +51,7 @@
 <!-- ============================================================ -->
 
 <xsl:template match="processing-instruction('coffeesacks-version')">
-  <xsl:value-of select="$coffeesacks-version"/>
-</xsl:template>
-
-<xsl:template match="processing-instruction('coffeefilter-version')">
-  <xsl:value-of select="$coffeefilter-version"/>
-</xsl:template>
-
-<xsl:template match="processing-instruction('coffeegrinder-version')">
-  <xsl:value-of select="$coffeegrinder-version"/>
+  <xsl:value-of select="$ninemlVersion"/>
 </xsl:template>
 
 </xsl:stylesheet>
