@@ -39,6 +39,21 @@ public class PragmasTest {
     }
 
     @Test
+    public void renameNonterminalXml() {
+        try {
+            //invisibleXml.getOptions().getLogger().setDefaultLogLevel("debug");
+            InvisibleXmlParser parser = invisibleXml.getParser(new File("src/test/resources/two-dates.xml"));
+            Map<String, List<String>> meta = parser.getMetadata();
+            Assertions.assertEquals(meta.get("http://purl.org/dc/elements/1.1/creator").get(0), "Norman Walsh");
+            InvisibleXmlDocument doc = parser.parse("1999-12-31");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<input><year>1999</year><month>12</month><day>31</day></input>", xml);
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
     public void renameTerminal() {
         try {
             InvisibleXmlParser parser = invisibleXml.getParser(new File("src/test/resources/two-dates.ixml"));

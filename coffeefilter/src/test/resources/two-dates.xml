@@ -1,0 +1,79 @@
+<ixml>
+   <prolog>
+      <ppragma pname='pragma'>
+         <pragma-data>rename "https://nineml.org/ns/pragma/rename"</pragma-data>
+      </ppragma>
+      <ppragma pname='pragma'>
+         <pragma-data>rewrite "https://nineml.org/ns/pragma/rewrite"</pragma-data>
+      </ppragma>
+      <ppragma pname='pragma'>
+         <pragma-data>dc "http://purl.org/dc/elements/1.1/"</pragma-data>
+      </ppragma>
+      <ppragma pname='pragma'>
+         <pragma-data>opts "https://nineml.org/ns/pragma/options/"</pragma-data>
+      </ppragma>
+      <ppragma pname='pragma'>
+         <pragma-data>date "http://purl.org/dc/elements/1.1/date"</pragma-data>
+      </ppragma>
+      <ppragma pname='dc'>
+         <pragma-data>creator Norman Walsh</pragma-data>
+      </ppragma>
+      <ppragma pname='opts'>
+         <pragma-data>test this</pragma-data>
+      </ppragma>
+      <ppragma pname='date'>
+         <pragma-data>2022-09-04</pragma-data>
+      </ppragma>
+      <comment> from the 'Renaming' use case in the pragmas proposal </comment></prolog>
+   <rule name='input'>
+      <alt>
+         <nonterminal name='date'></nonterminal></alt>
+      <alt>
+         <nonterminal name='iso'></nonterminal></alt></rule>
+   <rule mark='-' name='date'>
+      <alt>
+         <nonterminal name='day'></nonterminal>
+         <literal tmark='-' string=' '></literal>
+         <nonterminal name='month'></nonterminal>
+         <literal tmark='-' string=' '></literal>
+         <nonterminal name='year'></nonterminal></alt></rule>
+   <rule name='day'>
+      <alt>
+         <nonterminal name='d'></nonterminal>
+         <option>
+            <nonterminal name='d'></nonterminal></option></alt></rule>
+   <rule mark='@' name='month'>
+      <alt>
+         <alts>
+            <alt>
+               <literal string='January'></literal></alt>
+            <alt>
+               <literal string='Feb'></literal>
+               <literal tmark='-' string='ruary'></literal>
+               <insertion string='tacular'></insertion></alt></alts></alt></rule>
+   <rule name='year'>
+      <alt>
+         <nonterminal name='d'></nonterminal>
+         <nonterminal name='d'></nonterminal>
+         <nonterminal name='d'></nonterminal>
+         <nonterminal name='d'></nonterminal></alt></rule>
+   <rule mark='-' name='iso'>
+      <alt>
+         <nonterminal name='year'></nonterminal>
+         <literal tmark='-' string='-'></literal>
+         <alts>
+            <alt>
+               <nonterminal name='nmonth'>
+                  <pragma pname='rename'>
+                     <pragma-data>month</pragma-data>
+                  </pragma></nonterminal></alt></alts>
+         <literal tmark='-' string='-'></literal>
+         <nonterminal name='day'></nonterminal></alt></rule>
+   <rule name='nmonth'>
+      <alt>
+         <nonterminal name='d'></nonterminal>
+         <nonterminal name='d'></nonterminal></alt></rule>
+   <rule mark='-' name='d'>
+      <alt>
+         <inclusion>
+            <member from='0' to='9'></member></inclusion></alt></rule></ixml>
