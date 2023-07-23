@@ -65,7 +65,7 @@ that I don’t understand.)</para>
 <title>General use</title>
 
 <para>This is just an overview, consult the 
-<link xlink:href="/apidoc">JavaDoc</link> for more details.</para>
+<link xlink:href="apidoc">JavaDoc</link> for more details.</para>
 
 <programlistingco>
 <areaspec>
@@ -90,12 +90,12 @@ that I don’t understand.)</para>
 <calloutlist>
 <callout arearefs="ex_opt">
 <para>Create the
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/ParserOptions.html">ParserOptions</link>.
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/ParserOptions.html">ParserOptions</link>.
 </para>
 </callout>
 <callout arearefs="ex_g">
 <para>Create a
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/SourceGrammar.html">SourceGrammar</link>.
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/SourceGrammar.html">SourceGrammar</link>.
 </para>
 </callout>
 <callout arearefs="ex_ntg">
@@ -108,9 +108,9 @@ that I don’t understand.)</para>
 </callout>
 <callout arearefs="ex_term">
 <para>Several flavors of
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/TerminalSymbol.html">TerminalSymbol</link>
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/TerminalSymbol.html">TerminalSymbol</link>
 are supported out-of-the-box and the set of
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/tokens/Token.html">Tokens</link>
+<link xlink:href="apidoc/org/nineml/coffeegrinder/tokens/Token.html">Tokens</link>
 is extensible.
 </para>
 </callout>
@@ -119,16 +119,16 @@ is extensible.
 </para>
 </callout>
 <callout arearefs="ex_hyg">
-<para><link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/HygieneReport.html">Hygiene</link>
+<para><link xlink:href="apidoc/org/nineml/coffeegrinder/parser/HygieneReport.html">Hygiene</link>
 problems with a parser grammar will generate warning messages through the
-<link xlink:href="/apidoc/org/nineml/logging/package-summary.html">logging framework</link>.
+<link xlink:href="apidoc/org/nineml/logging/package-summary.html">logging framework</link>.
 Hygiene problems include undefined or unused symbols as well as unproductive symbols
 and rules.
 </para>
 </callout>
 <callout arearefs="ex_parser">
 <para>Create a
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/EarleyParser.html">parser</link>.
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/EarleyParser.html">parser</link>.
 </para>
 </callout>
 <callout arearefs="ex_result">
@@ -137,17 +137,17 @@ and rules.
 </callout>
 <callout arearefs="ex_success">
 <para>Examine the
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/EarleyResult.html">results</link>.
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/EarleyResult.html">results</link>.
 </para>
 </callout>
 <callout arearefs="ex_forest">
 <para>Obtain the
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/ParseForest.html">forest</link>.
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/ParseForest.html">forest</link>.
 </para>
 </callout>
 <callout arearefs="ex_tree">
 <para>Get the (first)
-<link xlink:href="/apidoc/org/nineml/coffeegrinder/parser/ParseTree.html">parse tree</link>.
+<link xlink:href="apidoc/org/nineml/coffeegrinder/parser/ParseTree.html">parse tree</link>.
 </para>
 </callout>
 <callout arearefs="ex_amb">

@@ -22,17 +22,17 @@
 <xsl:template match="db:productname" mode="m:titlepage"
               expand-text="yes">
   <div class="versions">
-    <p class="app">CoffeeGrinder version {../db:productnumber/string()}</p>
+    <p class="app">CoffeeGrinder version {$ninemlVersion}</p>
   </div>
 </xsl:template>
 
 <xsl:template match="*" mode="m:html-head-links">
   <xsl:next-match/>
-  <link rel="shortcut icon" href="icon/CoffeeGrinder.png"/>
+  <link rel="shortcut icon" href="/icon/CoffeeGrinder.png"/>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="css/nineml.css"/>
-  <link rel="stylesheet" href="css/coffeegrinder.css"/>
+  <link rel="stylesheet" href="/css/nineml.css"/>
+  <link rel="stylesheet" href="/css/coffeegrinder.css"/>
 </xsl:template>
 
 <xsl:template match="db:classname" mode="m:docbook">

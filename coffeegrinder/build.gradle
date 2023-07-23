@@ -226,6 +226,21 @@ task website(type: SaxonXsltTask, dependsOn: ["manual_augment", "classlist"]) {
   )
 }
 
+task publishVersions() {
+  doLast {
+    StaticPages.versionsJson(currentReleaseVersion, ninemlVersion,
+                             "${buildDir}/website/versions.json")
+  }
+}
+website.finalizedBy publishVersions
+
+task publishError404() {
+  doLast {
+    StaticPages.error404("CoffeeGrinder", currentReleaseVersion, "${buildDir}/website/404.html")
+  }
+}
+website.finalizedBy publishError404
+
 task classlist(
   dependsOn: ["javadoc"]
 ) {
