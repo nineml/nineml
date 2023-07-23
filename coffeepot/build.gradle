@@ -165,9 +165,14 @@ jar {
   archiveBaseName = "${potName}-${ninemlVersion}"
 }
 
-task copyRuntimeLibraries() {
+task copyRuntimeLibraries(
+  dependsOn: [':coffeegrinder:jar', ':coffeefilter:jar', ':coffeepot:jar', ':coffeesacks:jar']
+) {
   doLast {
     configurations.app.collect { dep ->
+      if (!dep.exists()) {
+        throw new GradleException("Dependency doesn't exist: ${dep}")
+      }
       copy {
         into "${buildDir}/libs/lib"
         from dep
