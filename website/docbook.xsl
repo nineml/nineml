@@ -51,6 +51,8 @@
   <i class="far fa-window-close"/>
 </xsl:variable>
 
+<xsl:variable name="ninemlVersion" select="/db:book/db:info/db:productnumber/string()"/>
+
 <!-- ============================================================ -->
 
 <xsl:variable name="v:templates" as="document-node()"

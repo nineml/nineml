@@ -136,6 +136,13 @@ task publishVersions() {
 }
 website.finalizedBy publishVersions
 
+task publishError404() {
+  doLast {
+    StaticPages.error404("nineml.org", currentReleaseVersion, "${buildDir}/website/404.html")
+  }
+}
+website.finalizedBy publishError404
+
 task copyResources(dependsOn: ["copyJarResources", "copyStaticResources"]) {
   // nop
 }
