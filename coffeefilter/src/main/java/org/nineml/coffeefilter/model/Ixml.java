@@ -181,7 +181,7 @@ public class Ixml extends XNonterminal {
                     if (!(alt instanceof IAlt)) {
                         throw new RuntimeException("Mixture of alts and other things?");
                     }
-                    IRule newRule = new IRule(this, rule.getName(), rule.getMark());
+                    IRule newRule = new IRule(this, rule.getName(), rule.getRename(), rule.getMark());
                     newRule.pragmas.addAll(rule.pragmas);
                     for (XNode gchild : alt.getChildren()) {
                         newRule.addCopy(gchild);
