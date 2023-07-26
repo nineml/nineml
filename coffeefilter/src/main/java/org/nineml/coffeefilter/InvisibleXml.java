@@ -136,6 +136,8 @@ public class InvisibleXml {
 
     /**
      * Is this version a valid "1.0" version?
+     * <p>The valid 1.0 versions are "1.0" and "1.0-nineml".</p>
+     * @param version the version string
      * @return true if this is a 1.0 version
      */
     public static boolean satisfiesVersion10(String version) {
@@ -144,6 +146,8 @@ public class InvisibleXml {
 
     /**
      * Is this version a valid "1.1" version?
+     * <p>The valid 1.1 versions are "1.1" and "1.1-nineml".</p>
+     * @param version the version string
      * @return true if this is a 1.1 version
      */
     public static boolean satisfiesVersion11(String version) {
