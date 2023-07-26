@@ -1,0 +1,7 @@
+phone-number = incountry .
+  incountry = (areacode, sep)?, prefix, sep, number .
+        sep = dash .
+       dash = -'-'? .
+      number = ['0'-'9']+ .
+      prefix = ['0'-'9']+ .
+    areacode = ['0'-'9']+ .

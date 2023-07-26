@@ -10,7 +10,7 @@
 
 <revhistory>
 <revision>
-<revnumber>3.0.0k</revnumber>
+<revnumber>3.0.0l</revnumber>
 <date>2023-07-26</date>
 <revdescription>
 <para>This is a beta release for version 3.0.0. There are a lot of
@@ -19,6 +19,13 @@ underlying changes in this release.</para>
 </revdescription>
 </revision>
 
+<revision>
+<revnumber>3.0.0k</revnumber>
+<date>2023-07-26</date>
+<revdescription>
+<para>Updated dependencies.</para>
+</revdescription>
+</revision>
 <revision>
 <revnumber>3.0.0j</revnumber>
 <date>2023-07-23</date>

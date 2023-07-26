@@ -9,17 +9,24 @@
 
 <revhistory>
 <revision>
-<revnumber>3.0.0k</revnumber>
+<revnumber>3.0.0l</revnumber>
 <date>2023-07-26</date>
 <revdescription>
 <para>This is a beta release for version 3.0.0. There are a lot of
 changes in this release and many of them impact the public APIs.</para>
+<para>Fixed a bug where the element names in a GLL parse were sometimes wrong.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>3.0.0k</revnumber>
+<date>2023-07-26</date>
+<revdescription>
 <para>Changed the graph walking code to avoid recursion so that we don’t blow up the Java stack.
 This has changed the tree counts for some infinitely ambiguous graphs, but since there
 are ∞ many trees, the counts aren’t really meaningful anyway.</para>
 </revdescription>
 </revision>
-
 <revision>
 <revnumber>3.0.0j</revnumber>
 <date>2023-07-23</date>

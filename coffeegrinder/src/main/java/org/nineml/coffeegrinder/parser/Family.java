@@ -110,17 +110,28 @@ public class Family {
             return Collections.emptyList();
         }
 
+        if (w.symbol instanceof NonterminalSymbol) {
+            // If w is a nonterminal, return the attributes it has
+            return w.symbol.getAttributes();
+        }
+
         // The GLL parser makes slightly different states. Sometimes there isn't a position - 2,
         // so I'm just guessing for the moment that it's position - 1 and the balance is different.
         if (state.position > 1) {
             return getAttributes(w.getSymbol(), state.rhs.get(state.position - 2));
         }
+
         return getAttributes(w.getSymbol(), state.rhs.get(state.position - 1));
     }
 
     public List<ParserAttribute> getRightAttributes() {
         if (v == null || state == null || state.position == 0) {
             return Collections.emptyList();
+        }
+
+        if (v.symbol instanceof NonterminalSymbol) {
+            // If v is a nonterminal, return the attributes it has
+            return v.symbol.getAttributes();
         }
 
         return getAttributes(v.getSymbol(), state.rhs.get(state.position - 1));
