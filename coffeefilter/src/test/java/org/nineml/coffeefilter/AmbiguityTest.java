@@ -132,4 +132,40 @@ public class AmbiguityTest {
             fail();
         }
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void phone7_1(String parserType) {
+        try {
+            ParserOptions opts = new ParserOptions(options);
+            opts.setParserType(parserType);
+            //opts.getLogger().setDefaultLogLevel("trace");
+            InvisibleXml ixml = new InvisibleXml(opts);
+            InvisibleXmlParser parser = ixml.getParser(new File("src/test/resources/seven.ixml"));
+            InvisibleXmlDocument doc = parser.parse("7");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<phone-number><cc>+1</cc>7</phone-number>", xml);
+            System.err.println(xml);
+        } catch (IOException ex) {
+            fail();
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void phone7_2(String parserType) {
+        try {
+            ParserOptions opts = new ParserOptions(options);
+            opts.setParserType(parserType);
+            //opts.getLogger().setDefaultLogLevel("trace");
+            InvisibleXml ixml = new InvisibleXml(opts);
+            InvisibleXmlParser parser = ixml.getParser(new File("src/test/resources/seven.ixml"));
+            InvisibleXmlDocument doc = parser.parse("+1-7");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<phone-number><cc>+1</cc>7</phone-number>", xml);
+            System.err.println(xml);
+        } catch (IOException ex) {
+            fail();
+        }
+    }
 }

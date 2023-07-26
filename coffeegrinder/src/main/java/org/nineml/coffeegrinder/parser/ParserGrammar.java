@@ -323,26 +323,24 @@ public class ParserGrammar extends Grammar {
         // For the GLL parser, any symbol that can lead to an epsilon production
         // is nullable.
         computeEarleyNullable();
-        HashSet<Symbol> notNullable = new HashSet<>();
 
         boolean changed = true;
         while (changed) {
             changed = false;
             for (Rule rule : rules) {
-                if (!nullable.contains(rule.symbol) && !notNullable.contains(rule.symbol)) {
+                if (!nullable.contains(rule.symbol)) {
                     if (rule.rhs.isEmpty()) {
                         nullable.add(rule.symbol);
                         changed = true;
                     } else {
                         boolean canBeNull = true;
-                        for (Symbol symbol : rule.rhs.symbols) {
-                            if (symbol instanceof TerminalSymbol || notNullable.contains(symbol)) {
-                                notNullable.add(rule.symbol);
-                                changed = true;
-                                canBeNull = false;
-                            } else if (!nullable.contains(symbol)) {
+                        int pos = 0;
+                        while (canBeNull && pos < rule.rhs.symbols.length) {
+                            Symbol symbol = rule.rhs.symbols[pos];
+                            if (symbol instanceof TerminalSymbol || !nullable.contains(symbol)) {
                                 canBeNull = false;
                             }
+                            pos++;
                         }
                         if (canBeNull) {
                             nullable.add(rule.symbol);
