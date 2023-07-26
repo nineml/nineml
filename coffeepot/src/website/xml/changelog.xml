@@ -10,19 +10,23 @@
 
 <revhistory>
 <revision>
-<revnumber>3.0.0j</revnumber>
-<date>2023-07-23</date>
+<revnumber>3.0.0k</revnumber>
+<date>2023-07-26</date>
 <revdescription>
 <para>This is a beta release for version 3.0.0. There are a lot of
 changes in this release, but most of them are “behind the scenes” for CoffeePot.</para>
-<para>Version 3.0.0i depends on CoffeeGrinder, CoffeeFilter, and
-CoffeeSacks 3.0.0i.
-</para>
+<para>Updated dependencies.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>3.0.0j</revnumber>
+<date>2023-07-23</date>
+<revdescription>
 <para>There are no technical changes in this release. The build system
 has been complete refactored.</para>
 </revdescription>
 </revision>
-
 <revision>
 <revnumber>3.0.0i</revnumber>
 <date>2023-07-22</date>

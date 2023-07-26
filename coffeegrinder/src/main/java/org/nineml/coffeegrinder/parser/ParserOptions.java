@@ -54,6 +54,7 @@ public class ParserOptions {
         returnChart = copy.returnChart;
         prefixParsing = copy.prefixParsing;
         monitor = copy.monitor;
+        priorityStyle = copy.priorityStyle;
     }
 
     /**

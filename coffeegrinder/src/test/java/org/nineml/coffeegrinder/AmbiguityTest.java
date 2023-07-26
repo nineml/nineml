@@ -397,12 +397,12 @@ public class AmbiguityTest extends CoffeeGrinderTest {
         GearleyParser parser = grammar.getParser(options, _S);
         GearleyResult result = parser.parse(Iterators.characterIterator("a"));
 
+        //result.getForest().serialize("simple.xml");
+
         Assertions.assertTrue(result.succeeded());
         Assertions.assertTrue(result.getForest().isAmbiguous());
         Assertions.assertFalse(result.getForest().isInfinitelyAmbiguous());
         Assertions.assertEquals(2, result.getForest().getParseTreeCount());
-
-        //result.getForest().serialize("simple.xml");
 
         expectTrees(Arborist.getArborist(result.getForest()), Arrays.asList(
                 "<S><A>a</A></S>",
@@ -524,7 +524,7 @@ public class AmbiguityTest extends CoffeeGrinderTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Earley", "GLL"})
-    public void fourparses(String parserType) {
+    public void fiveparses(String parserType) {
         ParserOptions options = new ParserOptions(globalOptions);
         options.setParserType(parserType);
 
@@ -553,10 +553,11 @@ public class AmbiguityTest extends CoffeeGrinderTest {
         GearleyParser parser = grammar.getParser(options, _S);
         GearleyResult result = parser.parse(Iterators.characterIterator("xay"));
 
-        Assertions.assertTrue(result.succeeded());
-        Assertions.assertEquals(4, result.getForest().getParseTreeCount());
+        //result.getForest().serialize("fiveparses.xml");
 
-        //result.getForest().serialize("fourparses.xml");
+        Assertions.assertTrue(result.succeeded());
+        Assertions.assertTrue(result.getForest().isInfinitelyAmbiguous());
+        Assertions.assertEquals(5, result.getForest().getParseTreeCount());
 
         expectTrees(Arborist.getArborist(result.getForest()), Arrays.asList(
                 "<S>x<A>a</A>y</S>",
@@ -944,10 +945,11 @@ public class AmbiguityTest extends CoffeeGrinderTest {
         GearleyParser parser = grammar.getParser(options, _S);
         GearleyResult result = parser.parse(Iterators.characterIterator("t"));
 
-        Assertions.assertTrue(result.succeeded());
-        Assertions.assertEquals(9, result.getForest().getParseTreeCount());
-
         //result.getForest().serialize(String.format("medium-%s.xml", parserType));
+
+        Assertions.assertTrue(result.succeeded());
+        Assertions.assertEquals(11, result.getForest().getParseTreeCount());
+
         //showTrees(Arborist.getLumberjack(result.getForest()), true, 9);
 
         expectTrees(Arborist.getArborist(result.getForest()), Arrays.asList(
@@ -1139,10 +1141,11 @@ public class AmbiguityTest extends CoffeeGrinderTest {
 
         GearleyParser parser = grammar.getParser(options, _S);
         GearleyResult result = parser.parse(input);
-        Assertions.assertTrue(result.succeeded());
-        Assertions.assertEquals(48, result.getForest().getParseTreeCount());
 
         //result.getForest().serialize(String.format("shortcircuit-%s.xml", parserType));
+
+        Assertions.assertTrue(result.succeeded());
+        Assertions.assertEquals(48, result.getForest().getParseTreeCount());
 
         expectTrees(Arborist.getArborist(result.getForest()), Arrays.asList(
                 "<S><A><A1>a</A1></A><B><B1>b</B1></B><C><C1>c</C1></C><D><D1>d</D1></D></S>",

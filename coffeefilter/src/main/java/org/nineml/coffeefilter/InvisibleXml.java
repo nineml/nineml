@@ -31,6 +31,11 @@ public class InvisibleXml {
     /** The category name used for InvisibleXml log messages. */
     public static final String logcategory = "InvisibleXml";
 
+    public static final String IXML_10 = "1.0";
+    public static final String IXML_10_NINEML = "1.0-nineml";
+    public static final String IXML_11 = "1.1";
+    public static final String IXML_11_NINEML = "1.1-nineml";
+
     /** The internal name for the xmlns parser attribute. */
     public static final String XMLNS_ATTRIBUTE = "https://coffeefilter.nineml.org/attr/xmlns";
     /** The internal name for the name parser attribute. */
@@ -127,6 +132,26 @@ public class InvisibleXml {
         list.add(AMBIGUOUS);
         list.add(VERSION_MISMATCH);
         return list;
+    }
+
+    /**
+     * Is this version a valid "1.0" version?
+     * <p>The valid 1.0 versions are "1.0" and "1.0-nineml".</p>
+     * @param version the version string
+     * @return true if this is a 1.0 version
+     */
+    public static boolean satisfiesVersion10(String version) {
+        return IXML_10.equals(version) || IXML_10_NINEML.equals(version);
+    }
+
+    /**
+     * Is this version a valid "1.1" version?
+     * <p>The valid 1.1 versions are "1.1" and "1.1-nineml".</p>
+     * @param version the version string
+     * @return true if this is a 1.1 version
+     */
+    public static boolean satisfiesVersion11(String version) {
+        return IXML_11.equals(version) || IXML_11_NINEML.equals(version);
     }
 
     /**

@@ -258,5 +258,30 @@ public class MainTest extends CoffeePotTest {
         }
     }
 
+    @Test
+    public void rewriteTest1() {
+        Main main = new Main();
+        try {
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/rename.ixml", "c" });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<X><C>c</C></X>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void rewriteTest2() {
+        Main main = new Main();
+        try {
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/rename.ixml", "ab" });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<X><Y>a</Y><B>b</B></X>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+
 
 }

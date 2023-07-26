@@ -1,0 +1,2 @@
+ixml version '1.1'.
+S>X = A, B | C . A>Y = 'a' . B = 'b' . C = 'c' .

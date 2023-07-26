@@ -1,5 +1,6 @@
 package org.nineml.coffeefilter.model;
 
+import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.exceptions.IxmlException;
 
 import java.io.PrintStream;
@@ -136,7 +137,7 @@ public class INonterminal extends XNonterminal {
 
         if (rename != null) {
             Ixml ixml = getRoot();
-            if (!"1.1-nineml".equals(ixml.getIxmlVersion())) {
+            if (!InvisibleXml.satisfiesVersion11(ixml.getIxmlVersion())) {
                 throw IxmlException.renameUnavailable(name, rename);
             }
             return rename;

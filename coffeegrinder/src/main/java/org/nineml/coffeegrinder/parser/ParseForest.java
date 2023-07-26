@@ -291,7 +291,8 @@ public class ParseForest {
         StopWatch timer = new StopWatch();
 
         for (ForestNode root : roots) {
-            root.reach(roots.size());
+            ForestNodeWalk walker = new ForestNodeWalk(this, root);
+            walker.treewalk();
         }
 
         int count = 0;
