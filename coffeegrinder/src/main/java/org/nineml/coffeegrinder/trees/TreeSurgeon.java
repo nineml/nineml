@@ -76,6 +76,7 @@ public class TreeSurgeon extends Arborist {
             scount = 0;
         }
         seenCount.put(node, scount);
+        selectedNodes.add(node.id);
 
         final Vertex vertex = new Vertex(node, parserAttributes);
         final ParseTree tree = root.addChild(vertex);
