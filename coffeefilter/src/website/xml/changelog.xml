@@ -10,12 +10,14 @@
 <revhistory>
 <revision>
 <revnumber>3.0.0k</revnumber>
-<date>2023-07-25</date>
+<date>2023-07-26</date>
 <revdescription>
 <para>This is a beta release for version 3.0.0. There are a lot of
 changes in this release and many of them impact the public APIs. The
 JavaDoc has not yet been updated.</para>
 <para>Fixed a bug where renaming the root nonterminal didn’t work.
+This version supports the <link xlink:href="https://invisiblexml.org/pr/193/index.html">renaming
+proposal</link> provided that the grammar identifies itself as version 1.1 (or 1.1-nineml).
 </para>
 </revdescription>
 </revision>

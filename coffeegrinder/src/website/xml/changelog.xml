@@ -14,7 +14,7 @@
 <revdescription>
 <para>This is a beta release for version 3.0.0. There are a lot of
 changes in this release and many of them impact the public APIs.</para>
-<para>Walk the graph without using recursion so that we don’t blow up the Java stack.
+<para>Changed the graph walking code to avoid recursion so that we don’t blow up the Java stack.
 This has changed the tree counts for some infinitely ambiguous graphs, but since there
 are ∞ many trees, the counts aren’t really meaningful anyway.</para>
 </revdescription>
