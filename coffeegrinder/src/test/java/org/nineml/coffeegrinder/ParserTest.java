@@ -569,7 +569,7 @@ public class ParserTest extends CoffeeGrinderTest {
             walker.getTree(builder);
             Assertions.assertTrue(result.getForest().isAmbiguous());
             Assertions.assertTrue(result.getForest().isInfinitelyAmbiguous());
-            Assertions.assertEquals(242, result.getForest().getParseTreeCount());
+            Assertions.assertEquals(476312, result.getForest().getParseTreeCount());
 
             expectTrees(Arborist.getArborist(result.getForest()), Arrays.asList(
                     "<S><Sp><A><X></X><Y></Y>a</A></Sp></S>",
