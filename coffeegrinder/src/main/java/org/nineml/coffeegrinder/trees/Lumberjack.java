@@ -136,6 +136,7 @@ public class Lumberjack extends Arborist {
             scount = 0;
         }
         seenCount.put(node, scount);
+        selectedNodes.add(node.id);
 
         if (!selected.containsKey(node)) {
             selected.put(node, new ArrayList<>());

@@ -3,9 +3,12 @@ package org.nineml.coffeefilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -108,4 +111,61 @@ public class AmbiguityTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void phone2(String parserType) {
+        try {
+            ParserOptions opts = new ParserOptions(options);
+            opts.setParserType(parserType);
+            InvisibleXml ixml = new InvisibleXml(opts);
+            InvisibleXmlParser parser = ixml.getParser(new File("src/test/resources/phone2.ixml"));
+            InvisibleXmlDocument doc = parser.parse("123-4567");
+            String xml = doc.getTree();
+
+            // <prefix> must occur exactly once
+            int pos = xml.indexOf("<prefix");
+            Assertions.assertTrue(pos > 0);
+            xml = xml.substring(pos+6);
+            pos = xml.indexOf("<prefix");
+            Assertions.assertEquals(-1, pos);
+        } catch (IOException ex) {
+            fail();
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void phone7_1(String parserType) {
+        try {
+            ParserOptions opts = new ParserOptions(options);
+            opts.setParserType(parserType);
+            //opts.getLogger().setDefaultLogLevel("trace");
+            InvisibleXml ixml = new InvisibleXml(opts);
+            InvisibleXmlParser parser = ixml.getParser(new File("src/test/resources/seven.ixml"));
+            InvisibleXmlDocument doc = parser.parse("7");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<phone-number><cc>+1</cc>7</phone-number>", xml);
+            System.err.println(xml);
+        } catch (IOException ex) {
+            fail();
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void phone7_2(String parserType) {
+        try {
+            ParserOptions opts = new ParserOptions(options);
+            opts.setParserType(parserType);
+            //opts.getLogger().setDefaultLogLevel("trace");
+            InvisibleXml ixml = new InvisibleXml(opts);
+            InvisibleXmlParser parser = ixml.getParser(new File("src/test/resources/seven.ixml"));
+            InvisibleXmlDocument doc = parser.parse("+1-7");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<phone-number><cc>+1</cc>7</phone-number>", xml);
+            System.err.println(xml);
+        } catch (IOException ex) {
+            fail();
+        }
+    }
 }
