@@ -33,6 +33,7 @@ public class GllParser implements GearleyParser {
     private final ArrayList<State> grammarSlots;
     private final HashMap<Rule, List<State>> ruleSlots;
     private final HashMap<State, Integer> slotLabels;
+    private final ParserInput parserInput;
 
     private String stringInput = null;
     private Token[] I;
@@ -66,6 +67,8 @@ public class GllParser implements GearleyParser {
         this.options = new ParserOptions(options);
         this.logger = options.getLogger();
 
+        parserInput = new ParserInput(options, grammar.usesRegex);
+
         grammarSlots = new ArrayList<>();
         ruleSlots = new HashMap<>();
         NonterminalSymbol seed = grammar.getSeed();
@@ -91,60 +94,25 @@ public class GllParser implements GearleyParser {
 
     @Override
     public GllResult parse(Token[] input) {
-        StringBuilder sb = grammar.usesRegex ? new StringBuilder() : null;
-
-        I = new Token[input.length + 1];
-
-        for (Token token : input) {
-            if (!(token instanceof TokenCharacter)) {
-                throw ParseException.invalidInputForGLL();
-            }
-            if (grammar.usesRegex) {
-                sb.append(token.getValue());
-            }
-        }
-
-        stringInput = grammar.usesRegex ? sb.toString() : null;
-
-        System.arraycopy(input, 0, I, 0, input.length);
-        I[input.length] = TokenEOF.EOF;
+        parserInput.from(input);
+        I = parserInput.tokens();
+        stringInput = parserInput.string();
         return parseInput();
     }
 
     @Override
     public GllResult parse(Iterator<Token> input) {
-        StringBuilder sb = grammar.usesRegex ? new StringBuilder() : null;
-        ArrayList<Token> list = new ArrayList<>();
-        while (input.hasNext()) {
-            Token token = input.next();
-            if (!(token instanceof TokenCharacter)) {
-                throw ParseException.invalidInputForGLL();
-            }
-            if (grammar.usesRegex) {
-                sb.append(token.getValue());
-            }
-            list.add(token);
-        }
-        stringInput = grammar.usesRegex ? sb.toString() : null;
-        I = new Token[list.size() + 1];
-        for (int pos = 0; pos < list.size(); pos++) {
-            I[pos] = list.get(pos);
-        }
-        I[list.size()] = TokenEOF.EOF;
+        parserInput.from(input);
+        I = parserInput.tokens();
+        stringInput = parserInput.string();
         return parseInput();
     }
 
     @Override
     public GllResult parse(String input) {
-        if (grammar.usesRegex) {
-            stringInput = input;
-        }
-        int[] codepoints = input.codePoints().toArray();
-        I = new Token[codepoints.length + 1];
-        for (int pos = 0; pos < codepoints.length; pos++) {
-            I[pos] = TokenCharacter.get(codepoints[pos]);
-        }
-        I[input.length()] = TokenEOF.EOF;
+        parserInput.from(input);
+        I = parserInput.tokens();
+        stringInput = parserInput.string();
         return parseInput();
     }
 

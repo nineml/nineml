@@ -16,6 +16,7 @@ public class ParserOptions {
     private boolean prefixParsing = false;
     private String priorityStyle = "max";
     private ProgressMonitor monitor = null;
+    private boolean normalizeLineEndings = false;
 
     /**
      * Create the parser options.
@@ -189,5 +190,28 @@ public class ParserOptions {
             throw new IllegalArgumentException("Unrecognized priority style: " + style);
         }
     }
+
+    /**
+     * Should line endings be normalized?
+     * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
+     * string are replaced with a single #A. This only applies to inputs that are strings are sequences
+     * of characters.</p>
+     * @return true if line endings will be normalized
+     */
+    public boolean getNormalizeLineEndings() {
+        return normalizeLineEndings;
+    }
+
+    /**
+     * Set normalize line endings
+     * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
+     * string are replaced with a single #A. This only applies to inputs that are strings are sequences
+     * of characters.</p>
+     * @param normalize true if line endings should be normalized
+     */
+    public void setNormalizeLineEndings(boolean normalize) {
+        normalizeLineEndings = normalize;
+    }
+
 
 }
