@@ -153,6 +153,7 @@ public class Configuration {
         options.setShowBnfNonterminals(cmain.showHiddenNonterminals);
         options.setPriorityStyle(cmain.priorityStyle);
         options.setStrictAmbiguity(cmain.strictAmbiguity);
+        options.setNormalizeLineEndings(cmain.normalizeLineEndings);
 
         if (cmain.gllParser) {
             options.setParserType("GLL");
@@ -595,6 +596,9 @@ public class Configuration {
 
         @Parameter(names = {"--show-options"}, description = "Show the configured options for the parse")
         public boolean showOptions = false;
+
+        @Parameter(names = {"--normalize", "--normalize-line-endings"}, description = "Normalize line endings in the input")
+        public boolean normalizeLineEndings = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

@@ -282,6 +282,96 @@ public class MainTest extends CoffeePotTest {
         }
     }
 
+    @Test
+    public void normalize_line_endings_1() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/unix-lines.txt";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_2() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/pc-lines.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1&#xD;</l><l>2&#xD;</l><l>3&#xD;</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_3() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/pc-lines.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "--normalize", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_4() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines1.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1&#xD;2&#x85;3&#xD;</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_5() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines1.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "--normalize", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_6() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines2.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1&#xD;2&#x2028;3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_7() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines2.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "--normalize", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
 
 
 }

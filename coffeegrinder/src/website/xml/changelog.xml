@@ -9,16 +9,23 @@
 
 <revhistory>
 <revision>
-<revnumber>3.0.0l</revnumber>
-<date>2023-07-26</date>
+<revnumber>3.0.0m</revnumber>
+<date>2023-07-27</date>
 <revdescription>
 <para>This is a beta release for version 3.0.0. There are a lot of
 changes in this release and many of them impact the public APIs.</para>
+<para>Added an option to normalize line endings.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>3.0.0l</revnumber>
+<date>2023-07-26</date>
+<revdescription>
 <para>Fixed a bug where the element names in a GLL parse were sometimes wrong.
 Also fixed a bug where the set of nullable nonterminals was sometimes wrong for a GLL parse.</para>
 </revdescription>
 </revision>
-
 <revision>
 <revnumber>3.0.0k</revnumber>
 <date>2023-07-26</date>
