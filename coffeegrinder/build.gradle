@@ -394,7 +394,7 @@ publishing {
       pom {
         name = grinderTitle
         packaging = 'jar'
-        description = 'An Earley parser with shared packed parse forests'
+        description = 'Earley and Generalized LL parsers'
         url = 'https://github.com/nineml/coffeegrinder'
 
         scm {

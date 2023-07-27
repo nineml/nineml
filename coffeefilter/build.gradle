@@ -558,7 +558,7 @@ publishing {
       pom {
         name = filterTitle
         packaging = 'jar'
-        description = 'An ixml parser'
+        description = 'An Invisible XML parser'
         url = 'https://github.com/nineml/coffeefilter'
 
         scm {
