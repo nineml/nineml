@@ -23,28 +23,62 @@ the individual component <filename>changelogs.xml</filename> files.</para>
 <revdescription>
 <para>This is a beta release for version 3.0.0.</para>
 
-<para audience="coffeegrinder">Added an option to normalize line
-endings. Fixed a bug where the GLL parser would fail to correctly find the
+<itemizedlist audience="coffeegrinder">
+<listitem>
+<para>Fixed a bug where the GLL parser would fail to correctly find the
 parser attributes associated with a “left hand side”.</para>
-<para audience="coffeegrinder">Fixed a bug in the ambiguity analyzer where
+</listitem>
+<listitem>
+<para>Fixed a bug in the ambiguity analyzer where
 it didn’t support Unicode character class groupings (LC, L, M, N, P, S, Z, C).
 </para>
+</listitem>
+<listitem>
+<para>Added an option to normalize line endings.
+</para>
+</listitem>
+<listitem>
+<para>Added an option to mark ambiguities. When enabled, this option
+identifies places in the tree where an ambiguous choice was made.
+(This only works for vertical ambiguities on nonterminals that aren’t
+suppressed.)
+</para>
+</listitem>
+</itemizedlist>
 
-<para audience="coffeefilter"/> <!-- no changes -->
+<para audience="coffeefilter">Added support for the “mark ambiguities” option. When
+enabled <code>n:ambiguous="true"</code> attributes are added to the XML trees.</para>
 
 <para audience="coffeesacks"/> <!-- no changes -->
 
-<para audience="coffeepot">Added a <option>--normalize</option> option
-to enable normalizing line endings on the input. Also added a
-<property>normalize-line-endings</property> configuration property.
-Fixed a couple of serialization bugs where a newline was sometimes
-missing before a closing tag when pretty printing was enabled and
-where the “trailing newline on output” option was ignored.
+<itemizedlist audience="coffeepot">
+<listitem>
+<para>Fixed a serialization bug where a newline was sometimes
+missing before a closing tag when pretty printing was enabled.</para>
+</listitem>
+<listitem>
+<para>Fixed a serialization bug where the “trailing newline on
+output” option was ignored.
 </para>
+</listitem>
+<listitem>
+<para>Added a <option>--normalize</option> option
+and a <property>normalize-line-endings</property> property
+to enable normalizing line endings on the input.
+</para>
+</listitem>
+<listitem>
+<para>Added a <option>--mark-ambiguities</option>
+option and a <property>mark-ambiguities</property> property to support
+marking the location of ambiguities in the XML trees.</para>
+</listitem>
+<listitem>
 <para audience="coffeepot">Moved the ambiguity report output from
 “standard output” to “standard error” so that command line redirection
 once again only includes the XML. Added a <option>--debug</option>
 option.</para>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
 </revhistory>

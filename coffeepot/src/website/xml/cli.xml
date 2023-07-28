@@ -264,6 +264,16 @@ by specifying a list of logger:level pairs, for example:
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_mark-ambiguities">
+<term><option>--mark-ambiguities</option></term>
+<listitem>
+<para>Enables marking ambiguities in the output. This option will
+cause additional attributes to be added to the result trees marking
+where ambiguous choices were made. (This only works for vertical
+ambiguities on nonterminals that aren’t suppressed.)
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_normalize">
 <term><option>--normalize</option></term>
 <listitem>

@@ -48,6 +48,7 @@ public class ParserOptionsLoader {
         PROPERTY_NAMES.add("suppress-states");
         PROPERTY_NAMES.add("trailing-newline-on-output");
         PROPERTY_NAMES.add("normalize-line-endings");
+        PROPERTY_NAMES.add("mark-ambiguities");
     }
 
     private static final String propfn = "nineml.properties";
@@ -136,6 +137,7 @@ public class ParserOptionsLoader {
         options.setAssertValidXmlCharacters(getBooleanProperty("assert-valid-xml-characters", true));
         options.setPrefixParsing(getBooleanProperty("prefix-parsing"));
         options.setNormalizeLineEndings(getBooleanProperty("normalize-line-endings"));
+        options.setMarkAmbiguities(getBooleanProperty("mark-ambiguities"));
 
         options.setAllowMultipleDefinitions(getBooleanProperty("allow-multiple-definitions"));
         options.setAllowUnproductiveSymbols(getBooleanProperty("allow-unproductive-symbols"));

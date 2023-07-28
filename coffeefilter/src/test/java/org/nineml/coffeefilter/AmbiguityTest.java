@@ -168,4 +168,27 @@ public class AmbiguityTest {
             fail();
         }
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void ambiguity_marked(String parserType) {
+        ParserOptions localOptions = new ParserOptions(options);
+        options.setParserType(parserType);
+        options.setMarkAmbiguities(true);
+
+        // This test is for the case where no ambiguous choices are made (taking priority into account)
+        String input = "S = 'x', (A | B), 'y'. -X = 'a' . A = X | B. B = 'b' | A.";
+
+        InvisibleXmlParser parser = invisibleXml.getParserFromIxml(input);
+        input = "xay";
+        InvisibleXmlDocument doc = parser.parse(input);
+
+        try {
+            String xml = doc.getTree();
+            Assertions.assertEquals("<S xmlns:n='https://nineml.org/ns/' xmlns:ixml='http://invisiblexml.org/NS' ixml:state='ambiguous'>x<A n:ambiguous='true'>a</A>y</S>", xml);
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
 }

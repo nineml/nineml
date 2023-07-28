@@ -155,6 +155,7 @@ public class Configuration {
         options.setPriorityStyle(cmain.priorityStyle);
         options.setStrictAmbiguity(cmain.strictAmbiguity);
         options.setNormalizeLineEndings(cmain.normalizeLineEndings);
+        options.setMarkAmbiguities(cmain.markAmbiguities);
 
         if (cmain.gllParser) {
             options.setParserType("GLL");
@@ -604,6 +605,9 @@ public class Configuration {
 
         @Parameter(names = {"--debug"}, description = "Additional debugging output")
         public boolean debug = false;
+
+        @Parameter(names = {"--mark-ambiguities", "--mark-ambiguity"}, description = "Mark where ambiguities occur in the document")
+        public boolean markAmbiguities = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

@@ -119,6 +119,16 @@ ignored if it isn’t successfully parsed.
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="prop_mark-ambiguities">
+<term><property>mark-ambiguities</property> (boolean)</term>
+<listitem>
+<para>Enables marking ambiguities in the output. This option will
+cause additional attributes to be added to the result trees marking
+where ambiguous choices were made. (This only works for vertical
+ambiguities on nonterminals that aren’t suppressed.)
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="prop_normalize-line-endings">
 <term><property>normalize-line-endings</property> (boolean)</term>
 <listitem>

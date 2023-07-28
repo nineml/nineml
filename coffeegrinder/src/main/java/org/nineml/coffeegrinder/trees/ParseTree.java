@@ -13,25 +13,26 @@ import java.util.*;
  * to determine what parts of the tree have already been constructed.</p>
  */
 public class ParseTree {
-    /* package */ final int cost;
     public final Vertex vertex;
     /* package */ ParseTree left = null;
     /* package */ ParseTree right = null;
     public final ParseTree parent;
+    private final boolean markAmbiguities;
+    private final boolean ambiguous;
 
-    /* package */ ParseTree() {
-        cost = 0;
+    /* package */ ParseTree(boolean markAmbiguities) {
         vertex = null;
         parent = null;
+        ambiguous = false;
+        this.markAmbiguities = markAmbiguities;
     }
 
-    /* package */ ParseTree(ParseTree parent, Vertex vertex, int cost) {
+    /* package */ ParseTree(ParseTree parent, Vertex vertex) {
         this.vertex = vertex;
-        this.cost = cost;
         this.parent = parent;
-        if (parent.right != null) {
-            throw new RuntimeException("BANG");
-        }
+        this.markAmbiguities = parent.markAmbiguities;
+        this.ambiguous = markAmbiguities && vertex.isAmbiguous;
+        assert parent.right == null;
         if (parent.left == null) {
             parent.left = this;
         } else {
@@ -51,11 +52,7 @@ public class ParseTree {
     }
 
     /* package */ ParseTree addChild(Vertex vertex) {
-        return addChild(vertex, -1);
-    }
-
-    /* package */ ParseTree addChild(Vertex vertex, int cost) {
-        return new ParseTree(this, vertex, cost);
+        return new ParseTree(this, vertex);
     }
 
     /* package */ void build(TreeBuilder builder) {
@@ -84,11 +81,15 @@ public class ParseTree {
     }
 
     private Map<String,String> attributeMap(List<ParserAttribute> attributes) {
-        if (attributes.isEmpty()) {
+        if (!ambiguous && attributes.isEmpty()) {
             return Collections.emptyMap();
         }
 
         HashMap<String,String> attmap = new HashMap<>();
+        if (ambiguous) {
+            attmap.put(ForestNode.AMBIGUOUS_ATTRIBUTE, "true");
+        }
+
         for (ParserAttribute attr : attributes) {
             if (!attmap.containsKey(attr.getName())) {
                 attmap.put(attr.getName(), attr.getValue());

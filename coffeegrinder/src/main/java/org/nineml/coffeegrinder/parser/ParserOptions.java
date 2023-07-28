@@ -17,6 +17,7 @@ public class ParserOptions {
     private String priorityStyle = "max";
     private ProgressMonitor monitor = null;
     private boolean normalizeLineEndings = false;
+    private boolean markAmbiguities = false;
 
     /**
      * Create the parser options.
@@ -56,6 +57,8 @@ public class ParserOptions {
         prefixParsing = copy.prefixParsing;
         monitor = copy.monitor;
         priorityStyle = copy.priorityStyle;
+        normalizeLineEndings = copy.normalizeLineEndings;
+        markAmbiguities = copy.markAmbiguities;
     }
 
     /**
@@ -213,5 +216,19 @@ public class ParserOptions {
         normalizeLineEndings = normalize;
     }
 
+    /**
+     * Are individual ambiguities be marked?
+     * @return true if ambiguities will be normalized
+     */
+    public boolean getMarkAmbiguities() {
+        return markAmbiguities;
+    }
 
+    /**
+     * Set ambiguity marking.
+     * @param mark true if individual ambiguities should be marked.
+     */
+    public void setMarkAmbiguities(boolean mark) {
+        markAmbiguities = mark;
+    }
 }

@@ -5,6 +5,7 @@ import org.nineml.coffeefilter.ParserOptions;
 import org.nineml.coffeefilter.exceptions.IxmlException;
 import org.nineml.coffeefilter.util.AttributeBuilder;
 import org.nineml.coffeefilter.util.TokenUtils;
+import org.nineml.coffeegrinder.parser.ForestNode;
 import org.nineml.coffeegrinder.parser.NonterminalSymbol;
 import org.nineml.coffeegrinder.tokens.Token;
 import org.nineml.coffeegrinder.trees.TreeBuilder;
@@ -183,7 +184,7 @@ public class ContentHandlerAdapter implements TreeBuilder {
                 handler.startPrefixMapping(InvisibleXml.ixml_prefix, InvisibleXml.ixml_ns);
             }
 
-            if (options.getShowBnfNonterminals()) {
+            if (options.getShowBnfNonterminals() || (options.getMarkAmbiguities() && ambiguous)) {
                 handler.startPrefixMapping(InvisibleXml.nineml_prefix, InvisibleXml.nineml_ns);
             }
 
@@ -277,6 +278,10 @@ public class ContentHandlerAdapter implements TreeBuilder {
                 String aname = InvisibleXml.ixml_prefix + ":mark";
                 atts.addAttribute(InvisibleXml.ixml_ns, aname, String.valueOf(mark));
                 names.add(aname);
+            }
+            if (options.getMarkAmbiguities() && attributes.containsKey(ForestNode.AMBIGUOUS_ATTRIBUTE)) {
+                String aname = InvisibleXml.nineml_prefix + ":ambiguous";
+                atts.addAttribute(InvisibleXml.nineml_ns, aname, attributes.get(ForestNode.AMBIGUOUS_ATTRIBUTE));
             }
 
             for (Node att : children.stream().filter(e -> e instanceof AttributeNode).collect(Collectors.toList())) {

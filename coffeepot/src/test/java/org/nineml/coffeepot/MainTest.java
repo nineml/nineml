@@ -181,6 +181,22 @@ public class MainTest extends CoffeePotTest {
     }
 
     @Test
+    public void showAmbiguities() {
+        WrappedPrintStream stdout = new WrappedPrintStream();
+        WrappedPrintStream stderr = new WrappedPrintStream();
+        Main main = new Main(stdout.stream, stderr.stream);
+        try {
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/ambig2.ixml", "x", "--mark-ambiguities" });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<S xmlns:n='https://nineml.org/ns/' xmlns:ixml='http://invisiblexml.org/NS' n:ambiguous='true' ixml:state='ambiguous'>x</S>",
+                    manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+
+    @Test
     public void showMarks() {
         WrappedPrintStream stdout = new WrappedPrintStream();
         WrappedPrintStream stderr = new WrappedPrintStream();
