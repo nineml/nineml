@@ -222,6 +222,7 @@ task sourcesJar(type: Jar, dependsOn: ['generateBuildConfig']) {
 
 task patch_changelog(type: SaxonXsltTask) {
   inputs.files fileTree(dir: "${projectDir}/src/website/xml")
+  inputs.files fileTree(dir: "${projectDir}/../src/website/xml")
   outputs.files fileTree(dir: "${buildDir}/tmp/coffeepot")
 
   doFirst {
