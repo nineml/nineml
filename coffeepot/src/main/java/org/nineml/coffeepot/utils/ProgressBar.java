@@ -274,13 +274,15 @@ public class ProgressBar implements ProgressMonitor {
         double tpms = (1.0*record) / duration;
         long remaining = (long) ((totalSize - record) / tpms);
 
-        if (showProgressBar) {
-            printProgress("%5.1f%% (%d r/s) %s %s", percent * 100.0, (long) (tpms * 1000.0), bar(percent), timer.elapsed(remaining));
-        } else {
-            options.getLogger().info(logcategory, "Parsed %,d records (%4.1f%% at %,d r/s)",
-                    record, percent * 100.0, (long) (tpms * 1000.0));
-            lastUpdateTime = now;
-            lastUpdatePercent = percent;
+        if (record > 0) {
+            if (showProgressBar) {
+                printProgress("%5.1f%% (%d r/s) %s %s", percent * 100.0, (long) (tpms * 1000.0), bar(percent), timer.elapsed(remaining));
+            } else {
+                options.getLogger().info(logcategory, "Parsed %,d records (%4.1f%% at %,d r/s)",
+                        record, percent * 100.0, (long) (tpms * 1000.0));
+                lastUpdateTime = now;
+                lastUpdatePercent = percent;
+            }
         }
     }
 
