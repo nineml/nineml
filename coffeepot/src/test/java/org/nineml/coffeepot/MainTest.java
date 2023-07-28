@@ -157,9 +157,24 @@ public class MainTest extends CoffeePotTest {
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/ambig2.ixml", "--analyze-ambiguity", "x" });
             Assertions.assertEquals(1, manager.stringRecords.size());
-            Assertions.assertTrue(stdout.contains("The grammar is ambiguous"));
-            Assertions.assertTrue(stdout.contains("vertical ambiguity:"));
-            Assertions.assertTrue(stdout.contains("horizontal ambiguity:"));
+            Assertions.assertTrue(stderr.contains("The grammar is ambiguous"));
+            Assertions.assertTrue(stderr.contains("vertical ambiguity:"));
+            Assertions.assertTrue(stderr.contains("horizontal ambiguity:"));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void analyzeUnicodeClassAmbiguity() {
+        WrappedPrintStream stdout = new WrappedPrintStream();
+        WrappedPrintStream stderr = new WrappedPrintStream();
+        Main main = new Main(stdout.stream, stderr.stream);
+        try {
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/list2.ixml", "--analyze-ambiguity", "a,1" });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertTrue(stderr.contains("The grammar is ambiguous"));
+            Assertions.assertTrue(stderr.contains("may be unreliable"));
         } catch (Exception ex) {
             fail();
         }
@@ -385,6 +400,4 @@ public class MainTest extends CoffeePotTest {
             fail();
         }
     }
-
-
 }
