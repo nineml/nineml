@@ -14,7 +14,6 @@ import java.util.Map;
 public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     private String progressBar = "false";
     private String barCharacters = ".#";
-    private boolean trailingNewlineOnOutput = true;
     private boolean asciiOnly = false;
     private boolean provenance = false;
     private final HashMap<String,String> graphOptions;
@@ -42,7 +41,6 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         super(copy);
         progressBar = copy.progressBar;
         barCharacters = copy.barCharacters;
-        trailingNewlineOnOutput = copy.trailingNewlineOnOutput;
         asciiOnly = copy.asciiOnly;
         graphOptions = new HashMap<>(copy.graphOptions);
         provenance = copy.provenance;
@@ -102,24 +100,6 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
             throw new IllegalArgumentException("At least two characters must be provided.");
         }
         barCharacters = chars;
-    }
-
-    /**
-     * Make sure the output ends with a newline?
-     * <p>If this option is true, a newline will be added to the end of the output.
-     * </p>
-     * @return the trailing newline setting.
-     */
-    public boolean getTrailingNewlineOnOutput() {
-        return trailingNewlineOnOutput;
-    }
-
-    /**
-     * Set the {@link #getTrailingNewlineOnOutput()} property.
-     * @param newline add a trailing newline?
-     */
-    public void setTrailingNewlineOnOutput(boolean newline) {
-        trailingNewlineOnOutput = newline;
     }
 
     /**

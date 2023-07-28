@@ -87,7 +87,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
     @Override
     public void endDocument() throws SAXException {
         super.endDocument();
-        if (options.getIgnoreTrailingWhitespace() && !outputlf) {
+        if (options.getTrailingNewlineOnOutput() && !outputlf) {
             stream.println();
         }
     }
