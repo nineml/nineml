@@ -1,0 +1,41 @@
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xi='http://www.w3.org/2001/XInclude'
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          version="5.2">
+<info>
+<title>Unified NineML change log</title>
+</info>
+
+<para>This appendix is a unified change log for all of the NineML
+components in this repository. It’s never formatted directly, it’s
+distributed into the different component repositories during the
+build. Having the source in a single place is an attempt to simplify
+managing the change log. The log is used automatically in the release
+notes for each component.</para>
+
+<para>The unified log starts at version 3.0.0m. Previous history is in
+the individual component <filename>changelogs.xml</filename> files.</para>
+
+<revhistory>
+<revision>
+<revnumber>3.0.0m</revnumber>
+<date>2023-07-28</date>
+<revdescription>
+<para>This is a beta release for version 3.0.0.</para>
+
+<para audience="coffeegrinder">Added an option to normalize line
+endings.</para>
+
+<para audience="coffeefilter"/> <!-- no changes -->
+
+<para audience="coffeesacks"/> <!-- no changes -->
+
+<para audience="coffeepot">Added a <option>--normalize</option> option
+to enable normalizing line endings on the input. Also added a
+<property>normalize-line-endings</property> configuration property.
+</para>
+</revdescription>
+</revision>
+</revhistory>
+
+</appendix>

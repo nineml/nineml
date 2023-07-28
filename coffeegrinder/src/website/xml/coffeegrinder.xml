@@ -84,7 +84,7 @@ that I don’t understand.)</para>
 <area xml:id="ex_amb" coords="37 55"/>
 </areaspec>
 <programlisting language="java"
-><xi:include href="../../test/java/DocExample.java"
+><xi:include href="../../../src/test/java/DocExample.java"
              fragid="text(line=15,60;md5=12f1c9480b45ddf78c80e6802619f33e)" parse="text"
 /></programlisting>
 <calloutlist>

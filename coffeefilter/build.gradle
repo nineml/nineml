@@ -307,10 +307,32 @@ tasks.withType(JavaCompile) {
 
 // ============================================================
 
-task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources"]) {
+task patch_changelog(type: SaxonXsltTask) {
   inputs.files fileTree(dir: "${projectDir}/src/website/xml")
+  outputs.files fileTree(dir: "${buildDir}/tmp/coffeefilter")
 
-  input "${projectDir}/src/website/xml/coffeefilter.xml"
+  doFirst {
+    copy {
+      into "${buildDir}/tmp/coffeefilter"
+      from "${projectDir}/src/website/xml"
+      include "**/*.xml"
+      exclude "changelog.xml"
+    }
+  }
+
+  input "${projectDir}/src/website/xml/changelog.xml"
+  stylesheet "${projectDir}/../website/combined-changelog.xsl"
+  output "${buildDir}/tmp/coffeefilter/changelog.xml"
+  parameters (
+    'version': ninemlVersion,
+    'audience': 'coffeefilter'
+  )
+}
+
+task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources", "patch_changelog"]) {
+  inputs.files fileTree(dir: "${buildDir}/tmp/coffeefilter")
+
+  input "${buildDir}/tmp/coffeefilter/coffeefilter.xml"
   stylesheet "${projectDir}/../website/xinclude.xsl"
   output "${buildDir}/tmp/coffeefilter.xml"
   args(['-init:org.docbook.xsltng.extensions.Register'])

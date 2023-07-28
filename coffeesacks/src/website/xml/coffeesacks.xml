@@ -46,14 +46,14 @@ the <code>cs:</code> namespace prefix in this document.</para>
 <para>Given an Invisible XML grammar for dates in <uri>date.ixml</uri>:</para>
 
 <programlisting language="ixml">
-<xi:include href="../../test/resources/date.ixml" parse="text"/>
+<xi:include href="../../../src/test/resources/date.ixml" parse="text"/>
 </programlisting>
 
 <para>A stylesheet like the following will parse a string against that
 grammar and return the result:</para>
 
 <programlisting language="xml">
-<xi:include href="../../test/resources/date-xml-example.xsl" parse="text"/>
+<xi:include href="../../../src/test/resources/date-xml-example.xsl" parse="text"/>
 </programlisting>
 
 <para>Returning:</para>
@@ -288,7 +288,7 @@ XML node, an <code>xs:anyURI</code>, or a string.</para>
 <para>Consider the following grammar:</para>
 
 <programlisting language="ixml">
-<xi:include href="../../test/resources/messy.ixml" parse="text"/>
+<xi:include href="../../../src/test/resources/messy.ixml" parse="text"/>
 </programlisting>
 
 <para>It contains unused and undefined nonterminals.</para>

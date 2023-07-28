@@ -253,6 +253,19 @@ by specifying a list of logger:level pairs, for example:
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_normalize">
+<term><option>--normalize</option></term>
+<listitem>
+<para>Normalize line endings in the input file. This option will
+translate all occurrences of carriage return (<code>#D</code>),
+carriage return followed immediately by a line feed
+(<code>#D#A</code>), next line (<code>#85</code>), and line separator
+(<code>#2028</code>) into a single line feed (<code>#A</code>).
+Multiple line endings are not combined. In other words,
+<code>#85#2028</code> becomes <code>#A#A</code>, not <code>#A</code>.
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_no-output">
 <term><option>--no-output</option></term>
 <listitem>

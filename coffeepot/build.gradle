@@ -220,11 +220,31 @@ task sourcesJar(type: Jar, dependsOn: ['generateBuildConfig']) {
 
 // ============================================================
 
-task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources"]) {
+task patch_changelog(type: SaxonXsltTask) {
   inputs.files fileTree(dir: "${projectDir}/src/website/xml")
-  inputs.file "${projectDir}/../website/xinclude.xsl"
+  outputs.files fileTree(dir: "${buildDir}/tmp/coffeepot")
 
-  input "${projectDir}/src/website/xml/coffeepot.xml"
+  doFirst {
+    copy {
+      into "${buildDir}/tmp/coffeepot"
+      from "${projectDir}/src/website/xml"
+      exclude "changelog.xml"
+    }
+  }
+
+  input "${projectDir}/src/website/xml/changelog.xml"
+  stylesheet "${projectDir}/../website/combined-changelog.xsl"
+  output "${buildDir}/tmp/coffeepot/changelog.xml"
+  parameters (
+    'version': ninemlVersion,
+    'audience': 'coffeepot'
+  )
+}
+
+task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources", "patch_changelog"]) {
+  inputs.files fileTree(dir: "${buildDir}/tmp/coffeepot")
+
+  input "${buildDir}/tmp/coffeepot/coffeepot.xml"
   stylesheet "${projectDir}/../website/xinclude.xsl"
   output "${buildDir}/tmp/coffeepot.xml"
   args(['-init:org.docbook.xsltng.extensions.Register'])

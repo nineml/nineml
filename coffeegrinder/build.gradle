@@ -182,12 +182,34 @@ tasks.withType(JavaCompile) {
 
 // ============================================================
 
-task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources"]) {
+task patch_changelog(type: SaxonXsltTask) {
   inputs.files fileTree(dir: "${projectDir}/src/website/xml")
+  outputs.files fileTree(dir: "${buildDir}/tmp/coffeegrinder")
+
+  doFirst {
+    copy {
+      into "${buildDir}/tmp/coffeegrinder"
+      from "${projectDir}/src/website/xml"
+      include "**/*.xml"
+      exclude "changelog.xml"
+    }
+  }
+
+  input "${projectDir}/src/website/xml/changelog.xml"
+  stylesheet "${projectDir}/../website/combined-changelog.xsl"
+  output "${buildDir}/tmp/coffeegrinder/changelog.xml"
+  parameters (
+    'version': ninemlVersion,
+    'audience': 'coffeegrinder'
+  )
+}
+
+task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources", "patch_changelog"]) {
+  inputs.files fileTree(dir: "${buildDir}/tmp/coffeegrinder")
   inputs.file "${projectDir}/../website/xinclude.xsl"
   inputs.file "${projectDir}/src/test/java/DocExample.java"
 
-  input "${projectDir}/src/website/xml/coffeegrinder.xml"
+  input "${buildDir}/tmp/coffeegrinder/coffeegrinder.xml"
   stylesheet "${projectDir}/../website/xinclude.xsl"
   output "${buildDir}/tmp/coffeegrinder.xml"
   args(['-init:org.docbook.xsltng.extensions.Register'])

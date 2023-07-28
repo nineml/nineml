@@ -194,8 +194,8 @@ public class ParserOptions {
     /**
      * Should line endings be normalized?
      * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
-     * string are replaced with a single #A. This only applies to inputs that are strings are sequences
-     * of characters.</p>
+     * string are replaced with a single #A. This only applies to sequences of characters
+     * in the input.</p>
      * @return true if line endings will be normalized
      */
     public boolean getNormalizeLineEndings() {
@@ -205,8 +205,8 @@ public class ParserOptions {
     /**
      * Set normalize line endings
      * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
-     * string are replaced with a single #A. This only applies to inputs that are strings are sequences
-     * of characters.</p>
+     * string are replaced with a single #A. This only applies to sequences of characters
+     * in the input.</p>
      * @param normalize true if line endings should be normalized
      */
     public void setNormalizeLineEndings(boolean normalize) {

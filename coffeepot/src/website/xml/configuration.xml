@@ -26,34 +26,39 @@ progress-bar=tty</programlisting>
 following options are read from it:</para>
 
 <variablelist>
-<varlistentry><term><property>allow-multiple-definitions</property> (boolean)</term>
-  <term><property>allow-undefined-symbols</property> (boolean)</term>
-  <term><property>allow-unproductive-symbols</property> (boolean)</term>
-  <term><property>allow-unreachable-symbols</property> (boolean)</term>
+<varlistentry>
+<term><property xml:id="prop_allow-multiple-definitions">allow-multiple-definitions</property> (boolean)</term>
+<term><property xml:id="prop_allow-undefined-symbols">allow-undefined-symbols</property> (boolean)</term>
+<term><property xml:id="prop_allow-unproductive-symbols">allow-unproductive-symbols</property> (boolean)</term>
+<term><property xml:id="prop_allow-unreachable-symbols">allow-unreachable-symbols</property> (boolean)</term>
 <listitem>
 <para>When the parser is not in “pedantic” mode, allow (or forbid)
 grammars with these conditions.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>ascii-only</property> (boolean)</term>
+<varlistentry xml:id="prop_ascii-only">
+<term><property>ascii-only</property> (boolean)</term>
 <listitem>
 <para>Use only ASCII characters in messages such as the grammar or ambiguity descriptions.
 (Note: this has no effect on the output of the parse.)
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>assert-valid-xml-characters</property> (boolean)</term>
+<varlistentry xml:id="prop_assert-valid-xml-characters">
+<term><property>assert-valid-xml-characters</property> (boolean)</term>
 <listitem>
 <para>Check that the output contains no invalid characters.</para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>assert-valid-xml-names</property> (boolean)</term>
+<varlistentry xml:id="prop_assert-valid-xml-names">
+<term><property>assert-valid-xml-names</property> (boolean)</term>
 <listitem>
 <para>Check that the output contains no invalid XML element or attribute names.</para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>default-log-level</property> (string)</term>
+<varlistentry xml:id="prop_default-log-level">
+<term><property>default-log-level</property> (string)</term>
 <listitem>
 <para>The default log level: <literal>trace</literal>,
 <literal>debug</literal>, <literal>info</literal>,
@@ -62,17 +67,20 @@ or <literal>silent</literal>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>disable-pragmas</property> (string)</term>
+<varlistentry xml:id="prop_disable-pragmas">
+<term><property>disable-pragmas</property> (string)</term>
 <listitem>
 <para>A comma-separated list of pragma names. These pragmas will be ignored.</para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>enable-pragmas</property> (string)</term>
+<varlistentry xml:id="prop_enable-pragmas">
+<term><property>enable-pragmas</property> (string)</term>
 <listitem>
 <para>A comma-separated list of pragma names. These pragmas will be enabled.</para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>graph-options</property> (string)</term>
+<varlistentry xml:id="prop_graph-options">
+<term><property>graph-options</property> (string)</term>
 <listitem>
 <para>A comma-separated list of graph options; each option must have
 the form name=value or name:value. These options will be passed to the
@@ -80,7 +88,8 @@ stylesheet that generates diagrams of the parse forest.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>graphviz</property> (filename)</term>
+<varlistentry xml:id="prop_graphviz">
+<term><property>graphviz</property> (filename)</term>
 <listitem>
 <para>The location of the
 <link xlink:href="https://en.wikipedia.org/wiki/Graphviz">Graphviz</link> “dot”
@@ -88,33 +97,49 @@ program that should be used for rendering diagrams of graphs.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>ignore-bom</property> (boolean)</term>
+<varlistentry xml:id="prop_ignore-bom">
+<term><property>ignore-bom</property> (boolean)</term>
 <listitem>
 <para>Ignore a BOM at the start of an input document?
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>ignore-trailing-whitespace</property> (boolean)</term>
+<varlistentry xml:id="prop_ignore-trailing-whitespace">
+<term><property>ignore-trailing-whitespace</property> (boolean)</term>
 <listitem>
 <para>If true, trailing whitespace at the end of input files will be
 ignored if it isn’t successfully parsed.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>log-levels</property> (string)</term>
+<varlistentry xml:id="prop_log-levels">
+<term><property>log-levels</property> (string)</term>
 <listitem>
 <para>A list of log category/level mappings.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry>
+<varlistentry xml:id="prop_normalize-line-endings">
+<term><property>normalize-line-endings</property> (boolean)</term>
+<listitem>
+<para>If true, line endings on the input file will be normalized. Normalizing will
+translate all occurrences of carriage return (<code>#D</code>),
+carriage return followed immediately by a line feed
+(<code>#D#A</code>), next line (<code>#85</code>), and line separator
+(<code>#2028</code>) into a single line feed (<code>#A</code>).
+Multiple line endings are not combined. In other words,
+<code>#85#2028</code> becomes <code>#A#A</code>, not <code>#A</code>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry xml:id="prop_parser">
 <term><property>parser</property> (string)</term>
 <listitem>
 <para>The parser to use: <literal>Earley</literal> or <literal>GLL</literal>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry>
+<varlistentry xml:id="prop_pedantic">
 <term><property>pedantic</property> (boolean)</term>
 <listitem>
 <para>By default, <application>CoffeePot</application> accepts
@@ -125,20 +150,23 @@ may be used.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>prefix-parsing</property> (boolean)</term>
+<varlistentry xml:id="prop_prefix-parsing">
+<term><property>prefix-parsing</property> (boolean)</term>
 <listitem>
 <para>If true, a parse will succeed if it matches a prefix of the input.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>pretty-print</property> (boolean)</term>
+<varlistentry xml:id="prop_pretty-print">
+<term><property>pretty-print</property> (boolean)</term>
 <listitem>
 <para>If true, line breaks and indentation will be added to the XML output
 so that it’s easier to read.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>progress-bar</property> (“on”, “off”, or “tty”)</term>
+<varlistentry xml:id="prop_progress-bar">
+<term><property>progress-bar</property> (“on”, “off”, or “tty”)</term>
 <listitem>
 <para>Setting the progress bar to “on” or “off” enables or disables it.
 Setting it to “tty” enables it only if the output is going to a “tty”, an
@@ -146,14 +174,16 @@ interactive computer terminal.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>progress-bar-characters</property> (string)</term>
+<varlistentry xml:id="prop_progress-bar-characters">
+<term><property>progress-bar-characters</property> (string)</term>
 <listitem>
 <para>Sets the characters used to construct the progress bar when
 it is displayed.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>progress-bar-style</property> (string)</term>
+<varlistentry xml:id="prop_progress-bar-style">
+<term><property>progress-bar-style</property> (string)</term>
 <listitem>
 <para>Sets the progress bar style. The style is just a name for
 a set of characters. The styles are:
@@ -187,7 +217,7 @@ a set of characters. The styles are:
 </variablelist>
 </listitem>
 </varlistentry>
-<varlistentry>
+<varlistentry xml:id="prop_strict-ambiguity">
 <term><property>strict-ambiguity</property> (boolean)</term>
 <listitem>
 <para>If a grammar contains priority pragmas that uniquely determine
@@ -196,7 +226,7 @@ whether or not it is reported as ambiguous. If strict ambiguity is true,
 it will be reported as ambiguous.</para>
 </listitem>
 </varlistentry>
-<varlistentry>
+<varlistentry xml:id="prop_suppress-states">
 <term><property>suppress-states</property> (string)</term>
 <listitem>
 <para>An Invisible XML parse adds states to the root element to
@@ -204,7 +234,8 @@ indicate features such as ambiguity or a prefix parse. The states in this
 comma-separated list will be suppressed.</para>
 </listitem>
 </varlistentry>
-<varlistentry><term><property>trailing-newline-on-output</property> (boolean)</term>
+<varlistentry xml:id="prop_trailing-newline-on-output">
+<term><property>trailing-newline-on-output</property> (boolean)</term>
 <listitem>
 <para>If true, a newline will be printed after the output. It’s often useful
 to have a newline at the end of the XML, after the closing tag of the document
