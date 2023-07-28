@@ -24,7 +24,8 @@ the individual component <filename>changelogs.xml</filename> files.</para>
 <para>This is a beta release for version 3.0.0.</para>
 
 <para audience="coffeegrinder">Added an option to normalize line
-endings.</para>
+endings. Fixed a bug where the GLL parser would fail to correctly find the
+parser attributes associated with a “left hand side”.</para>
 
 <para audience="coffeefilter"/> <!-- no changes -->
 
