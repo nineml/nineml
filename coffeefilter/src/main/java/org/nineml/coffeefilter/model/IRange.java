@@ -80,7 +80,7 @@ public class IRange extends XTerminal {
         this.from = from;
         this.to = to;
         if (this.from > this.to) {
-            throw IxmlException.invalidRange(""+from, ""+to);
+            throw IxmlException.invalidRange(String.valueOf(from), String.valueOf(to));
         }
     }
 
