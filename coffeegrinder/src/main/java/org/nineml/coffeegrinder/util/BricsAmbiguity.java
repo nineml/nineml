@@ -67,8 +67,7 @@ public class BricsAmbiguity {
                                         checkReliability(cset.getCharacters());
                                         next = BasicAutomata.makeCharSet(cset.getCharacters());
                                     } else if (cset.isUnicodeCharacterClass()) {
-                                        // We don't have to worry about characters from the astral plane in classes,
-                                        // the classes are disjoint so that won't cause errors in ambiguity detection.
+                                        reliable = reliable && !unreliableClasses.contains(cset.getUnicodeCharacterClass());
                                         next = getAutomaton(cset.getUnicodeCharacterClass());
                                     } else {
                                         throw new IllegalStateException("Impossible character set: " + cset);
@@ -147,6 +146,87 @@ public class BricsAmbiguity {
                 pname = name;
                 line = reader.readLine();
             }
+
+            // https://www.unicode.org/reports/tr44/#General_Category_Values
+            ArrayList<CodepointRange> range = new ArrayList<>();
+            for (String uclass : new String[] { "Lu", "Ll", "Lt" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("LC");
+                }
+            }
+            codepoints.put("LC", new ArrayList<>(range));
+
+            if (unreliableClasses.contains("LC")) {
+                unreliableClasses.add("L");
+            }
+            for (String uclass : new String[] { "Lm", "Lo" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("L");
+                }
+            }
+            codepoints.put("L", range);
+
+            range = new ArrayList<>();
+            for (String uclass : new String[] { "Mn", "Mc", "Me" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("M");
+                }
+            }
+            codepoints.put("M", range);
+
+            range = new ArrayList<>();
+            for (String uclass : new String[] { "Nd", "Nl", "No" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("N");
+                }
+            }
+            codepoints.put("N", range);
+
+            range = new ArrayList<>();
+            for (String uclass : new String[] { "Pc", "Pd", "Ps", "Pe", "Pi", "Pf", "Po" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("P");
+                }
+            }
+            codepoints.put("P", range);
+
+            range = new ArrayList<>();
+            for (String uclass : new String[] { "Sm", "Sc", "Sk", "So" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("S");
+                }
+            }
+            codepoints.put("S", range);
+
+            range = new ArrayList<>();
+            for (String uclass : new String[] { "Zs", "Zl", "Zp" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("Z");
+                }
+            }
+            codepoints.put("Z", range);
+
+            range = new ArrayList<>();
+            for (String uclass : new String[] { "Cc", "Cf", "Cs", "Co" }) {
+                range.addAll(codepoints.get(uclass));
+                if (unreliableClasses.contains(uclass)) {
+                    unreliableClasses.add("C");
+                }
+            }
+            if (codepoints.containsKey("Cn")) {
+                range.addAll(codepoints.get("Cn")); // Unassigned
+                if (unreliableClasses.contains("Cn")) {
+                    unreliableClasses.add("C");
+                }
+            }
+            codepoints.put("C", range);
         } catch (IOException err) {
             throw new RuntimeException(err);
         }
