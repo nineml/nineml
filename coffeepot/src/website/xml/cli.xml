@@ -129,6 +129,13 @@ See <xref linkend="choose-alternative"/>.
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_debug">
+<term><option>--debug</option></term>
+<listitem>
+<para>If the <option>--debug</option> option is specified and CoffeePot terminates
+because an exception was raised, the stack trace will be printed.</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_describe-ambiguity">
 <term><option>--describe-ambiguity</option></term>
 <listitem>

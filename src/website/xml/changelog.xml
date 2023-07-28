@@ -26,6 +26,9 @@ the individual component <filename>changelogs.xml</filename> files.</para>
 <para audience="coffeegrinder">Added an option to normalize line
 endings. Fixed a bug where the GLL parser would fail to correctly find the
 parser attributes associated with a “left hand side”.</para>
+<para audience="coffeegrinder">Fixed a bug in the ambiguity analyzer where
+it didn’t support Unicode character class groupings (LC, L, M, N, P, S, Z, C).
+</para>
 
 <para audience="coffeefilter"/> <!-- no changes -->
 
@@ -38,6 +41,10 @@ Fixed a couple of serialization bugs where a newline was sometimes
 missing before a closing tag when pretty printing was enabled and
 where the “trailing newline on output” option was ignored.
 </para>
+<para audience="coffeepot">Moved the ambiguity report output from
+“standard output” to “standard error” so that command line redirection
+once again only includes the XML. Added a <option>--debug</option>
+option.</para>
 </revdescription>
 </revision>
 </revhistory>
