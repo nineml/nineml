@@ -463,6 +463,13 @@ and <code>prefix</code> states can be suppressed.
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_trailing-newline" revisionflag="added">
+<term><option>--trailing-newline</option></term>
+<listitem>
+<para>Force a newline at the end of the output?
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_unbuffered">
 <term><option>--unbuffered</option></term>
 <listitem>

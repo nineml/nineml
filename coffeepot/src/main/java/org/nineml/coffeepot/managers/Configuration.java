@@ -156,6 +156,7 @@ public class Configuration {
         options.setNormalizeLineEndings(cmain.normalizeLineEndings || options.getNormalizeLineEndings());
         options.setMarkAmbiguities(cmain.markAmbiguities || options.getMarkAmbiguities());
         options.setProvenance(cmain.provenance || options.getProvenance());
+        options.setTrailingNewlineOnOutput(cmain.trailingNewline || options.getTrailingNewlineOnOutput());
 
         if (cmain.priorityStyle != null) {
             options.setPriorityStyle(cmain.priorityStyle);
@@ -615,6 +616,9 @@ public class Configuration {
 
         @Parameter(names = {"--provenance"}, description = "Add provenance to (XML) outputs")
         public boolean provenance = false;
+
+        @Parameter(names = {"--trailing-newline"}, description = "Output a newline at the end of the output")
+        public boolean trailingNewline = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();
