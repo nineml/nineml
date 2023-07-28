@@ -16,6 +16,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     private String barCharacters = ".#";
     private boolean trailingNewlineOnOutput = true;
     private boolean asciiOnly = false;
+    private boolean provenance = false;
     private final HashMap<String,String> graphOptions;
 
     /**
@@ -44,6 +45,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         trailingNewlineOnOutput = copy.trailingNewlineOnOutput;
         asciiOnly = copy.asciiOnly;
         graphOptions = new HashMap<>(copy.graphOptions);
+        provenance = copy.provenance;
     }
 
     /**
@@ -141,6 +143,22 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     }
 
     /**
+     * Should we store provenance information in the output XML?
+     * @return true if the output XML should include a provenance comment
+     */
+    public boolean getProvenance() {
+        return provenance;
+    }
+
+    /**
+     * Set the {@link #getPedantic()} property.
+     * @param outputProvenance true if a provenance comment should be generated.
+     */
+    public void setProvenance(boolean outputProvenance) {
+        provenance = outputProvenance;
+    }
+
+    /**
      * Get the default graph options.
      *
      * @return the options.
@@ -201,6 +219,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         show(stderr, logger, "Strict ambiguity: %s", getStrictAmbiguity());
         show(stderr, logger, "Trailing newline on output: %s", getTrailingNewlineOnOutput());
         show(stderr, logger, "Priority style: %s", getPriorityStyle());
+        show(stderr, logger, "Provenance: %s", getProvenance());
 
         if (getGraphOptions().isEmpty()) {
             show(stderr, logger, "Graph options: null");
@@ -224,8 +243,6 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         for (String pname : InvisibleXml.knownPragmas()) {
             show(stderr, logger, "Pragma disabled: %s: %s", pname, pragmaDisabled(pname));
         }
-
-
     }
     
     private void show(PrintStream stderr, Logger logger, String format, Object... value) {

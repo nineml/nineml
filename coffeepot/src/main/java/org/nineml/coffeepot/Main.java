@@ -167,6 +167,7 @@ class Main {
 
         InputManager inputManager = new InputManager(config, parser);
         GraphOutputManager graphOutputManager = new GraphOutputManager(config);
+        outputManager.setInputManager(inputManager);
 
         long parseStart = Calendar.getInstance().getTimeInMillis();
 

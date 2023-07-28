@@ -348,6 +348,16 @@ The default for this option can be set in the
 <link linkend="configuration">configuration file</link>.</para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_provenance">
+<term><option>--provenance</option></term>
+<listitem>
+<para>If provenance is requested, a comment is generated at the top of XML outputs
+that identifies the version of NineML used and details about the input and the grammar.
+(This only applies to XML outputs as neither JSON nor CSV have a standard mechanism for
+comments.)
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_record-end">
 <term><option>--record-end:<replaceable>regular-expression</replaceable></option></term>
 <listitem>

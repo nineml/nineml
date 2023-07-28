@@ -73,7 +73,13 @@ option and a <property>mark-ambiguities</property> property to support
 marking the location of ambiguities in the XML trees.</para>
 </listitem>
 <listitem>
-<para audience="coffeepot">Moved the ambiguity report output from
+<para>Added a <option>--provenance</option>
+option and a <property>provenance</property> property to support
+writing provenance (program version, input, grammar details) as
+a comment at the top of XML outputs.</para>
+</listitem>
+<listitem>
+<para>Moved the ambiguity report output from
 “standard output” to “standard error” so that command line redirection
 once again only includes the XML. Added a <option>--debug</option>
 option.</para>

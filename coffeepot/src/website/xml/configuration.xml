@@ -227,6 +227,16 @@ a set of characters. The styles are:
 </variablelist>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="prop_provenance">
+<term><property>provenance</property> (boolean)</term>
+<listitem>
+<para>If provenance is requested, a comment is generated at the top of XML outputs
+that identifies the version of NineML used and details about the input and the grammar.
+(This only applies to XML outputs as neither JSON nor CSV have a standard mechanism for
+comments.)
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="prop_strict-ambiguity">
 <term><property>strict-ambiguity</property> (boolean)</term>
 <listitem>

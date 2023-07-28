@@ -20,6 +20,7 @@ public class InputManager {
     private final Configuration config;
     private final InvisibleXmlParser parser;
     public final List<String> records;
+    public final int inputSize;
 
     public InputManager(Configuration config, InvisibleXmlParser parser) throws IOException {
         this.config = config;
@@ -59,6 +60,8 @@ public class InputManager {
             input = config.input;
         }
 
+        inputSize = input.length();
+
         boolean hasRecords = false;
         String recordStart = null;
         String recordEnd = null;
@@ -81,7 +84,7 @@ public class InputManager {
                     config.options.getLogger().error(logcategory, "Grammar must not specify more than one record-start or record-end option.");
                 } else {
                     String value = metadata.get(key).get(0).trim();
-                    if ("".equals(value)) {
+                    if (value.isEmpty()) {
                         config.options.getLogger().error(logcategory, "Grammar must not specify empty record separator.");
                     } else {
                         String quote = value.substring(0, 1);

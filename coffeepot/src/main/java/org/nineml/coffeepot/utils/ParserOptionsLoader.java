@@ -49,6 +49,7 @@ public class ParserOptionsLoader {
         PROPERTY_NAMES.add("trailing-newline-on-output");
         PROPERTY_NAMES.add("normalize-line-endings");
         PROPERTY_NAMES.add("mark-ambiguities");
+        PROPERTY_NAMES.add("provenance");
     }
 
     private static final String propfn = "nineml.properties";
@@ -138,6 +139,7 @@ public class ParserOptionsLoader {
         options.setPrefixParsing(getBooleanProperty("prefix-parsing"));
         options.setNormalizeLineEndings(getBooleanProperty("normalize-line-endings"));
         options.setMarkAmbiguities(getBooleanProperty("mark-ambiguities"));
+        options.setProvenance(getBooleanProperty("provenance"));
 
         options.setAllowMultipleDefinitions(getBooleanProperty("allow-multiple-definitions"));
         options.setAllowUnproductiveSymbols(getBooleanProperty("allow-unproductive-symbols"));
