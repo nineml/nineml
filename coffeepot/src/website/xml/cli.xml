@@ -97,6 +97,10 @@ are taken as the input, separated by single spaces.
 <link xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link> to the grammar.
 This can help to identify where ambiguity occurs and what inputs will trigger it. The analyzer
 operates on the <link linkend="how">transformed grammar</link>.</para>
+<para>Note that the analyzer can be quite slow if the grammar uses
+Unicode character classes. This is especially true if it uses classes
+that contain a large number of characters such as <code>[L]</code> or
+<code>[LC]</code>.</para>
 </listitem>
 </varlistentry>
 <varlistentry xml:id="_bnf" revisionflag="added">
