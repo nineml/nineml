@@ -373,5 +373,18 @@ public class MainTest extends CoffeePotTest {
         }
     }
 
+    @Test
+    public void prettyprint() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/unix-lines.txt";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "-pp", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines>\n   <l>1</l>\n   <l>2</l>\n   <l>3</l>\n</lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
 
 }

@@ -33,6 +33,9 @@ endings.</para>
 <para audience="coffeepot">Added a <option>--normalize</option> option
 to enable normalizing line endings on the input. Also added a
 <property>normalize-line-endings</property> configuration property.
+Fixed a couple of serialization bugs where a newline was sometimes
+missing before a closing tag when pretty printing was enabled and
+where the “trailing newline on output” option was ignored.
 </para>
 </revdescription>
 </revision>

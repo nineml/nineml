@@ -206,7 +206,7 @@ public class OutputManager {
         checkConfig();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream output = new PrintStream(baos);
+        PrintStream out = new PrintStream(baos);
 
         DataTreeBuilder dataBuilder;
         SimpleTreeBuilder simpleBuilder;
@@ -217,7 +217,7 @@ public class OutputManager {
 
         switch (config.outputFormat) {
             case XML:
-                StringTreeBuilder handler = new StringTreeBuilder(opts, output);
+                StringTreeBuilder handler = new StringTreeBuilder(opts, out);
                 if (doc.succeeded()) {
                     walker.getTree(doc.getAdapter(handler));
                 } else {
@@ -234,7 +234,7 @@ public class OutputManager {
                     doc.getTree(dataBuilder);
                 }
                 dataTree = dataBuilder.getTree();
-                output.print(dataTree.asJSON());
+                out.print(dataTree.asJSON());
                 break;
             case JSON_TREE:
                 opts.setAssertValidXmlNames(false);
@@ -246,7 +246,7 @@ public class OutputManager {
                     doc.getTree(simpleBuilder);
                 }
                 simpleTree = simpleBuilder.getTree();
-                output.print(simpleTree.asJSON());
+                out.print(simpleTree.asJSON());
                 break;
             case CSV:
                 opts.setAssertValidXmlNames(false);
@@ -258,7 +258,7 @@ public class OutputManager {
                     List<CsvColumn> columns = dataTree.prepareCsv();
                     if (columns == null) {
                         walker.reset();
-                        StringTreeBuilder shandler = new StringTreeBuilder(opts, output);
+                        StringTreeBuilder shandler = new StringTreeBuilder(opts, out);
                         walker.getTree(doc.getAdapter(shandler));
                         try {
                             config.stderr.println("Result cannot be serialized as CSV: " + baos.toString("UTF-8"));
@@ -268,7 +268,7 @@ public class OutputManager {
                         }
                         return;
                     }
-                    output.print(dataTree.asCSV(columns, config.omitCsvHeaders));
+                    out.print(dataTree.asCSV(columns, config.omitCsvHeaders));
                 } else {
                     StringTreeBuilder sbuilder = new StringTreeBuilder(doc.getOptions());
                     doc.getTree(sbuilder);
@@ -283,7 +283,8 @@ public class OutputManager {
         }
 
         try {
-            stringRecords.add(baos.toString("UTF-8"));
+            String output = baos.toString("UTF-8");
+            stringRecords.add(output);
         } catch (UnsupportedEncodingException ex) {
             // This can't happen.
         }
