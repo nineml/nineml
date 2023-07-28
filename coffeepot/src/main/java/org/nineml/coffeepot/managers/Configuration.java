@@ -49,6 +49,7 @@ public class Configuration {
     public final String describeAmbiguityWith;
     public final boolean omitCsvHeaders;
     public final int repeat;
+    public final boolean debug;
 
     public Configuration(String[] args) {
         this(System.out, System.err, args);
@@ -363,6 +364,7 @@ public class Configuration {
         unbuffered = cmain.unbuffered;
         outputFile = cmain.outputFile;
         forest = cmain.forest;
+        debug = cmain.debug;
         graph = cmain.graph;
         graphOptions = cmain.graphOptions;
         if (cmain.graphFormat != null) {
@@ -599,6 +601,9 @@ public class Configuration {
 
         @Parameter(names = {"--normalize", "--normalize-line-endings"}, description = "Normalize line endings in the input")
         public boolean normalizeLineEndings = false;
+
+        @Parameter(names = {"--debug"}, description = "Additional debugging output")
+        public boolean debug = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();
