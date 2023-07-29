@@ -43,7 +43,7 @@ public class BricsAmbiguity {
 
             Map<NonterminalSymbol, List<Rule>> ruleMap = grammar.getRulesBySymbol();
             for (NonterminalSymbol nt : ruleMap.keySet()) {
-                ntEntities.put(nt, new NonterminalEntity(nt.getName(), nt.getName(), null));
+                ntEntities.put(nt, new NonterminalEntity(nt.getName(), null, null));
             }
 
             ArrayList<Production> productions = new ArrayList<>();
