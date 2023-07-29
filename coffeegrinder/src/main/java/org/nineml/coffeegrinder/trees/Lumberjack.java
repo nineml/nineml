@@ -92,7 +92,7 @@ public class Lumberjack extends Arborist {
             numberPosition = 0;
             nextVertex = null;
 
-            tree = new ParseTree();
+            tree = new ParseTree(forest.getOptions().getMarkAmbiguities());
             ok = seek(node, parserAttributes, tree);
 
             //System.err.printf("%s %s%n", treeNumber, ok);

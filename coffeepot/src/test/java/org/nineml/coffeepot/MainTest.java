@@ -157,13 +157,44 @@ public class MainTest extends CoffeePotTest {
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/ambig2.ixml", "--analyze-ambiguity", "x" });
             Assertions.assertEquals(1, manager.stringRecords.size());
-            Assertions.assertTrue(stdout.contains("The grammar is ambiguous"));
-            Assertions.assertTrue(stdout.contains("vertical ambiguity:"));
-            Assertions.assertTrue(stdout.contains("horizontal ambiguity:"));
+            Assertions.assertTrue(stderr.contains("The grammar is ambiguous"));
+            Assertions.assertTrue(stderr.contains("vertical ambiguity:"));
+            Assertions.assertTrue(stderr.contains("horizontal ambiguity:"));
         } catch (Exception ex) {
             fail();
         }
     }
+
+    @Test
+    public void analyzeUnicodeClassAmbiguity() {
+        WrappedPrintStream stdout = new WrappedPrintStream();
+        WrappedPrintStream stderr = new WrappedPrintStream();
+        Main main = new Main(stdout.stream, stderr.stream);
+        try {
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/list2.ixml", "--analyze-ambiguity", "a,1" });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertTrue(stderr.contains("The grammar is ambiguous"));
+            Assertions.assertTrue(stderr.contains("may be unreliable"));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void showAmbiguities() {
+        WrappedPrintStream stdout = new WrappedPrintStream();
+        WrappedPrintStream stderr = new WrappedPrintStream();
+        Main main = new Main(stdout.stream, stderr.stream);
+        try {
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/ambig2.ixml", "x", "--mark-ambiguities" });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<S xmlns:n='https://nineml.org/ns/' xmlns:ixml='http://invisiblexml.org/NS' n:ambiguous='true' ixml:state='ambiguous'>x</S>",
+                    manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
 
     @Test
     public void showMarks() {
@@ -282,6 +313,107 @@ public class MainTest extends CoffeePotTest {
         }
     }
 
+    @Test
+    public void normalize_line_endings_1() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/unix-lines.txt";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
 
+    @Test
+    public void normalize_line_endings_2() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/pc-lines.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1&#xD;</l><l>2&#xD;</l><l>3&#xD;</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
 
+    @Test
+    public void normalize_line_endings_3() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/pc-lines.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "--normalize", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_4() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines1.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1&#xD;2&#x85;3&#xD;</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_5() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines1.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "--normalize", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_6() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines2.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1&#xD;2&#x2028;3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void normalize_line_endings_7() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/mixed-lines2.bin";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "--normalize", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines><l>1</l><l>2</l><l>3</l></lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void prettyprint() {
+        Main main = new Main();
+        try {
+            String input = "-i:src/test/resources/unix-lines.txt";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/lines.ixml", "-pp", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals("<lines>\n   <l>1</l>\n   <l>2</l>\n   <l>3</l>\n</lines>", manager.stringRecords.get(0));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
 }

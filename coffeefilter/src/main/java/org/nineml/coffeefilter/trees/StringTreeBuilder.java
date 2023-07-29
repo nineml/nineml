@@ -38,6 +38,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
 
     private final String iunit = "   ";
     private final PrintStream stream;
+    private boolean outputlf = false;
 
     /**
      * Create a string tree builder.
@@ -84,6 +85,14 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
     }
 
     @Override
+    public void endDocument() throws SAXException {
+        super.endDocument();
+        if (options.getTrailingNewlineOnOutput() && !outputlf) {
+            stream.println();
+        }
+    }
+
+    @Override
     public void startPrefixMapping (String prefix, String uri)
             throws SAXException
     {
@@ -98,6 +107,8 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
                               String qName, Attributes attributes)
             throws SAXException
     {
+        outputlf = false;
+
         if (state == IN_TAG) {
             stream.print(">");
             state = START_TAG;
@@ -185,6 +196,8 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
     public void endElement (String uri, String localName, String qName)
             throws SAXException
     {
+        outputlf = false;
+
         if (state == IN_TAG) {
             stream.print("/>");
         }
@@ -216,11 +229,16 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
     public void characters (char[] ch, int start, int length)
             throws SAXException
     {
+        if (length == 0) {
+            return;
+        }
+
         if (state == IN_TAG) {
             stream.print(">");
         }
 
         state = CHARS;
+        outputlf = false;
 
         for (int pos = start; pos < start+length; pos++) {
             switch (ch[pos]) {
@@ -241,6 +259,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
                 case TAB:
                 case LF:
                     stream.print(ch[pos]);
+                    outputlf = (ch[pos] == LF);
                     break;
                 default:
                     if (ch[pos] <= 0x1F || (ch[pos] >= 0x7F && ch[pos] <= 0x9F)) {

@@ -49,12 +49,37 @@
       </a>
     </xsl:when>
     <xsl:when test="$optid = '-jar' or $optid = '_help' or $optid = '_no-cache'
-                    or $optid = '_tree-svg' or $optid = '_tree-xml'">
+                    or $optid = '_tree-svg' or $optid = '_tree-xml'
+                    or $optid = '_graph-svg' or $optid = '_graph-svg-option'
+                    ">
       <!-- I know these were removed... -->
       <xsl:next-match/>
     </xsl:when>
     <xsl:when test="$optid != ''">
       <xsl:message select="'Undocumented option: ' || $optid"/>
+      <xsl:next-match/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:next-match/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="db:property[not(@linkend)]" mode="m:docbook">
+  <xsl:variable name="propid"
+                select="'prop_' || ."/>
+
+  <xsl:choose>
+    <xsl:when test="id($propid) and ancestor::*[@xml:id=$propid]">
+      <xsl:next-match/>
+    </xsl:when>
+    <xsl:when test="id($propid)">
+      <a href="#{$propid}">
+        <xsl:next-match/>
+      </a>
+    </xsl:when>
+    <xsl:when test="$propid != ''">
+      <xsl:message select="'Undocumented option: ' || $propid"/>
       <xsl:next-match/>
     </xsl:when>
     <xsl:otherwise>

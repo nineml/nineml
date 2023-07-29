@@ -75,11 +75,11 @@ public class IxmlException extends RuntimeException {
     public static IxmlException repeatedAttribute(String name) { return getException("D02", name); }
     public static IxmlException invalidCharacterClass(String name) { return getException("S10", name); }
     public static IxmlException invalidXmlName(String name) { return getException("D03", name); }
-    public static IxmlException invalidXmlNameCharacter(String name, int ch) { return getException("D03", new String[] {name, ""+ch}); }
+    public static IxmlException invalidXmlNameCharacter(String name, int ch) { return getException("D03", new String[] {name, String.valueOf(ch)}); }
     public static IxmlException invalidXmlCharacter(String ch) { return getException("D04", ch); }
     public static IxmlException multipleDefinitionsOfSymbol(String name) { return getException("S03", name); }
-    public static IxmlException invalidMark(char mark) { return getException("S05", ""+mark); }
-    public static IxmlException invalidTMark(char mark) { return getException("E006", ""+mark); }
+    public static IxmlException invalidMark(char mark) { return getException("S05", String.valueOf(mark)); }
+    public static IxmlException invalidTMark(char mark) { return getException("E006", String.valueOf(mark)); }
     public static IxmlException invalidHexCharacters(String hex) { return getException("S06", hex); }
     public static IxmlException invalidHexTooLarge(String hex) { return getException("S07", hex); }
     public static IxmlException invalidHex(String hex) { return getException("S08", hex); }

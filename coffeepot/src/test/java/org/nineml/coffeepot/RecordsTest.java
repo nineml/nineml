@@ -18,9 +18,9 @@ public class RecordsTest extends CoffeePotTest {
             });
             Assertions.assertEquals(3, manager.stringRecords.size());
             Assertions.assertEquals("<records>\n" +
-                    "<line><d>1</d><text>First line</text></line>\n" +
-                    "<line><d>2</d><text>Second line</text></line>\n" +
-                    "<line><d>3</d><text>Third line</text></line>\n" +
+                    "<line><d>1</d><text>First line</text></line>" +
+                    "<line><d>2</d><text>Second line</text></line>" +
+                    "<line><d>3</d><text>Third line</text></line>" +
                     "</records>\n", manager.publication());
 
             Assertions.assertEquals("", stdout.toString().trim());
@@ -42,9 +42,9 @@ public class RecordsTest extends CoffeePotTest {
             });
             Assertions.assertEquals(3, manager.stringRecords.size());
             Assertions.assertEquals("<records>\n" +
-                    "<line><d>1</d><text>First line</text></line>\n" +
-                    "<line><d>2</d><text>Second line</text></line>\n" +
-                    "<line><d>3</d><text>Third line</text></line>\n" +
+                    "<line><d>1</d><text>First line</text></line>" +
+                    "<line><d>2</d><text>Second line</text></line>" +
+                    "<line><d>3</d><text>Third line</text></line>" +
                     "</records>\n", manager.publication());
 
             Assertions.assertEquals("", stdout.toString().trim());
@@ -71,9 +71,9 @@ public class RecordsTest extends CoffeePotTest {
             });
             Assertions.assertEquals(3, manager.stringRecords.size());
             Assertions.assertEquals("<records>\n" +
-                    "<line><d>1</d><text>First line</text></line>\n" +
-                    "<line><d>2</d><text>Second line</text></line>\n" +
-                    "<line><d>3</d><text>Third line</text></line>\n" +
+                    "<line><d>1</d><text>First line</text></line>" +
+                    "<line><d>2</d><text>Second line</text></line>" +
+                    "<line><d>3</d><text>Third line</text></line>" +
                     "</records>\n", manager.publication());
 
             Assertions.assertEquals("", stdout.toString().trim());

@@ -65,10 +65,7 @@ class Main {
             }
             System.exit(manager.getReturnCode());
         } catch (Exception ex) {
-            if (progress != null) {
-                stderr.println();
-            }
-            stderr.println(ex.getMessage());
+            handleException(ex);
             System.exit(1);
         }
     }
@@ -88,9 +85,7 @@ class Main {
             manager.setReturnCode(2);
             return manager;
         } catch (Exception ex) {
-            if (ex.getMessage() != null) {
-                stderr.println(ex.getMessage());
-            }
+            handleException(ex);
             manager.setReturnCode(2);
             return manager;
         }
@@ -109,15 +104,21 @@ class Main {
                 showTime(accumulatedInputParseTime, "input repeatedly");
             }
         } catch (Exception ex) {
-            if (progress != null) {
-                stderr.println();
-            }
-            stderr.println(ex.getMessage());
+            handleException(ex);
             manager.setReturnCode(1);
             manager.setException(ex);
         }
 
         return manager;
+    }
+
+    private void handleException(Exception ex) {
+        if (ex.getMessage() != null) {
+            stderr.println(ex.getMessage());
+        }
+        if (config.debug) {
+            ex.printStackTrace(stderr);
+        }
     }
 
     private void process(OutputManager outputManager) throws IOException {
@@ -166,6 +167,7 @@ class Main {
 
         InputManager inputManager = new InputManager(config, parser);
         GraphOutputManager graphOutputManager = new GraphOutputManager(config);
+        outputManager.setInputManager(inputManager);
 
         long parseStart = Calendar.getInstance().getTimeInMillis();
 
@@ -225,27 +227,29 @@ class Main {
             report.checkAmbiguity();
             if (report.ambiguityChecked()) {
                 if (report.provablyUnambiguous()) {
-                    stdout.println("The grammar is unambiguous.");
+                    stderr.println("The grammar is unambiguous.");
                 } else {
                     String summary = report.getAmbiguityReport();
                     if (summary == null) {
                         summary = "";
                     }
                     if (summary.contains("***")) {
-                        stdout.println("The grammar is ambiguous:");
-                        stdout.println(summary);
+                        stderr.println("The grammar is ambiguous:");
+                        stderr.println(summary);
                     } else {
-                        stdout.println("Analysis cannot prove the grammar is unambiguous.");
+                        stderr.println("Analysis cannot prove the grammar is unambiguous.");
                         if (!"".equals(summary)) {
-                            stdout.println(summary);
+                            stderr.println(summary);
                         }
                     }
                 }
                 if (!report.reliablyUnambiguous()) {
-                    stdout.println("(Analysis may be unreliable if the grammar or input uses Unicode characters outside the BMP.)");
+                    stderr.println("(Analysis may be unreliable if the grammar or input uses Unicode characters outside the BMP.)");
+                    stderr.println();
                 }
             } else {
-                stdout.println("Grammar analysis unavailable or analysis failed.");
+                stderr.println("Grammar analysis unavailable or analysis failed.");
+                stderr.println();
             }
         }
     }

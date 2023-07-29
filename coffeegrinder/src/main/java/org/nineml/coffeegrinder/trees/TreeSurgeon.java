@@ -63,7 +63,7 @@ public class TreeSurgeon extends Arborist {
 
         seenCount.clear();
         selectedNodes.clear();
-        ParseTree tree = new ParseTree();
+        ParseTree tree = new ParseTree(forest.getOptions().getMarkAmbiguities());
         seek(node, parserAttributes, tree);
         build(builder, tree.left);
     }

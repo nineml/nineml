@@ -1,0 +1,6 @@
+          list = list-of-letter, s, list-of-number .
+list-of-letter = (letter, s)+ .
+list-of-number = (number, s)+ .
+        letter = [L] .
+        number = [N] .
+            -s = -[' ' | ',']* .

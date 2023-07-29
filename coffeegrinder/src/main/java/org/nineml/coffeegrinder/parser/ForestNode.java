@@ -16,6 +16,7 @@ public class ForestNode {
      * The internal name of the attribute that holds priority.
      */
     public static final String PRIORITY_ATTRIBUTE = "https://coffeegrinder.nineml.org/attr/priority";
+    public static final String AMBIGUOUS_ATTRIBUTE = "https://coffeegrinder.nineml.org/attr/ambiguous";
 
     private final TreeInfo emptyTree = new TreeInfo(0, 1);
 

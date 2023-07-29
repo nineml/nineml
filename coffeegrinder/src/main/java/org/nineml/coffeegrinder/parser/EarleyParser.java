@@ -26,6 +26,7 @@ public class EarleyParser implements GearleyParser {
     private final ParseForest graph;
     private final NonterminalSymbol S;
     private final HashMap<NonterminalSymbol, List<Rule>> Rho;
+    private final ParserInput parserInput;
     protected Token[] input = null;
     protected int inputPos = 0;
     protected int offset = -1;
@@ -44,6 +45,8 @@ public class EarleyParser implements GearleyParser {
     protected EarleyParser(ParserGrammar grammar, ParserOptions options) {
         this.grammar = grammar;
         this.options = options;
+
+        parserInput = new ParserInput(options, grammar.usesRegex);
 
         List<Rule> usefulRules = usefulSubset(grammar.getRules());
 
@@ -145,14 +148,9 @@ public class EarleyParser implements GearleyParser {
      * @return a parse result
      */
     public EarleyResult parse(String input) {
-        if (grammar.usesRegex) {
-            stringInput = input;
-        }
-        int[] codepoints = input.codePoints().toArray();
-        this.input = new Token[codepoints.length];
-        for (int pos = 0; pos < codepoints.length; pos++) {
-            this.input[pos] = TokenCharacter.get(codepoints[pos]);
-        }
+        parserInput.from(input);
+        this.input = parserInput.tokens();
+        this.stringInput = parserInput.string();
         return parseInput();
     }
 
@@ -163,19 +161,9 @@ public class EarleyParser implements GearleyParser {
      * @return a parse result
      */
     public EarleyResult parse(Token[] input) {
-        if (grammar.usesRegex) {
-            StringBuilder sb = new StringBuilder();
-            for (Token token : input) {
-                if (token instanceof TokenCharacter) {
-                    sb.append(token.getValue());
-                } else {
-                    throw ParseException.invalidInputForRegex();
-                }
-            }
-            stringInput = sb.toString();
-        }
-
-        this.input = input;
+        parserInput.from(input);
+        this.input = parserInput.tokens();
+        this.stringInput = parserInput.string();
         return parseInput();
     }
 
@@ -186,24 +174,9 @@ public class EarleyParser implements GearleyParser {
      * @return a parse result
      */
     public EarleyResult parse(Iterator<Token> input) {
-        StringBuilder sb = grammar.usesRegex ? new StringBuilder() : null;
-        ArrayList<Token> list = new ArrayList<>();
-        while (input.hasNext()) {
-            Token token = input.next();
-            if (grammar.usesRegex) {
-                if (token instanceof TokenCharacter) {
-                    sb.append(token.getValue());
-                } else {
-                    throw ParseException.invalidInputForRegex();
-                }
-            }
-            list.add(token);
-        }
-        stringInput = grammar.usesRegex ? sb.toString() : null;
-        this.input = new Token[list.size()];
-        for (int pos = 0; pos < list.size(); pos++) {
-            this.input[pos] = list.get(pos);
-        }
+        parserInput.from(input);
+        this.input = parserInput.tokens();
+        this.stringInput = parserInput.string();
         return parseInput();
     }
 

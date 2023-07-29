@@ -49,6 +49,7 @@ public class Configuration {
     public final String describeAmbiguityWith;
     public final boolean omitCsvHeaders;
     public final int repeat;
+    public final boolean debug;
 
     public Configuration(String[] args) {
         this(System.out, System.err, args);
@@ -148,11 +149,18 @@ public class Configuration {
             options.setAllowUnreachableSymbols(true);
         }
 
-        options.setShowChart(cmain.showChart);
-        options.setShowMarks(cmain.showMarks);
-        options.setShowBnfNonterminals(cmain.showHiddenNonterminals);
-        options.setPriorityStyle(cmain.priorityStyle);
-        options.setStrictAmbiguity(cmain.strictAmbiguity);
+        options.setShowChart(cmain.showChart || options.getShowChart());
+        options.setShowMarks(cmain.showMarks || options.getShowMarks());
+        options.setShowBnfNonterminals(cmain.showHiddenNonterminals || options.getShowBnfNonterminals());
+        options.setStrictAmbiguity(cmain.strictAmbiguity || options.getStrictAmbiguity());
+        options.setNormalizeLineEndings(cmain.normalizeLineEndings || options.getNormalizeLineEndings());
+        options.setMarkAmbiguities(cmain.markAmbiguities || options.getMarkAmbiguities());
+        options.setProvenance(cmain.provenance || options.getProvenance());
+        options.setTrailingNewlineOnOutput(cmain.trailingNewline || options.getTrailingNewlineOnOutput());
+
+        if (cmain.priorityStyle != null) {
+            options.setPriorityStyle(cmain.priorityStyle);
+        }
 
         if (cmain.gllParser) {
             options.setParserType("GLL");
@@ -204,7 +212,7 @@ public class Configuration {
             cmain.functionLibrary = null;
         }
 
-        if (cmain.choose.size() > 0 && processor == null) {
+        if (!cmain.choose.isEmpty() && processor == null) {
             options.getLogger().error(logcategory, "Cannot resolve ambiguity with a XPath expressions, no Saxon processor available");
             cmain.choose.clear();
         }
@@ -362,6 +370,7 @@ public class Configuration {
         unbuffered = cmain.unbuffered;
         outputFile = cmain.outputFile;
         forest = cmain.forest;
+        debug = cmain.debug;
         graph = cmain.graph;
         graphOptions = cmain.graphOptions;
         if (cmain.graphFormat != null) {
@@ -582,7 +591,7 @@ public class Configuration {
         public String functionLibrary = null;
 
         @Parameter(names = {"--priority-style"}, description = "The style used to compute priorities")
-        public String priorityStyle = "max";
+        public String priorityStyle = null;
 
         @Parameter(names = {"--bnf"}, description = "Check if the grammar is a simple BNF grammar")
         public boolean bnf = false;
@@ -595,6 +604,21 @@ public class Configuration {
 
         @Parameter(names = {"--show-options"}, description = "Show the configured options for the parse")
         public boolean showOptions = false;
+
+        @Parameter(names = {"--normalize", "--normalize-line-endings"}, description = "Normalize line endings in the input")
+        public boolean normalizeLineEndings = false;
+
+        @Parameter(names = {"--debug"}, description = "Additional debugging output")
+        public boolean debug = false;
+
+        @Parameter(names = {"--mark-ambiguities", "--mark-ambiguity"}, description = "Mark where ambiguities occur in the document")
+        public boolean markAmbiguities = false;
+
+        @Parameter(names = {"--provenance"}, description = "Add provenance to (XML) outputs")
+        public boolean provenance = false;
+
+        @Parameter(names = {"--trailing-newline"}, description = "Output a newline at the end of the output")
+        public boolean trailingNewline = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

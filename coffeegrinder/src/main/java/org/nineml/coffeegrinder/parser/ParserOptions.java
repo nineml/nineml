@@ -16,6 +16,8 @@ public class ParserOptions {
     private boolean prefixParsing = false;
     private String priorityStyle = "max";
     private ProgressMonitor monitor = null;
+    private boolean normalizeLineEndings = false;
+    private boolean markAmbiguities = false;
 
     /**
      * Create the parser options.
@@ -55,6 +57,8 @@ public class ParserOptions {
         prefixParsing = copy.prefixParsing;
         monitor = copy.monitor;
         priorityStyle = copy.priorityStyle;
+        normalizeLineEndings = copy.normalizeLineEndings;
+        markAmbiguities = copy.markAmbiguities;
     }
 
     /**
@@ -190,4 +194,41 @@ public class ParserOptions {
         }
     }
 
+    /**
+     * Should line endings be normalized?
+     * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
+     * string are replaced with a single #A. This only applies to sequences of characters
+     * in the input.</p>
+     * @return true if line endings will be normalized
+     */
+    public boolean getNormalizeLineEndings() {
+        return normalizeLineEndings;
+    }
+
+    /**
+     * Set normalize line endings
+     * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
+     * string are replaced with a single #A. This only applies to sequences of characters
+     * in the input.</p>
+     * @param normalize true if line endings should be normalized
+     */
+    public void setNormalizeLineEndings(boolean normalize) {
+        normalizeLineEndings = normalize;
+    }
+
+    /**
+     * Are individual ambiguities be marked?
+     * @return true if ambiguities will be normalized
+     */
+    public boolean getMarkAmbiguities() {
+        return markAmbiguities;
+    }
+
+    /**
+     * Set ambiguity marking.
+     * @param mark true if individual ambiguities should be marked.
+     */
+    public void setMarkAmbiguities(boolean mark) {
+        markAmbiguities = mark;
+    }
 }

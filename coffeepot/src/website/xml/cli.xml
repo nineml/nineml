@@ -97,6 +97,10 @@ are taken as the input, separated by single spaces.
 <link xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link> to the grammar.
 This can help to identify where ambiguity occurs and what inputs will trigger it. The analyzer
 operates on the <link linkend="how">transformed grammar</link>.</para>
+<para>Note that the analyzer can be quite slow if the grammar uses
+Unicode character classes. This is especially true if it uses classes
+that contain a large number of characters such as <code>[L]</code> or
+<code>[LC]</code>.</para>
 </listitem>
 </varlistentry>
 <varlistentry xml:id="_bnf" revisionflag="added">
@@ -123,6 +127,13 @@ See <xref linkend="choose-alternative"/>.
 <listitem>
 <para>Load a specific <link linkend="configuration">configuration file</link>.
 </para>
+</listitem>
+</varlistentry>
+<varlistentry xml:id="_debug">
+<term><option>--debug</option></term>
+<listitem>
+<para>If the <option>--debug</option> option is specified and CoffeePot terminates
+because an exception was raised, the stack trace will be printed.</para>
 </listitem>
 </varlistentry>
 <varlistentry xml:id="_describe-ambiguity">
@@ -253,6 +264,29 @@ by specifying a list of logger:level pairs, for example:
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_mark-ambiguities">
+<term><option>--mark-ambiguities</option></term>
+<listitem>
+<para>Enables marking ambiguities in the output. This option will
+cause additional attributes to be added to the result trees marking
+where ambiguous choices were made. (This only works for vertical
+ambiguities on nonterminals that aren’t suppressed.)
+</para>
+</listitem>
+</varlistentry>
+<varlistentry xml:id="_normalize">
+<term><option>--normalize</option></term>
+<listitem>
+<para>Normalize line endings in the input file. This option will
+translate all occurrences of carriage return (<code>#D</code>),
+carriage return followed immediately by a line feed
+(<code>#D#A</code>), next line (<code>#85</code>), and line separator
+(<code>#2028</code>) into a single line feed (<code>#A</code>).
+Multiple line endings are not combined. In other words,
+<code>#85#2028</code> becomes <code>#A#A</code>, not <code>#A</code>.
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_no-output">
 <term><option>--no-output</option></term>
 <listitem>
@@ -312,6 +346,16 @@ that priority takes precedence.
 <link xlink:href="https://en.wikipedia.org/wiki/Computer_terminal">TTY</link> (<literal>tty</literal>).
 The default for this option can be set in the
 <link linkend="configuration">configuration file</link>.</para>
+</listitem>
+</varlistentry>
+<varlistentry xml:id="_provenance">
+<term><option>--provenance</option></term>
+<listitem>
+<para>If provenance is requested, a comment is generated at the top of XML outputs
+that identifies the version of NineML used and details about the input and the grammar.
+(This only applies to XML outputs as neither JSON nor CSV have a standard mechanism for
+comments.)
+</para>
 </listitem>
 </varlistentry>
 <varlistentry xml:id="_record-end">
@@ -416,6 +460,13 @@ and <code>prefix</code> states can be suppressed.
 <term><option>--time-records</option></term>
 <listitem>
 <para>When using record-oriented input, this option enables output of timings for each record.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry xml:id="_trailing-newline" revisionflag="added">
+<term><option>--trailing-newline</option></term>
+<listitem>
+<para>Force a newline at the end of the output?
 </para>
 </listitem>
 </varlistentry>

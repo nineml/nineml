@@ -42,7 +42,7 @@
               <img src="images/CoffeeGrinder.png" width="300"/>
             </a>
             <h3><a href="https://coffeegrinder.nineml.org">CoffeeGrinder</a></h3>
-            <p>An Earley parser</p>
+            <p>Earley and GLL parsers</p>
           </div>
           <div class="product">
             <a href="https://coffeefilter.nineml.org/">

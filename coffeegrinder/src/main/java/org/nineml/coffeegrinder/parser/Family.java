@@ -115,13 +115,16 @@ public class Family {
             return w.symbol.getAttributes();
         }
 
-        // The GLL parser makes slightly different states. Sometimes there isn't a position - 2,
-        // so I'm just guessing for the moment that it's position - 1 and the balance is different.
+        // This should always be the case, but see below.
         if (state.position > 1) {
             return getAttributes(w.getSymbol(), state.rhs.get(state.position - 2));
         }
 
-        return getAttributes(w.getSymbol(), state.rhs.get(state.position - 1));
+        // When the GLL parser constructs the SPPF, the state associated with a node
+        // is sometimes the parent of the actual state. It's not clear why, but this seems
+        // to only happen when the state is a simple X=>Y⸳ state. Since we need the
+        // position-2 item and there isn't one, look at the w.state for the answer.
+        return getAttributes(w.getSymbol(), w.state.rhs.get(w.state.position - 2));
     }
 
     public List<ParserAttribute> getRightAttributes() {

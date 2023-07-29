@@ -1257,4 +1257,44 @@ public class AmbiguityTest extends CoffeeGrinderTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"Earley", "GLL"})
+    public void simpleambiguityIdentified(String parserType) {
+        ParserOptions options = new ParserOptions(globalOptions);
+        options.setParserType(parserType);
+        options.setMarkAmbiguities(true);
+
+        SourceGrammar grammar = new SourceGrammar();
+
+    /*
+    S = A | B .
+    A = "a" .
+    B = "a" .
+     */
+
+        NonterminalSymbol _S = grammar.getNonterminal("S");
+        NonterminalSymbol _A = grammar.getNonterminal("A");
+        NonterminalSymbol _B = grammar.getNonterminal("B");
+
+        grammar.addRule(_S, _A);
+        grammar.addRule(_S, _B);
+        grammar.addRule(_A, TerminalSymbol.ch('a'));
+        grammar.addRule(_B, TerminalSymbol.ch('a'));
+
+        GearleyParser parser = grammar.getParser(options, _S);
+        GearleyResult result = parser.parse(Iterators.characterIterator("a"));
+
+        //result.getForest().serialize("simple.xml");
+
+        Assertions.assertTrue(result.succeeded());
+        Assertions.assertTrue(result.getForest().isAmbiguous());
+        Assertions.assertFalse(result.getForest().isInfinitelyAmbiguous());
+        Assertions.assertEquals(2, result.getForest().getParseTreeCount());
+
+        expectTrees(Arborist.getArborist(result.getForest()), Arrays.asList(
+                "<S https://coffeegrinder.nineml.org/attr/ambiguous='true'><A>a</A></S>",
+                "<S https://coffeegrinder.nineml.org/attr/ambiguous='true'><B>a</B></S>"));
+    }
+
+
 }

@@ -16,11 +16,12 @@
 <xsl:key name="target" match="*" use="@target"/>
 <xsl:key name="label" match="sppf/*" use="@label"/>
 
+<xsl:param name="bgcolor" select="'none'"/>
 <xsl:param name="label-color" select="'none'"/>
 <xsl:param name="show-states" select="'false'"/>
 <xsl:param name="show-real-root" select="'true'"/>
 <xsl:param name="rankdir" select="'TB'"/>
-<xsl:param name="subgraph-color" select="'white'"/>
+<xsl:param name="subgraph-color" select="'none'"/>
 
 <xsl:param name="terminal-shape" select="'house'"/>
 <xsl:param name="state-shape" select="'box'"/>
@@ -35,13 +36,13 @@
 
 <xsl:param name="node-font-name" select="'Arial'"/>
 <xsl:param name="node-color" select="'black'"/>
-<xsl:param name="node-fill-color" select="'none'"/>
+<xsl:param name="node-fill-color" select="'white'"/>
 <xsl:param name="node-font-color" select="'black'"/>
 <xsl:param name="node-pen-width" select="1"/>
 
 <xsl:param name="selected-node-font-name" select="'Arial'"/>
 <xsl:param name="selected-node-color" select="'#d55e00'"/>
-<xsl:param name="selected-node-fill-color" select="'none'"/>
+<xsl:param name="selected-node-fill-color" select="'white'"/>
 <xsl:param name="selected-node-font-color" select="'black'"/>
 <xsl:param name="selected-node-pen-width" select="3"/>
 
@@ -181,6 +182,7 @@
 <xsl:template match="sppf">
   <xsl:text>digraph SPPF {{&#10;</xsl:text>
   <xsl:text>rankdir={$rankdir}&#10;</xsl:text>
+  <xsl:text>bgcolor="{$bgcolor}"&#10;</xsl:text>
   <xsl:apply-templates select="*[$show-real-root = 'true' or not(@label = '$$')]"/>
 
   <xsl:if test="$root-node and not($root-node is $graph-root)">
@@ -284,7 +286,7 @@
                             else 'style=&quot;filled&quot;'"/>
 
       <xsl:text>{$style} </xsl:text>
-      <xsl:text>color="{$selected-node-color}" fillcolor="{$selected-node-fill-color}" </xsl:text>
+      <xsl:text>color="{$selected-node-color}" style="filled" fillcolor="{$selected-node-fill-color}" </xsl:text>
       <xsl:text>penwidth="{$selected-node-pen-width}" </xsl:text>
       <xsl:text>fontcolor="{$font-color}" </xsl:text>
       <xsl:text>fontname="{$selected-node-font-name}" </xsl:text>
@@ -296,7 +298,7 @@
                             else ''"/>
 
       <xsl:text>{$style} </xsl:text>
-      <xsl:text>color="{$node-color}" fillcolor="{$node-fill-color}" </xsl:text>
+      <xsl:text>color="{$node-color}" style="filled" fillcolor="{$node-fill-color}" </xsl:text>
       <xsl:text>penwidth="{$node-pen-width}" </xsl:text>
       <xsl:text>fontcolor="{$font-color}" </xsl:text>
       <xsl:text>fontname="{$node-font-name}" </xsl:text>
@@ -343,7 +345,7 @@
   <xsl:text>node{../@id/string()} -&gt; anon{generate-id(.)} </xsl:text>
   <xsl:text>[color={$edge-color} penwidth={$edge-pen-width}];&#10;</xsl:text>
   <xsl:text>anon{generate-id(.)} [ label=&lt;{$prio}&gt; </xsl:text>
-  <xsl:text>shape=circle width={$size} height={$size} fixedsize=true </xsl:text>
+  <xsl:text>shape=circle color={$edge-color} width={$size} height={$size} fixedsize=true </xsl:text>
   <xsl:text>penwidth={$node-pen-width} ]&#10;</xsl:text>
 </xsl:template>
 

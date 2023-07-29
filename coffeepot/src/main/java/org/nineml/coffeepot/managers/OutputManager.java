@@ -9,6 +9,7 @@ import org.nineml.coffeefilter.InvisibleXmlParser;
 import org.nineml.coffeefilter.trees.*;
 import org.nineml.coffeegrinder.trees.Arborist;
 import org.nineml.coffeegrinder.trees.NopTreeBuilder;
+import org.nineml.coffeepot.BuildConfig;
 import org.nineml.coffeepot.trees.VerboseAxe;
 import org.nineml.coffeepot.trees.XdmDataTree;
 import org.nineml.coffeepot.trees.XdmSimpleTree;
@@ -20,6 +21,10 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class OutputManager {
@@ -36,6 +41,8 @@ public class OutputManager {
     private long totalParses = -1;
     private boolean infiniteParses = false;
     public Set<Integer> selectedNodes = new HashSet<>();
+    private boolean firstResult = true;
+    private InputManager inputManager = null;
 
     public void configure(Configuration config) {
         if (config == null) {
@@ -76,6 +83,10 @@ public class OutputManager {
     public boolean hadParseError() {
         checkConfig();
         return parseError;
+    }
+
+    public void setInputManager(InputManager manager) {
+        inputManager = manager;
     }
 
     public void addOutput(InvisibleXmlParser parser, InvisibleXmlDocument doc, String input) {
@@ -206,7 +217,7 @@ public class OutputManager {
         checkConfig();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream output = new PrintStream(baos);
+        PrintStream out = new PrintStream(baos);
 
         DataTreeBuilder dataBuilder;
         SimpleTreeBuilder simpleBuilder;
@@ -217,7 +228,11 @@ public class OutputManager {
 
         switch (config.outputFormat) {
             case XML:
-                StringTreeBuilder handler = new StringTreeBuilder(opts, output);
+                StringTreeBuilder handler = new StringTreeBuilder(opts, out);
+                if  (firstResult && config.options.getProvenance() && inputManager.records.size() == 1) {
+                    out.print(provenance());
+                }
+                firstResult = false;
                 if (doc.succeeded()) {
                     walker.getTree(doc.getAdapter(handler));
                 } else {
@@ -234,7 +249,7 @@ public class OutputManager {
                     doc.getTree(dataBuilder);
                 }
                 dataTree = dataBuilder.getTree();
-                output.print(dataTree.asJSON());
+                out.print(dataTree.asJSON());
                 break;
             case JSON_TREE:
                 opts.setAssertValidXmlNames(false);
@@ -246,7 +261,7 @@ public class OutputManager {
                     doc.getTree(simpleBuilder);
                 }
                 simpleTree = simpleBuilder.getTree();
-                output.print(simpleTree.asJSON());
+                out.print(simpleTree.asJSON());
                 break;
             case CSV:
                 opts.setAssertValidXmlNames(false);
@@ -258,7 +273,7 @@ public class OutputManager {
                     List<CsvColumn> columns = dataTree.prepareCsv();
                     if (columns == null) {
                         walker.reset();
-                        StringTreeBuilder shandler = new StringTreeBuilder(opts, output);
+                        StringTreeBuilder shandler = new StringTreeBuilder(opts, out);
                         walker.getTree(doc.getAdapter(shandler));
                         try {
                             config.stderr.println("Result cannot be serialized as CSV: " + baos.toString("UTF-8"));
@@ -268,7 +283,7 @@ public class OutputManager {
                         }
                         return;
                     }
-                    output.print(dataTree.asCSV(columns, config.omitCsvHeaders));
+                    out.print(dataTree.asCSV(columns, config.omitCsvHeaders));
                 } else {
                     StringTreeBuilder sbuilder = new StringTreeBuilder(doc.getOptions());
                     doc.getTree(sbuilder);
@@ -283,10 +298,40 @@ public class OutputManager {
         }
 
         try {
-            stringRecords.add(baos.toString("UTF-8"));
+            String output = baos.toString("UTF-8");
+            stringRecords.add(output);
         } catch (UnsupportedEncodingException ex) {
             // This can't happen.
         }
+    }
+
+    private String provenance() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<!-- NineML version ").append(BuildConfig.VERSION);
+        sb.append(" at ");
+        sb.append(ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS).format( DateTimeFormatter.ISO_INSTANT ));
+        int size = inputManager.inputSize;
+        String units = "b";
+        if (size > 1024) {
+            size = size / 1024;
+            units = "k";
+        }
+        if (size > 1000) {
+            size = size / 1000;
+            units = "m";
+        }
+        sb.append("\n     Parsed ").append(String.format("%,d", size)).append(units);
+        if (config.inputFile != null) {
+            sb.append(" from ").append(config.inputFile);
+        }
+        if (config.grammar != null) {
+            sb.append("\n     Using ").append(config.grammar);
+        }
+        if (inputManager.records.size() != 1) {
+            sb.append("\n     (Input processed as ").append(inputManager.records.size()).append(" records)");
+        }
+        sb.append("\n-->\n");
+        return sb.toString();
     }
 
     public void publish() throws IOException {
@@ -345,6 +390,9 @@ public class OutputManager {
                 }
                 sb.append("  \"records\": [\n");
             } else {
+                if  (config.options.getProvenance()) {
+                    sb.append(provenance());
+                }
                 sb.append("<records");
                 if (firstParse != 1) {
                     sb.append(" firstParse=\"").append(firstParse).append("\"");
@@ -367,9 +415,8 @@ public class OutputManager {
             sb.append(stringRecords.get(pos));
             if (pos+1 < stringRecords.size()) {
                 if (outputJSON) {
-                    sb.append(",");
+                    sb.append(",\n");
                 }
-                sb.append("\n");
             }
         }
 
@@ -377,7 +424,7 @@ public class OutputManager {
             if (outputJSON) {
                 sb.append("]\n}\n");
             } else {
-                sb.append("\n</records>\n");
+                sb.append("</records>\n");
             }
         }
 

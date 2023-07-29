@@ -15,6 +15,7 @@ import java.util.HashSet;
  */
 public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions {
     private boolean ignoreTrailingWhitespace = false;
+    private boolean trailingNewlineOnOutput = false;
     private boolean allowUndefinedSymbols = false;
     private boolean allowUnreachableSymbols = true;
     private boolean allowUnproductiveSymbols = true;
@@ -62,6 +63,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
     public ParserOptions(ParserOptions copy) {
         super(copy);
         ignoreTrailingWhitespace = copy.ignoreTrailingWhitespace;
+        trailingNewlineOnOutput = copy.trailingNewlineOnOutput;
         allowUndefinedSymbols = copy.allowUndefinedSymbols;
         allowUnreachableSymbols = copy.allowUnreachableSymbols;
         allowUnproductiveSymbols = copy.allowUnproductiveSymbols;
@@ -97,6 +99,24 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
      */
     public void setIgnoreTrailingWhitespace(boolean ignore) {
         ignoreTrailingWhitespace = ignore;
+    }
+
+    /**
+     * Make sure the output ends with a newline?
+     * <p>If this option is true, a newline will be added to the end of the output.
+     * </p>
+     * @return the trailing newline setting.
+     */
+    public boolean getTrailingNewlineOnOutput() {
+        return trailingNewlineOnOutput;
+    }
+
+    /**
+     * Set the {@link #getTrailingNewlineOnOutput()} property.
+     * @param newline add a trailing newline?
+     */
+    public void setTrailingNewlineOnOutput(boolean newline) {
+        trailingNewlineOnOutput = newline;
     }
 
     /**

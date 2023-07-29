@@ -14,8 +14,8 @@ import java.util.Map;
 public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     private String progressBar = "false";
     private String barCharacters = ".#";
-    private boolean trailingNewlineOnOutput = true;
     private boolean asciiOnly = false;
+    private boolean provenance = false;
     private final HashMap<String,String> graphOptions;
 
     /**
@@ -41,9 +41,9 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         super(copy);
         progressBar = copy.progressBar;
         barCharacters = copy.barCharacters;
-        trailingNewlineOnOutput = copy.trailingNewlineOnOutput;
         asciiOnly = copy.asciiOnly;
         graphOptions = new HashMap<>(copy.graphOptions);
+        provenance = copy.provenance;
     }
 
     /**
@@ -103,24 +103,6 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     }
 
     /**
-     * Make sure the output ends with a newline?
-     * <p>If this option is true, a newline will be added to the end of the output.
-     * </p>
-     * @return the trailing newline setting.
-     */
-    public boolean getTrailingNewlineOnOutput() {
-        return trailingNewlineOnOutput;
-    }
-
-    /**
-     * Set the {@link #getTrailingNewlineOnOutput()} property.
-     * @param newline add a trailing newline?
-     */
-    public void setTrailingNewlineOnOutput(boolean newline) {
-        trailingNewlineOnOutput = newline;
-    }
-
-    /**
      * Use only ASCII characters in output?
      * <p>If this option is true, punctuation in output like the ambiguity description
      * will include only ASCII characters. (Note: this has no effect on the output of the
@@ -138,6 +120,22 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
      */
     public void setAsciiOnly(boolean ascii) {
         asciiOnly = ascii;
+    }
+
+    /**
+     * Should we store provenance information in the output XML?
+     * @return true if the output XML should include a provenance comment
+     */
+    public boolean getProvenance() {
+        return provenance;
+    }
+
+    /**
+     * Set the {@link #getPedantic()} property.
+     * @param outputProvenance true if a provenance comment should be generated.
+     */
+    public void setProvenance(boolean outputProvenance) {
+        provenance = outputProvenance;
     }
 
     /**
@@ -201,6 +199,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         show(stderr, logger, "Strict ambiguity: %s", getStrictAmbiguity());
         show(stderr, logger, "Trailing newline on output: %s", getTrailingNewlineOnOutput());
         show(stderr, logger, "Priority style: %s", getPriorityStyle());
+        show(stderr, logger, "Provenance: %s", getProvenance());
 
         if (getGraphOptions().isEmpty()) {
             show(stderr, logger, "Graph options: null");
@@ -224,8 +223,6 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         for (String pname : InvisibleXml.knownPragmas()) {
             show(stderr, logger, "Pragma disabled: %s: %s", pname, pragmaDisabled(pname));
         }
-
-
     }
     
     private void show(PrintStream stderr, Logger logger, String format, Object... value) {
