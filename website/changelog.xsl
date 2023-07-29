@@ -55,6 +55,10 @@
   <xsl:text>`</xsl:text>
 </xsl:template>
 
+<xsl:template match="h:span">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="h:a">
   <xsl:apply-templates/>
 </xsl:template>

@@ -17,72 +17,138 @@ notes for each component.</para>
 the individual component <filename>changelogs.xml</filename> files.</para>
 
 <revhistory>
-<revision>
-<revnumber>3.0.0m</revnumber>
-<date>2023-07-28</date>
+<revision xml:id="v300">
+<revnumber>3.0.0</revnumber>
+<date>2023-07-29</date>
 <revdescription>
-<para>This is a beta release for version 3.0.0.</para>
-
 <itemizedlist audience="coffeegrinder">
 <listitem>
-<para>Fixed a bug where the GLL parser would fail to correctly find the
-parser attributes associated with a “left hand side”.</para>
-</listitem>
-<listitem>
-<para>Fixed a bug in the ambiguity analyzer where
-it didn’t support Unicode character class groupings (LC, L, M, N, P, S, Z, C).
+<para>Many improvements and bug fixes in the GLL parser. It is now often (slightly)
+faster than the Earley parser and should be just as reliable.
 </para>
 </listitem>
 <listitem>
-<para>Added an option to normalize line endings.
+<para>Refactored how trees are returned from the forest. In principle, it is possible
+to retrieve all of the trees.</para>
+</listitem>
+<listitem>
+<para>When prefix parsing is enabled, it is now possible to continue the parse with
+a different parser.</para>
+</listitem>
+<listitem>
+<para>Refactored tests to use JUnit 5 exclusively, many new and improved tests.</para>
+</listitem>
+<listitem>
+<para>Refactored and improved how and where terminals can be matched with regular
+expressions. Regular expression matches work with both parsers.</para>
+</listitem>
+<listitem>
+<para>Many improvements to the <filename>forest2dot.xsl</filename> stylesheet that
+produces forest diagrams.</para>
+</listitem>
+<listitem><para>Added an option to analyze the grammar for ambiguity
+with Anders Møller’s
+<link xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link>.
+(Note that the analyzer jar file is included in the repository, but
+it isn’t bundled with CoffeeGrinder, you need to add it to your class
+path. It is bundled with CoffeePot.)</para>
+</listitem>
+<listitem>
+<para>Parser attributes (used internally to track marks and other
+features) have been renamed so that they’re all URIs. Added an
+attribute to track nonterminal priority. (To guide selection in
+ambiguous forests.)
+</para>
+</listitem>
+<listitem>
+<para>Added an option to normalize line endings on input.
 </para>
 </listitem>
 <listitem>
 <para>Added an option to mark ambiguities. When enabled, this option
 identifies places in the tree where an ambiguous choice was made.
-(This only works for vertical ambiguities on nonterminals that aren’t
-suppressed.)
+(It currently only works for “vertical” ambiguities between nonterminals.)
 </para>
 </listitem>
 </itemizedlist>
 
-<para audience="coffeefilter">Added support for the “mark ambiguities” option. When
-enabled <code>n:ambiguous="true"</code> attributes are added to the XML trees.</para>
+<itemizedlist audience="coffeefilter">
+<listitem>
+<para>All of the NineML core components have been updated to version 3.0.0; 
+CoffeeFilter incorporates the changes in
+<link xlink:href="https://coffeegrinder.nineml.org/changelog.html#v300">CoffeeGrinder</link>
+3.0.0.</para>
+</listitem>
+<listitem>
+<para>Added support for the <link xlink:href="https://invisiblexml.org/pr/193/index.html">renaming
+proposal</link> provided that the grammar identifies itself as version 1.1 (or 1.1-nineml).
+</para>
+</listitem>
+<listitem>
+<para>Refactored how pragmas are processed; removed the unused “token” pragma.</para>
+</listitem>
+<listitem><para>Removed the “rewrite” pragma; it can be replaced with standard features:
+deletion and insertion. Removed the default priority pragma because it didn’t actually seem
+useful.
+</para></listitem>
+<listitem><para>Removed the notion of compiled grammars and the cache of compiled grammars.
+</para></listitem>
+<listitem>
+<para>Added an option to omit headers when generating CSV output.</para>
+</listitem>
+<listitem>
+<para>Added support for the “mark ambiguities” option. When enabled
+<code>n:ambiguous="true"</code> attributes are added to the XML
+trees.</para>
+</listitem>
+</itemizedlist>
 
-<para audience="coffeesacks"/> <!-- no changes -->
+<itemizedlist audience="coffeesacks">
+<listitem>
+<para>All of the NineML core components have been updated to version 3.0.0; 
+CoffeeSacks incorporates the changes in
+<link xlink:href="https://coffeegrinder.nineml.org/changelog.html#v300">CoffeeGrinder</link>
+and
+<link xlink:href="https://coffeefilter.nineml.org/changelog.html#v300">CoffeeFilter</link>
+3.0.0.</para>
+</listitem>
+<listitem>
+<para>The API for resolving ambiguities has been completely refactored to align with 
+CoffeeGrinder.</para>
+</listitem>
+</itemizedlist>
 
 <itemizedlist audience="coffeepot">
 <listitem>
-<para>Fixed a serialization bug where a newline was sometimes
-missing before a closing tag when pretty printing was enabled.</para>
+<para>All of the NineML core components have been updated to version 3.0.0; 
+CoffeePot incorporates the changes in
+<link xlink:href="https://coffeegrinder.nineml.org/changelog.html#v300">CoffeeGrinder</link>,
+<link xlink:href="https://coffeefilter.nineml.org/changelog.html#v300">CoffeeFilter</link>,
+and
+<link xlink:href="https://coffeesacks.nineml.org/changelog.html#v300">CoffeeSacks</link>,
+3.0.0.</para>
 </listitem>
 <listitem>
-<para>Fixed a serialization bug where the “trailing newline on
-output” option was ignored.
+<para>Many new command line options and configuration properties have been
+added; a few have been renamed or removed.</para>
+</listitem>
+<listitem>
+<para>CoffeePot will now work with either Saxon 11 or Saxon 12.</para>
+</listitem>
+<listitem><para>Undefined symbols are no longer allowed, even when not in pedantic mode.
+Undefined symbols are almost always an error and lead to very confusing error messages.
+</para></listitem>
+<listitem><para>Added an option to analyze the grammar for ambiguity
+with Anders Møller’s <link
+xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link>.
 </para>
 </listitem>
 <listitem>
-<para>Added a <option>--normalize</option> option
-and a <property>normalize-line-endings</property> property
-to enable normalizing line endings on the input.
+<para>Support for compiled grammars and grammar compilation has been removed.
 </para>
 </listitem>
 <listitem>
-<para>Added a <option>--mark-ambiguities</option>
-option and a <property>mark-ambiguities</property> property to support
-marking the location of ambiguities in the XML trees.</para>
-</listitem>
-<listitem>
-<para>Added a <option>--provenance</option>
-option and a <property>provenance</property> property to support
-writing provenance (program version, input, grammar details) as
-a comment at the top of XML outputs.</para>
-</listitem>
-<listitem>
-<para>Moved the ambiguity report output from
-“standard output” to “standard error” so that command line redirection
-once again only includes the XML. Added a <option>--debug</option>
-option.</para>
+<para>Fixed a number of small serialization bugs.</para>
 </listitem>
 </itemizedlist>
 </revdescription>
