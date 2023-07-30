@@ -51,4 +51,14 @@ public class PrintStreamTreeBuilder implements TreeBuilder {
         trailingnl = text.endsWith("\n");
         stream.printf(text);
     }
+
+    @Override
+    public void startAmbiguity(int id, int leftExtent, int rightExtent) {
+        // nop
+    }
+
+    @Override
+    public void endAmbiguity(int id, int leftExtent, int rightExtent) {
+        // nop
+    }
 }

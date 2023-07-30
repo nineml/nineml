@@ -86,4 +86,18 @@ public class StringTreeBuilder implements TreeBuilder {
     public void token(Token token, Map<String,String> attributes, int leftExtent, int rightExtent) {
         builder.token(token, attributes, leftExtent, rightExtent);
     }
+
+    @Override
+    public void startAmbiguity(int id, int leftExtent, int rightExtent) {
+        if (debug) {
+            builder.stream.printf("<?start-ambiguity id='%d' start='%d' end='%d'?>", id, leftExtent, rightExtent);
+        }
+    }
+
+    @Override
+    public void endAmbiguity(int id, int leftExtent, int rightExtent) {
+        if (debug) {
+            builder.stream.printf("<?end-ambiguity id='%d'>", id);
+        }
+    }
 }

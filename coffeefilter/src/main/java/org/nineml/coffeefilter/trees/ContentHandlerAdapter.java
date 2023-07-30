@@ -110,6 +110,20 @@ public class ContentHandlerAdapter implements TreeBuilder {
         node.addChild(new TextNode(token, attributes));
     }
 
+    @Override
+    public void startAmbiguity(int id, int leftExtent, int rightExtent) {
+        if (options.getMarkAmbiguities()) {
+            node.addChild(new PINode("start-ambiguity", id));
+        }
+    }
+
+    @Override
+    public void endAmbiguity(int id, int leftExtent, int rightExtent) {
+        if (options.getMarkAmbiguities()) {
+            node.addChild(new PINode("end-ambiguity", id));
+        }
+    }
+
     private abstract class Node {
         public final Map<String,String> attributes;
         public final ArrayList<Node> children;
@@ -152,6 +166,9 @@ public class ContentHandlerAdapter implements TreeBuilder {
             nodeStack.push(node);
         }
         public void text(TextNode node) {
+            nodeStack.peek().children.add(node);
+        }
+        public void processingInstruction(PINode node) {
             nodeStack.peek().children.add(node);
         }
         public void endNode() {
@@ -315,9 +332,9 @@ public class ContentHandlerAdapter implements TreeBuilder {
                 root = false;
                 String state = markAmbiguous ? "ambiguous" : "";
                 if (badVersion) {
-                    state += ("".equals(state) ? "" : " ") + "version-mismatch";
+                    state += (state.isEmpty() ? "" : " ") + "version-mismatch";
                 }
-                if (!"".equals(state)) {
+                if (!state.isEmpty()) {
                     atts.addAttribute(InvisibleXml.ixml_ns, InvisibleXml.ixml_prefix + ":state", state);
                 }
             }
@@ -390,6 +407,31 @@ public class ContentHandlerAdapter implements TreeBuilder {
         @Override
         public String toString() {
             return String.format("%s%s", mark, token.getValue());
+        }
+    }
+
+    private class PINode extends Node {
+        public final String target;
+        public final String data;
+        public PINode(String target, int id) {
+            super('?', Collections.emptyMap());
+            this.target = target;
+            this.data = String.format("id='%d'", id);
+        }
+        @Override
+        public String getStringValue() {
+            return String.format("<?%s %s?>", target, data);
+        }
+        public void flatten() {
+            processingInstruction(this);
+        }
+        @Override
+        public void serialize() throws SAXException {
+            handler.processingInstruction(target, data);
+        }
+        @Override
+        public String toString() {
+            return getStringValue();
         }
     }
 }

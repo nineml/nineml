@@ -36,4 +36,14 @@ public class NopTreeBuilder implements TreeBuilder {
     public void token(Token token, Map<String,String> attributes, int leftExtent, int rightExtent) {
         // nop
     }
+
+    @Override
+    public void startAmbiguity(int id, int leftExtent, int rightExtent) {
+        // nop
+    }
+
+    @Override
+    public void endAmbiguity(int id, int leftExtent, int rightExtent) {
+        // nop
+    }
 }
