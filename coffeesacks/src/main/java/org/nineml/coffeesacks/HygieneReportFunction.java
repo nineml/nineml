@@ -22,6 +22,7 @@ import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import org.nineml.coffeefilter.InvisibleXmlDocument;
 import org.nineml.coffeefilter.InvisibleXmlParser;
+import org.nineml.coffeefilter.ParserOptions;
 import org.nineml.coffeegrinder.parser.HygieneReport;
 import org.nineml.coffeegrinder.parser.NonterminalSymbol;
 import org.nineml.coffeegrinder.parser.Rule;
@@ -87,6 +88,7 @@ public class HygieneReportFunction extends CommonDefinition {
 
         @Override
         public Sequence call(XPathContext context, Sequence[] sequences) throws XPathException {
+            final ParserOptions popts;
             HashMap<String, String> options = new HashMap<>();
             if (sequences.length > 1) {
                 Item item = sequences[1].head();
@@ -99,10 +101,12 @@ public class HygieneReportFunction extends CommonDefinition {
                             options.put(entry.getKey(), (String) entry.getValue());
                         }
                     }
-                    checkOptions(options);
+                    popts = checkOptions(options);
                 } else {
                     throw new CoffeeSacksException(CoffeeSacksException.ERR_BAD_OPTIONS, "Options must be a map", sourceLoc);
                 }
+            } else {
+                popts = new ParserOptions(parserOptions);
             }
 
             Sequence input = sequences[0].head();
@@ -115,9 +119,9 @@ public class HygieneReportFunction extends CommonDefinition {
                 } else {
                     grammarURI = URIUtils.resolve(URIUtils.cwd(), grammarHref);
                 }
-                parser = parserFromURI(context, grammarURI, options);
+                parser = parserFromURI(context, grammarURI, popts, options);
             } else if (input instanceof StringValue) {
-                parser = parserFromString(context, ((StringValue) input).getStringValue(), options);
+                parser = parserFromString(context, ((StringValue) input).getStringValue(), popts, options);
             } else {
                 throw new CoffeeSacksException(CoffeeSacksException.ERR_BAD_GRAMMAR, "Grammar must be a string or a URI", sourceLoc);
             }

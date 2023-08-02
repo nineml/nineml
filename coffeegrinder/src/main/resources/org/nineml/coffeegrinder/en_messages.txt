@@ -24,6 +24,7 @@ T001: No trees selected.
 T002: No more trees.
 T003: Internal error in tree walk.
 T004: Invalid choice selected.
+T005: No trees found.
 P001: Seed not in grammar: %1.
 P002: Attempt to continue an invalid parse.
 P003: Internal error: %1.

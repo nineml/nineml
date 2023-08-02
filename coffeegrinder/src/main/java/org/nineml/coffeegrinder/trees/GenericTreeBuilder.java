@@ -50,4 +50,14 @@ public class GenericTreeBuilder implements TreeBuilder {
     public void token(Token token, Map<String,String> attributes, int leftExtent, int rightExtent) {
          current.addChild(new GenericLeaf(token, attributes, leftExtent, rightExtent));
     }
+
+    @Override
+    public void startAmbiguity(int id, int leftExtent, int rightExtent) {
+        // nop
+    }
+
+    @Override
+    public void endAmbiguity(int id, int leftExtent, int rightExtent) {
+        // nop
+    }
 }

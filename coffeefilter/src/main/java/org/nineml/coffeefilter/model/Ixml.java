@@ -31,7 +31,6 @@ public class Ixml extends XNonterminal {
     protected IRule emptyProduction = null;
     protected String version = "1.0";
     protected final RuleRewriter ruleRewriter;
-    protected final ArrayList<XNode> originalRules;
     /**
      * Construct an Ixml.
      */
@@ -52,7 +51,6 @@ public class Ixml extends XNonterminal {
         }
 
         ruleRewriter.setRoot(this);
-        originalRules = new ArrayList<>();
     }
 
     /**
@@ -79,7 +77,6 @@ public class Ixml extends XNonterminal {
         }
 
         ruleRewriter.setRoot(this);
-        originalRules = new ArrayList<>();
     }
 
     public String getIxmlVersion() {
@@ -170,7 +167,10 @@ public class Ixml extends XNonterminal {
             }
         }
 
-        setupOriginalRules();
+        for (XNode child : children) {
+            XNode copied = child.copy();
+            setupDerivation(child, copied);
+        }
 
         flatten();
 
@@ -205,14 +205,6 @@ public class Ixml extends XNonterminal {
         constructGrammar(options);
     }
 
-    private void setupOriginalRules() {
-        for (XNode child : children) {
-            XNode copied = child.copy();
-            originalRules.add(copied);
-            setupDerivation(child, copied);
-        }
-    }
-
     private void setupDerivation(XNode original, XNode copy) {
         original.derivedFrom = copy;
         for (int pos = 0; pos < original.children.size(); pos++) {
@@ -226,14 +218,34 @@ public class Ixml extends XNonterminal {
         ArrayList<XNode> newchildren = new ArrayList<>();
         IRule startSymbol = new IRule(this, startRule, '-');
 
-        IRule firstRule = null;
-        int pos = 0;
-        while (!(children.get(pos) instanceof IRule)) {
-            pos++;
+        if (options.getStartSymbol() != null) {
+            String symbol = options.getStartSymbol();
+            IRule symbolRule = null;
+            for (XNode child : children) {
+                if (child instanceof IRule) {
+                    IRule rule = (IRule) child;
+                    if (rule.getName().equals(symbol)) {
+                        symbolRule = rule;
+                        break;
+                    }
+                }
+            }
+            if (symbolRule == null) {
+                throw IxmlException.noSuchSymbol(symbol);
+            }
+            startSymbol.children.add(new INonterminal(startSymbol, symbolRule.getName(), symbolRule.getMark()));
+        } else {
+            IRule firstRule = null;
+            for (XNode child : children) {
+                if (child instanceof IRule) {
+                    firstRule = (IRule) child;
+                    break;
+                }
+            }
+            assert firstRule != null;
+            startSymbol.children.add(new INonterminal(startSymbol, firstRule.getName(), firstRule.getMark()));
         }
-        firstRule = (IRule) children.get(pos);
 
-        startSymbol.children.add(new INonterminal(startSymbol, firstRule.getName(), firstRule.getMark()));
         newchildren.add(startSymbol);
         newchildren.addAll(children);
 

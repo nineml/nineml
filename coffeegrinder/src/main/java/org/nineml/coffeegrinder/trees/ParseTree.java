@@ -71,11 +71,17 @@ public class ParseTree {
         } else if (node.symbol instanceof TerminalSymbol) {
             builder.token(((TerminalSymbol) node.getSymbol()).getToken(), attributeMap(vertex.parserAttributes), node.leftExtent, node.rightExtent);
         } else {
+            if (vertex.isAmbiguous) {
+                builder.startAmbiguity(node.id, node.leftExtent, node.rightExtent);
+            }
             if (left != null) {
                 left.build(builder);
             }
             if (right != null) {
                 right.build(builder);
+            }
+            if (vertex.isAmbiguous) {
+                builder.endAmbiguity(node.id, node.leftExtent, node.rightExtent);
             }
         }
     }

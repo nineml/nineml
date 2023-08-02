@@ -103,7 +103,11 @@ public class InvisibleXml {
                 throw IxmlException.failedToLoadIxmlGrammar(ixml);
             }
 
+            // Kinda hacky. The start symbol doesn't apply here.
+            String startSymbol = options.getStartSymbol();
+            options.setStartSymbol("ixml");
             ixmlForIxml = getParserFromVxml(stream, resource.toString());
+            options.setStartSymbol(startSymbol);
         } catch (IOException ex) {
             throw IxmlException.failedToLoadIxmlGrammar(ex);
         }

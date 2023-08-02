@@ -158,6 +158,10 @@ public class Configuration {
         options.setProvenance(cmain.provenance || options.getProvenance());
         options.setTrailingNewlineOnOutput(cmain.trailingNewline || options.getTrailingNewlineOnOutput());
 
+        if (cmain.startSymbol != null) {
+            options.setStartSymbol(cmain.startSymbol);
+        }
+
         if (cmain.priorityStyle != null) {
             options.setPriorityStyle(cmain.priorityStyle);
         }
@@ -370,8 +374,8 @@ public class Configuration {
         unbuffered = cmain.unbuffered;
         outputFile = cmain.outputFile;
         forest = cmain.forest;
-        debug = cmain.debug;
         graph = cmain.graph;
+
         graphOptions = cmain.graphOptions;
         if (cmain.graphFormat != null) {
             graphFormat = cmain.graphFormat;
@@ -383,8 +387,13 @@ public class Configuration {
                 graphFormat = "svg";
             }
         }
-        parse = cmain.parse;
 
+        debug = cmain.debug;
+        if (debug && cmain.logLevels == null) {
+            options.getLogger().setDefaultLogLevel("debug");
+        }
+
+        parse = cmain.parse;
         if (cmain.parseCount == null) {
             parseCount = 1;
             allParses = false;
@@ -619,6 +628,9 @@ public class Configuration {
 
         @Parameter(names = {"--trailing-newline"}, description = "Output a newline at the end of the output")
         public boolean trailingNewline = false;
+
+        @Parameter(names = {"--start-symbol", "--start"}, description = "Specify the start symbol")
+        public String startSymbol = null;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

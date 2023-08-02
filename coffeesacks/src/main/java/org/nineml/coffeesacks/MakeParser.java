@@ -24,6 +24,7 @@ import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import org.nineml.coffeefilter.InvisibleXmlParser;
+import org.nineml.coffeefilter.ParserOptions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -88,6 +89,7 @@ public class MakeParser extends CommonDefinition {
         public Sequence call(XPathContext context, Sequence[] sequences) throws XPathException {
             UserFunctionReference.BoundUserFunction chooseAlternative = null;
             HashMap<String, String> options = new HashMap<>();
+            final ParserOptions popts;
             if (sequences.length > 1) {
                 Item item = sequences[1].head();
                 if (item instanceof MapItem) {
@@ -99,10 +101,12 @@ public class MakeParser extends CommonDefinition {
                             options.put(entry.getKey(), (String) entry.getValue());
                         }
                     }
-                    checkOptions(options);
+                    popts = checkOptions(options);
                 } else {
                     throw new CoffeeSacksException(CoffeeSacksException.ERR_BAD_OPTIONS, "Options must be a map", sourceLoc);
                 }
+            } else {
+                popts = new ParserOptions(parserOptions);
             }
 
             Sequence input = sequences[0].head();
@@ -116,11 +120,11 @@ public class MakeParser extends CommonDefinition {
                 } else {
                     grammarURI = URIUtils.resolve(URIUtils.cwd(), grammarHref);
                 }
-                parser = parserFromURI(context, grammarURI, options);
+                parser = parserFromURI(context, grammarURI, popts, options);
             } else if (input instanceof AtomicValue) {
-                parser = parserFromString(context, ((StringValue) input).getStringValue(), options);
+                parser = parserFromString(context, ((StringValue) input).getStringValue(), popts, options);
             } else if (input instanceof NodeInfo) {
-                parser = parserFromXml(context, (NodeInfo) input, options);
+                parser = parserFromXml(context, (NodeInfo) input, popts, options);
             } else if (input instanceof MapItem) {
                 throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_GRAMMAR, "Cannot parse a map as Invisible XML", sourceLoc, input);
             } else if (input instanceof ArrayItem) {

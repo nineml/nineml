@@ -23,7 +23,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
     private static final int START_TAG = 1;
     private static final int IN_TAG = 2;
     private static final int END_TAG = 3;
-    private static final int CHARS = 4;
+    private static final int CONTENT = 4;
 
     private static final int CR = 0x000D;
     private static final int LF = 0x000A;
@@ -119,7 +119,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
                 case FIRST:
                     break;
                 case START_TAG:
-                case CHARS:
+                case CONTENT:
                 case END_TAG:
                     stream.printf("%n");
                     stream.print(indent);
@@ -209,7 +209,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
 
             switch (state) {
                 case IN_TAG:
-                case CHARS:
+                case CONTENT:
                     break;
                 case START_TAG:
                 case END_TAG:
@@ -226,8 +226,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
     }
 
     @Override
-    public void characters (char[] ch, int start, int length)
-            throws SAXException
+    public void characters (char[] ch, int start, int length) throws SAXException
     {
         if (length == 0) {
             return;
@@ -237,7 +236,7 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
             stream.print(">");
         }
 
-        state = CHARS;
+        state = CONTENT;
         outputlf = false;
 
         for (int pos = start; pos < start+length; pos++) {
@@ -270,5 +269,15 @@ public class StringTreeBuilder extends AbstractTreeBuilder {
                     break;
             }
         }
+    }
+
+    @Override
+    public void processingInstruction(String target, String data) throws SAXException {
+        if (state == IN_TAG) {
+            stream.print(">");
+        }
+
+        state = CONTENT;
+        stream.printf("<?%s %s?>", target, data);
     }
 }

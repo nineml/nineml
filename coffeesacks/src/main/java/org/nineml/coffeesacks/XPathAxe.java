@@ -64,6 +64,8 @@ public class XPathAxe implements Axe {
     @Override
     public List<Family> select(ParseTree tree, ForestNode forestNode, int count, List<Family> choices) {
         if (chooseAlternatives == null) {
+            lastChoiceWasAmbiguous = true;
+            madeAmbiguousChoice = true;
             return choices;
         }
 

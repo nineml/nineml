@@ -702,30 +702,4 @@
          <literal string='}'/>
       </alt>
    </rule>
-   <rule mark='-' name='QName'>
-      <alt>
-         <nonterminal mark='-' name='name'/>
-         <literal string=':'/>
-         <nonterminal mark='-' name='name'/>
-      </alt>
-   </rule>
-   <rule mark='-' name='UQName'>
-      <alt>
-         <literal string='Q{'/>
-         <nonterminal mark='-' name='ns-name'/>
-         <literal string='}'/>
-         <nonterminal mark='-' name='name'/>
-      </alt>
-   </rule>
-   <rule mark='-' name='ns-name'>
-      <alt>
-         <repeat0>
-            <exclusion>
-               <member string='{}'/>
-               <member string='"'/>
-               <member string='&apos;'/>
-            </exclusion>
-         </repeat0>
-      </alt>
-   </rule>
 </ixml>

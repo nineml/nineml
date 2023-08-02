@@ -7,9 +7,9 @@ buildscript {
 
   configurations.all {
     resolutionStrategy {
-      force 'xml-apis:xml-apis:1.4.01',
-        "${saxonGroup}:${saxonEdition}:${saxonVersion}",
-        "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+      force 'xml-apis:xml-apis:1.4.01'
+      force "${saxonGroup}:${saxonEdition}:${saxonVersion}"
+      force "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
     }
   }
 
@@ -44,9 +44,9 @@ repositories {
 
 configurations.all {
   resolutionStrategy {
-    force 'xml-apis:xml-apis:1.4.01',
-      "${saxonGroup}:${saxonEdition}:${saxonVersion}",
-      "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+    force 'xml-apis:xml-apis:1.4.01'
+    force "${saxonGroup}:${saxonEdition}:${saxonVersion}"
+    force "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
   }
 }
 
