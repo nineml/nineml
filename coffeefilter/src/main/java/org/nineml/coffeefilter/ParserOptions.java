@@ -32,8 +32,11 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
     private RuleRewriter ruleRewriter = null;
     private boolean ignoreBOM = true;
     private boolean strictAmbiguity = false;
+    private String startSymbol = null;
     private final HashSet<String> disabledPragmas;
-    private static final HashSet<String> knownPragmas = new HashSet<>(Arrays.asList("discard-empty", "ns", "priority", "regex", "rename", "token"));
+
+    // FIXME: this list should somehow be connected to the pragmas defined in InvisibleXml
+    private static final HashSet<String> knownPragmas = new HashSet<>(Arrays.asList("discard-empty", "ns", "priority", "regex", "rename"));
 
     /**
      * Create the parser options.
@@ -81,6 +84,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
         strictAmbiguity = copy.strictAmbiguity;
         ignoreBOM = copy.ignoreBOM;
         disabledPragmas = new HashSet<>(copy.disabledPragmas);
+        startSymbol = copy.startSymbol;
     }
 
     /**
@@ -441,4 +445,28 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
             disabledPragmas.remove(pragma);
         }
     }
+
+    /**
+     * Where should parsing start?
+     * <p>Invisible XML defines the start symbol as the symbol defined by the first rule in the grammar.
+     * In practice, the parser can start with any symbol in the grammar. This option returns the
+     * start symbol, if one was specified, or null. If null is returned, the parser will use the default
+     * start symbol. An exception will be raised if the symbol named is not defined in the grammar.</p>
+     * @return the start symbol, or null if none was specified
+     */
+    public String getStartSymbol() {
+        return startSymbol;
+    }
+
+    /**
+     * Set the {@link #getStartSymbol()} property.
+     * <p>This option allows you to specify
+     * what the "seed" symbol should be for parsing. This will result in nonconformant parser behavior
+     * if the symbol specified isn't the symbol defined by the first rule in the grammar.</p>
+     * @param name the symbol name
+     */
+    public void setStartSymbol(String name) {
+        startSymbol = name;
+    }
+
 }

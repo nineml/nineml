@@ -158,6 +158,10 @@ public class Configuration {
         options.setProvenance(cmain.provenance || options.getProvenance());
         options.setTrailingNewlineOnOutput(cmain.trailingNewline || options.getTrailingNewlineOnOutput());
 
+        if (cmain.startSymbol != null) {
+            options.setStartSymbol(cmain.startSymbol);
+        }
+
         if (cmain.priorityStyle != null) {
             options.setPriorityStyle(cmain.priorityStyle);
         }
@@ -619,6 +623,9 @@ public class Configuration {
 
         @Parameter(names = {"--trailing-newline"}, description = "Output a newline at the end of the output")
         public boolean trailingNewline = false;
+
+        @Parameter(names = {"--start-symbol", "--start"}, description = "Specify the start symbol")
+        public String startSymbol = null;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();
