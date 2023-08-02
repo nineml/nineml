@@ -389,7 +389,7 @@ public class Configuration {
         }
 
         debug = cmain.debug;
-        if (cmain.logLevels == null) {
+        if (debug && cmain.logLevels == null) {
             options.getLogger().setDefaultLogLevel("debug");
         }
 
