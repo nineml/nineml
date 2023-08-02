@@ -68,8 +68,8 @@ were no selectors (XPath expressions or functions) provided at all.
 </listitem>
 </itemizedlist>
 </revdescription>
+</revision>
 
-<revhistory>
 <revision xml:id="v300">
 <revnumber>3.0.0</revnumber>
 <date>2023-07-29</date>
