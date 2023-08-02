@@ -191,8 +191,10 @@ public class ContentHandlerAdapter implements TreeBuilder {
             String grammarVersion = parserVersion;
             badVersion = !(InvisibleXml.satisfiesVersion10(grammarVersion) || InvisibleXml.satisfiesVersion11(grammarVersion));
 
-            markAmbiguous = ambiguous && !options.isSuppressedState(InvisibleXml.AMBIGUOUS)
-                    && (options.getStrictAmbiguity() || madeAmbiguousChoice);
+            markAmbiguous = ambiguous && !options.isSuppressedState(InvisibleXml.AMBIGUOUS);
+            if (madeAmbiguousChoice) {
+                markAmbiguous = markAmbiguous || options.getStrictAmbiguity();
+            }
 
             badVersion = badVersion && !options.isSuppressedState(InvisibleXml.VERSION_MISMATCH);
 
