@@ -15,6 +15,7 @@ import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import org.nineml.coffeefilter.InvisibleXmlParser;
+import org.nineml.coffeefilter.ParserOptions;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class LoadGrammar extends CommonDefinition {
         public Sequence call(XPathContext context, Sequence[] sequences) throws XPathException {
             UserFunctionReference.BoundUserFunction chooseAlternative = null;
             HashMap<String, String> options = new HashMap<>();
+            final ParserOptions popts;
             if (sequences.length > 1) {
                 Item item = sequences[1].head();
                 if (item instanceof MapItem) {
@@ -86,10 +88,12 @@ public class LoadGrammar extends CommonDefinition {
                             options.put(entry.getKey(), (String) entry.getValue());
                         }
                     }
-                    checkOptions(options);
+                    popts = checkOptions(options);
                 } else {
                     throw new CoffeeSacksException(CoffeeSacksException.ERR_BAD_OPTIONS, "Options must be a map", sourceLoc);
                 }
+            } else {
+                popts = new ParserOptions(parserOptions);
             }
 
             Sequence input = sequences[0].head();
@@ -109,7 +113,7 @@ public class LoadGrammar extends CommonDefinition {
             } else {
                 grammarURI = URIUtils.resolve(URIUtils.cwd(), grammarHref);
             }
-            parser = parserFromURI(context, grammarURI, options);
+            parser = parserFromURI(context, grammarURI, popts, options);
             return functionFromParser(context, parser, chooseAlternative, options);
         }
     }

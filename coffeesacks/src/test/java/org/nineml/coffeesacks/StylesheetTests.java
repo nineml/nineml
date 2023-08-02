@@ -5,6 +5,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nineml.coffeefilter.InvisibleXml;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class StylesheetTests extends TestConfiguration {
     public static final QName ixml_state = new QName(InvisibleXml.ixml_prefix, InvisibleXml.ixml_ns, "state");
 
@@ -171,6 +176,68 @@ public class StylesheetTests extends TestConfiguration {
         XdmNode result = transform(stylesheet, stylesheet);
         String xml = serialize(result);
         Assertions.assertTrue(xml.contains("<decimal>42"));
+    }
+
+    @Test
+    public void startSymbolUndefined() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/start-symbol.xsl");
+
+        XdmNode result = transform(stylesheet, stylesheet);
+        String xml = serialize(result);
+        Assertions.assertTrue(xml.contains("<S "));
+        Assertions.assertTrue(xml.contains("ambiguous"));
+    }
+
+    @Test
+    public void startSymbolB() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/start-symbol.xsl");
+
+        Map<String,String> params = new HashMap<>();
+        params.put("start-symbol", "B");
+
+        XdmNode result = transform(stylesheet, stylesheet, params);
+        String xml = serialize(result);
+        Assertions.assertEquals("<doc><B>a</B></doc>", xml);
+    }
+
+    @Test
+    public void startSymbolX() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/start-symbol.xsl");
+
+        Map<String,String> params = new HashMap<>();
+        params.put("start-symbol", "X");
+
+        try {
+            XdmNode result = transform(stylesheet, stylesheet, params);
+            String xml = serialize(result);
+            fail();
+        } catch (Exception ex) {
+            ex = (Exception) ex.getCause();
+            Assertions.assertTrue(ex.getMessage().contains("Failed to parse grammar"));
+        }
+    }
+
+    @Test
+    public void logLevelDefault() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/log-level.xsl");
+
+        Map<String,String> params = new HashMap<>();
+
+        XdmNode result = transform(stylesheet, stylesheet, params);
+        String xml = serialize(result);
+        Assertions.assertEquals("<doc><S>a</S></doc>", xml);
+    }
+
+    @Test
+    public void logLevelDebug() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/log-level.xsl");
+
+        Map<String,String> params = new HashMap<>();
+        params.put("log-level", "debug");
+
+        XdmNode result = transform(stylesheet, stylesheet, params);
+        String xml = serialize(result);
+        Assertions.assertEquals("<doc><S>a</S></doc>", xml);
     }
 
 }

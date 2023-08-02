@@ -8,6 +8,7 @@ import net.sf.saxon.functions.hof.UserFunctionReference;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.ma.map.MapType;
+import net.sf.saxon.om.GroundedValue;
 import net.sf.saxon.om.Item;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.Sequence;
@@ -17,10 +18,8 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.tree.iter.AtomicIterator;
 import net.sf.saxon.type.FunctionItemType;
 import net.sf.saxon.type.SpecificFunctionType;
-import net.sf.saxon.value.AnyURIValue;
-import net.sf.saxon.value.AtomicValue;
+import net.sf.saxon.value.*;
 import net.sf.saxon.value.SequenceType;
-import net.sf.saxon.value.StringValue;
 import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.InvisibleXmlDocument;
 import org.nineml.coffeefilter.InvisibleXmlParser;
@@ -47,9 +46,6 @@ import java.util.*;
  */
 public abstract class CommonDefinition extends ExtensionFunctionDefinition {
     public static final String logcategory = "CoffeeSacks";
-    public static final QName cxml = new QName("", "http://nineml.org/coffeegrinder/ns/grammar/compiled", "grammar");
-    public static final QName ixml_state = new QName("ixml", "http://invisiblexml.org/NS", "state");
-    public static final String cs_namespace = "https://ninenl.org/ns/coffeesacks/error";
 
     protected static final String _encoding = "encoding";
     protected static final String _type = "type";
@@ -70,30 +66,14 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
         this.config = config;
     }
 
-    protected InvisibleXmlParser parserFromURI(XPathContext context, URI grammarURI, Map<String,String> options) throws XPathException {
+    protected InvisibleXmlParser parserFromURI(XPathContext context, URI grammarURI, ParserOptions popts, Map<String,String> options) throws XPathException {
         try {
-            invisibleXml = new InvisibleXml(parserOptions);
+            invisibleXml = new InvisibleXml(popts);
             final InvisibleXmlParser parser;
 
             if (options.containsKey(_type)) {
                 String grammarType = options.get(_type);
-                URLConnection conn = grammarURI.toURL().openConnection();
-                String location = conn.getHeaderField("location");
-                if (location != null) {
-                    HashSet<String> seenLocations = new HashSet<>();
-                    while (location != null) {
-                        if (seenLocations.contains(location)) {
-                            throw new CoffeeSacksException(CoffeeSacksException.ERR_HTTP_INF_LOOP, "Redirect loop", sourceLoc, new AnyURIValue(grammarURI.toString()));
-                        }
-                        if (seenLocations.size() > FOLLOW_REDIRECT_LIMIT) {
-                            throw new CoffeeSacksException(CoffeeSacksException.ERR_HTTP_LOOP, "Redirect limit exceeded", sourceLoc, new AnyURIValue(grammarURI.toString()));
-                        }
-                        seenLocations.add(location);
-                        URL loc = new URL(location);
-                        conn = loc.openConnection();
-                        location = conn.getHeaderField("location");
-                    }
-                }
+                URLConnection conn = getUrlConnection(grammarURI);
                 if ("ixml".equals(grammarType)) {
                     String encoding = options.getOrDefault(_encoding, "UTF-8");
                     parser = invisibleXml.getParserFromIxml(conn.getInputStream(), encoding);
@@ -112,8 +92,29 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
         }
     }
 
-    protected InvisibleXmlParser parserFromString(XPathContext context, String grammarString, Map<String,String> options) throws XPathException {
-        invisibleXml = new InvisibleXml(parserOptions);
+    private URLConnection getUrlConnection(URI grammarURI) throws IOException, CoffeeSacksException {
+        URLConnection conn = grammarURI.toURL().openConnection();
+        String location = conn.getHeaderField("location");
+        if (location != null) {
+            HashSet<String> seenLocations = new HashSet<>();
+            while (location != null) {
+                if (seenLocations.contains(location)) {
+                    throw new CoffeeSacksException(CoffeeSacksException.ERR_HTTP_INF_LOOP, "Redirect loop", sourceLoc, new AnyURIValue(grammarURI.toString()));
+                }
+                if (seenLocations.size() > FOLLOW_REDIRECT_LIMIT) {
+                    throw new CoffeeSacksException(CoffeeSacksException.ERR_HTTP_LOOP, "Redirect limit exceeded", sourceLoc, new AnyURIValue(grammarURI.toString()));
+                }
+                seenLocations.add(location);
+                URL loc = new URL(location);
+                conn = loc.openConnection();
+                location = conn.getHeaderField("location");
+            }
+        }
+        return conn;
+    }
+
+    protected InvisibleXmlParser parserFromString(XPathContext context, String grammarString, ParserOptions popts, Map<String,String> options) throws XPathException {
+        invisibleXml = new InvisibleXml(popts);
         final InvisibleXmlParser parser;
 
         if (options.containsKey(_type)) {
@@ -130,8 +131,8 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
         return parser;
     }
 
-    protected InvisibleXmlParser parserFromXml(XPathContext context, NodeInfo grammar, Map<String,String> options) throws XPathException {
-        invisibleXml = new InvisibleXml(parserOptions);
+    protected InvisibleXmlParser parserFromXml(XPathContext context, NodeInfo grammar, ParserOptions popts, Map<String,String> options) throws XPathException {
+        invisibleXml = new InvisibleXml(popts);
         final InvisibleXmlParser parser;
 
         try {
@@ -149,7 +150,10 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
         return parser;
     }
 
-    protected Sequence functionFromParser(XPathContext context, InvisibleXmlParser parser, UserFunctionReference.BoundUserFunction chooseAlternative, Map<String, String> options) throws XPathException {
+    protected Sequence functionFromParser(XPathContext context,
+                                          InvisibleXmlParser parser,
+                                          UserFunctionReference.BoundUserFunction chooseAlternative,
+                                          Map<String, String> options) throws XPathException {
         if (parser.constructed()) {
             SequenceType[] argTypes = new SequenceType[]{SequenceType.SINGLE_STRING};
 
@@ -216,8 +220,11 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                     UserFunctionReference.BoundUserFunction ref = (UserFunctionReference.BoundUserFunction) get.invoke(item, next);
                     options.put(key, ref);
                 } else {
-                    AtomicValue value = (AtomicValue) get.invoke(item, next);
-                    options.put(key, value.getStringValue());
+                    GroundedValue value = (GroundedValue) get.invoke(item, next);
+                    // Ignore options that are set to the empty sequence
+                    if (value.getLength() > 0) {
+                        options.put(key, ((AtomicValue) value).getStringValue());
+                    }
                 }
                 next = aiter.next();
             }
@@ -228,16 +235,52 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
         return options;
     }
 
-    protected void checkOptions(Map<String,String> options) throws XPathException {
-        Set<String> booleanOptions = new HashSet<>(Arrays.asList("ignoreTrailingWhitespace",
-                "allowUndefinedSymbols", "allowUnreachableSymbols", "allowUnproductiveSymobls",
-                "allowMultipleDefinitions", "showMarks", "showBnfNonterminals",
-                "suppressAmbiguousState", "suppressPrefixState", "strictAmbiguity"));
+    protected ParserOptions checkOptions(Map<String,String> options) throws XPathException {
+        ParserOptions parserOptions = new ParserOptions(this.parserOptions);
 
-        //Set<String> stringOptions = new HashSet<>(Collections.singletonList("parser"));
+        Set<String> booleanOptions = new HashSet<>(Arrays.asList(
+                "ignore-trailing-whitespace",  "ignoreTrailingWhitespace",
+                "allow-undefined-symbols",     "allowUndefinedSymbols",
+                "allow-unreachable-symbols",   "allowUnreachableSymbols",
+                "allow-unproductive-symbols",  "allowUnproductiveSymobls",
+                "allow-multiple-definitions",  "allowMultipleDefinitions",
+                "show-marks",                  "showMarks",
+                "show-bnf-nonterminals",       "showBnfNonterminals",
+                                               "suppressAmbiguousState",
+                                               "suppressPrefixState",
+                "strict-ambiguity",            "strictAmbiguity",
+                "ignore-bom",
+                "normalize-line-endings",
+                "mark-ambiguities",
+                "pedantic"
+        ));
+
+        Set<String> stringOptions = new HashSet<>(Arrays.asList(
+                "parser-type",                 "parser",
+                "priority-style",
+                "disable-pragmas",
+                "enable-pragmas",
+                "disable-states",
+                "enable-states",
+                "default-log-level",
+                "log-levels",
+                "start-symbol",
+                "format",
+                "type"
+        ));
+
+        // We want to make sure we have an appropriate logger.
+        parserOptions.setLogger(new SacksLogger(config.getLogger()));
+
+        if (options.containsKey("default-log-level")) {
+            parserOptions.getLogger().setDefaultLogLevel(options.get("default-log-level"));
+        }
+        if (options.containsKey("log-levels")) {
+            parserOptions.getLogger().setLogLevels(options.get("log-levels"));
+        }
 
         for (String key : options.keySet()) {
-            String value = options.get(key);
+            final String value = options.get(key);
             final boolean bool;
 
             if (booleanOptions.contains(key)) {
@@ -251,17 +294,40 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                 }
             } else {
                 bool = false; // irrelevant but makes the compiler happy
-                if ("parser".equals(key)) {
-                    if (!"GLL".equals(value) && !"Earley".equals(value)) {
-                        parserOptions.getLogger().warn(logcategory, "Ignoring invalid option value: %s=%s", key, value);
-                        continue;
-                    }
+                if (!stringOptions.contains(key)) {
+                    parserOptions.getLogger().warn(logcategory, "Ignoring invalid option: %s=%s", key, value);
+                    continue;
                 }
             }
 
             switch (key) {
+                case "ignore-trailing-whitespace":
                 case "ignoreTrailingWhitespace":
                     parserOptions.setIgnoreTrailingWhitespace(bool);
+                    break;
+                case "allow-undefined-symbols":
+                case "allowUndefinedSymbols":
+                    parserOptions.setAllowUndefinedSymbols(bool);
+                    break;
+                case "allow-unreachable-symbols":
+                case "allowUnreachableSymbols":
+                    parserOptions.setAllowUnreachableSymbols(bool);
+                    break;
+                case "allow-unproductive-symbols":
+                case "allowUnproductiveSymbols":
+                    parserOptions.setAllowUnproductiveSymbols(bool);
+                    break;
+                case "allow-multiple-definitions":
+                case "allowMultipleDefinitions":
+                    parserOptions.setAllowMultipleDefinitions(bool);
+                    break;
+                case "show-marks":
+                case "showMarks":
+                    parserOptions.setShowMarks(bool);
+                    break;
+                case "show-bnf-nonterminals":
+                case "showBnfNonterminals":
+                    parserOptions.setShowBnfNonterminals(bool);
                     break;
                 case "suppressAmbiguousState":
                     if (bool) {
@@ -277,35 +343,45 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                         parserOptions.exposeState("prefix");
                     }
                     break;
+                case "strict-ambiguity":
                 case "strictAmbiguity":
                     parserOptions.setStrictAmbiguity(bool);
                     break;
-                case "allowUndefinedSymbols":
-                    parserOptions.setAllowUndefinedSymbols(bool);
+                case "ignore-bom":
+                    parserOptions.setIgnoreBOM(bool);
                     break;
-                case "allowUnreachableSymbols":
-                    parserOptions.setAllowUnreachableSymbols(bool);
+                case "normalize-line-endings":
+                    parserOptions.setNormalizeLineEndings(bool);
                     break;
-                case "allowUnproductiveSymbols":
-                    parserOptions.setAllowUnproductiveSymbols(bool);
+                case "mark-ambiguities":
+                    parserOptions.setMarkAmbiguities(bool);
                     break;
-                case "allowMultipleDefinitions":
-                    parserOptions.setAllowMultipleDefinitions(bool);
+                case "pedantic":
+                    parserOptions.setPedantic(bool);
                     break;
-                case "showMarks":
-                    parserOptions.setShowMarks(bool);
-                    break;
-                case "showBnfNonterminals":
-                    parserOptions.setShowBnfNonterminals(bool);
-                    break;
+                case "parser-type":
                 case "parser":
                     parserOptions.setParserType(value);
                     break;
-
-                case "enablePragmas":
-                case "disablePragmas":
-                    // See below
+                case "priority-style":
+                    parserOptions.setPriorityStyle(value);
                     break;
+                case "start-symbol":
+                    parserOptions.setStartSymbol(value);
+                    break;
+                case "disable-pragmas":
+                case "disablePragmas":
+                    break; // see below
+                case "enable-pragmas":
+                case "enablePragmas":
+                    break; // see below
+                case "disable-states":
+                case "enable-states":
+                    break; // see below
+                case "default-log-level":
+                    break; // see above
+                case "log-levels":
+                    break; // see above
 
                 case "format":
                     Set<String> formats = new HashSet<>(Arrays.asList("xml", "json", "json-data", "json-tree", "json-text"));
@@ -315,30 +391,48 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                     }
                     break;
                 case "type":
-                    Set<String> types = new HashSet<>(Arrays.asList("ixml", "xml", "vxml", "cxml", "compiled"));
+                    Set<String> types = new HashSet<>(Arrays.asList("ixml", "xml", "vxml"));
                     if (!types.contains(value)) {
                         throw new CoffeeSacksException(CoffeeSacksException.ERR_BAD_INPUT_FORMAT, "Invalid input format",
                                 sourceLoc, new StringValue(value));
                     }
-                    break;
-                case "encoding":
                     break;
                 default:
                     parserOptions.getLogger().warn(logcategory, "Ignoring unexpected option: %s", key);
             }
         }
 
-        // Disable first, then enable
-        if (options.containsKey("disablePragmas")) {
-            for (String name : options.get("disablePragmas").split(",")) {
+        // Disable first,
+        String value = options.getOrDefault("disable-pragmas", options.getOrDefault("disablePragmas", null));
+        if (value != null) {
+            for (String name : value.split(",\\s*")) {
                 parserOptions.disablePragma(name.trim());
             }
         }
-        if (options.containsKey("enablePragmas")) {
-            for (String name : options.get("enablePragmas").split(",")) {
+        // then enable
+        value = options.getOrDefault("enable-pragmas", options.getOrDefault("enablePragmas", null));
+        if (value != null) {
+            for (String name : value.split(",\\s*")) {
                 parserOptions.enablePragma(name.trim());
             }
         }
+
+        // Disable first,
+        value = options.getOrDefault("disable-states", null);
+        if (value != null) {
+            for (String name : value.split(",\\s*")) {
+                parserOptions.suppressState(name.trim());
+            }
+        }
+        // then enable
+        value = options.getOrDefault("enable-states",null);
+        if (value != null) {
+            for (String name : value.split(",\\s*")) {
+                parserOptions.exposeState(name.trim());
+            }
+        }
+
+        return parserOptions;
     }
 
     protected Item jsonToXDM(Processor processor, String json) throws SaxonApiException {
