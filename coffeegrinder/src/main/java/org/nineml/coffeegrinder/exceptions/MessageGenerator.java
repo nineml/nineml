@@ -68,8 +68,10 @@ public class MessageGenerator {
             // ???
             StringBuilder sb = new StringBuilder();
             sb.append("Unknown error: ").append(code);
-            for (String param : params) {
-                sb.append(": ").append(param);
+            if (params != null) {
+                for (String param : params) {
+                    sb.append(": ").append(param);
+                }
             }
             message = sb.toString();
         } else {
