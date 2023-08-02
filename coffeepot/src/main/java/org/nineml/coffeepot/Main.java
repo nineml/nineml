@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 /**
  * A command-line Invisible XML parser.
@@ -223,6 +224,61 @@ class Main {
     private void hygeineReport() {
         HygieneReport report = parser.getHygieneReport();
 
+        if (!report.isClean()) {
+            String sep = "";
+            StringBuilder sb = new StringBuilder();
+            for (Rule rule : report.getUnproductiveRules()) {
+                if (options.getPedantic() || !rule.symbol.symbolName.startsWith("$")) {
+                    sb.append(sep).append(rule.symbol);
+                    sep = ", ";
+                }
+            }
+            if (!sb.toString().isEmpty()) {
+                options.getLogger().debug(logcategory, "Unreachable rules: %s", sb);
+            }
+
+            sep = "";
+            sb = new StringBuilder();
+            for (NonterminalSymbol symbol : report.getUnproductiveSymbols()) {
+                if (options.getPedantic() || !symbol.symbolName.startsWith("$")) {
+                    sb.append(sep).append(symbol);
+                    sep = ", ";
+                }
+            }
+            if (!sb.toString().isEmpty()) {
+                options.getLogger().debug(logcategory, "Unproductive symbols: %s", sb);
+            }
+
+            sep = "";
+            sb = new StringBuilder();
+            for (NonterminalSymbol symbol : report.getUnreachableSymbols()) {
+                if (options.getPedantic() || !symbol.symbolName.startsWith("$")) {
+                    sb.append(sep).append(symbol);
+                    sep = ", ";
+                }
+            }
+            if (!sb.toString().isEmpty()) {
+                options.getLogger().debug(logcategory, "Unreachable symbols: %s", sb);
+            }
+
+            boolean unusable = false;
+            sep = "";
+            sb = new StringBuilder();
+            for (NonterminalSymbol symbol : report.getUndefinedSymbols()) {
+                unusable = unusable || !report.getUnreachableSymbols().contains(symbol);
+                if (options.getPedantic() || !symbol.symbolName.startsWith("$")) {
+                    sb.append(sep).append(symbol);
+                    sep = ", ";
+                }
+            }
+            if (!sb.toString().isEmpty()) {
+                options.getLogger().debug(logcategory, "Undefined symbols: %s", sb);
+                if (unusable) {
+                    throw new RuntimeException("Cannot use grammar with reachable undefined symbols");
+                }
+            }
+        }
+
         if (config.analyzeAmbiguity) {
             report.checkAmbiguity();
             if (report.ambiguityChecked()) {
@@ -238,7 +294,7 @@ class Main {
                         stderr.println(summary);
                     } else {
                         stderr.println("Analysis cannot prove the grammar is unambiguous.");
-                        if (!"".equals(summary)) {
+                        if (!summary.isEmpty()) {
                             stderr.println(summary);
                         }
                     }
