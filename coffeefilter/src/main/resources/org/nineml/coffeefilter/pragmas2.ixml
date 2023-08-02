@@ -88,8 +88,3 @@ ixml version "1.0".
   pragma-data: (-pragma-char; -bracket-pair)*.
  -pragma-char: ~["{}"].
 -bracket-pair: '{', -pragma-data, '}'.
-
-       -QName: -name, ':', -name.
-      -UQName: 'Q{', -ns-name, '}', -name.
-     -ns-name: ~["{}"; '"'; "'"]* .
-
