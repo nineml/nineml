@@ -374,8 +374,8 @@ public class Configuration {
         unbuffered = cmain.unbuffered;
         outputFile = cmain.outputFile;
         forest = cmain.forest;
-        debug = cmain.debug;
         graph = cmain.graph;
+
         graphOptions = cmain.graphOptions;
         if (cmain.graphFormat != null) {
             graphFormat = cmain.graphFormat;
@@ -387,8 +387,13 @@ public class Configuration {
                 graphFormat = "svg";
             }
         }
-        parse = cmain.parse;
 
+        debug = cmain.debug;
+        if (cmain.logLevels == null) {
+            options.getLogger().setDefaultLogLevel("debug");
+        }
+
+        parse = cmain.parse;
         if (cmain.parseCount == null) {
             parseCount = 1;
             allParses = false;
