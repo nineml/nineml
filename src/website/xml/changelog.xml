@@ -17,6 +17,59 @@ notes for each component.</para>
 the individual component <filename>changelogs.xml</filename> files.</para>
 
 <revhistory>
+<revision xml:id="v310">
+<revnumber>3.1.0</revnumber>
+<date>2023-08-01</date>
+<revdescription>
+<itemizedlist audience="coffeegrinder">
+<listitem>
+<para>Added support for marking horizontal ambiguities with processing
+instructions.</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeefilter">
+<listitem>
+<para>Added support for specifying an alternate start symbol for parsing.
+This is not conformant behavior, but is useful for converted grammars that may
+have otherwise unreachable states.</para>
+</listitem>
+<listitem>
+<para>Added more checks for grammars provided in XML form. Removed some unused rules
+from the internal pragmas grammar.</para>
+</listitem>
+<listitem>
+<para>Improved the way ambiguity is detected and reported.</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeesacks">
+<listitem>
+<para>Refactored the way parser options are constructed. There’s now a separate
+options object for each grammar and parser.
+</para>
+</listitem>
+<listitem>
+<para>Cleaned up the names of the parser options that can be passed in the XPath
+options map.</para>
+</listitem>
+<listitem>
+<para>Fixed a bug where the default Axe failed to report ambiguous choices if there
+were no selectors (XPath expressions or functions) provided at all.
+</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem>
+<para>Hygiene issues with the grammar are now logged at the debug level.
+</para>
+</listitem>
+<listitem>
+<para>Added a <option>--start-symbol</option> option to select an alternate start symbol.
+</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+
+<revhistory>
 <revision xml:id="v300">
 <revnumber>3.0.0</revnumber>
 <date>2023-07-29</date>
