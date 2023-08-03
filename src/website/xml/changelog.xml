@@ -17,6 +17,18 @@ notes for each component.</para>
 the individual component <filename>changelogs.xml</filename> files.</para>
 
 <revhistory>
+<revision xml:id="v311">
+<revnumber>3.1.1</revnumber>
+<date>2023-08-02</date>
+<revdescription>
+<para audience="coffeesacks">Fixed a bug in the construction of the graph that
+an <classname>XPathAxe</classname> gets to inspect. Nodes were inadvertantly being
+processed many (many!) times in ambiguous forests making the construction very slow.</para>
+<para audience="coffeegrinder"/>
+<para audience="coffeefilter"/>
+<para audience="coffeepot"/>
+</revdescription>
+</revision>
 <revision xml:id="v310">
 <revnumber>3.1.0</revnumber>
 <date>2023-08-01</date>
