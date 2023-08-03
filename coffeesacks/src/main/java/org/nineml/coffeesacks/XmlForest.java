@@ -90,12 +90,16 @@ public class XmlForest {
 
         AttributeBuilder atts;
         HashSet<ForestNode> processed = new HashSet<>();
+        HashSet<ForestNode> queued = new HashSet<>();
         ArrayList<ForestNode> toBeProcessed = new ArrayList<>();
         toBeProcessed.add(root);
 
         while (!toBeProcessed.isEmpty()) {
             ForestNode node = toBeProcessed.remove(0);
             processed.add(node);
+            queued.remove(node);
+
+            //System.err.printf("Node: %s%n", node);
 
             final String gi;
             if (node.symbol instanceof TerminalSymbol) {
@@ -167,8 +171,9 @@ public class XmlForest {
                     atts.addAttribute("", "length", String.valueOf(child.rightExtent - child.leftExtent));
                     handler.startElement("", childgi, childgi, atts);
                     handler.endElement("", childgi, childgi);
-                    if (!processed.contains(child)) {
+                    if (!processed.contains(child) && !queued.contains(child)) {
                         toBeProcessed.add(child);
+                        queued.add(child);
                     }
                 }
                 handler.endElement("", "children", "children");
