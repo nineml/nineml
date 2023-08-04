@@ -109,6 +109,6 @@ public class ParseTree {
         if (vertex == null) {
             return "ROOT";
         }
-        return vertex + " :: " + (left == null ? "" : "L") + (right == null ? "" : "R");
+        return vertex.toString();
     }
 }
