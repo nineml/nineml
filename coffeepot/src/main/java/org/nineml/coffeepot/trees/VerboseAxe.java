@@ -22,6 +22,7 @@ import org.nineml.coffeegrinder.trees.Axe;
 import org.nineml.coffeegrinder.trees.ParseTree;
 import org.nineml.coffeegrinder.trees.PriorityAxe;
 import org.nineml.coffeepot.managers.Configuration;
+import org.nineml.coffeepot.utils.NodeUtils;
 import org.nineml.coffeepot.utils.ParserOptions;
 import org.nineml.coffeesacks.XmlForest;
 import org.xml.sax.InputSource;
@@ -64,15 +65,11 @@ public class VerboseAxe extends PriorityAxe {
     private boolean lastChoiceWasAmbiguous = false;
     private boolean madeAmbiguousChoice = false;
 
-    public VerboseAxe(Configuration config, InvisibleXmlParser parser, InvisibleXmlDocument document, String input) {
+    public VerboseAxe(Configuration config, InvisibleXmlParser parser, XmlForest forest, InvisibleXmlDocument document, String input) {
         this.processor = config.processor;
         this.options = config.options;
         this.input = new XdmAtomicValue(input);
-        try {
-            forest = new XmlForest(processor, document);
-        } catch (SaxonApiException | SAXException ex) {
-            throw new RuntimeException(ex);
-        }
+        this.forest = forest;
     }
 
     public void addExpression(String expr) {
@@ -186,7 +183,7 @@ public class VerboseAxe extends PriorityAxe {
             choiceMap.put("C" + choice.id, choice);
         }
 
-        final XdmNode node = getAmbiguityContext(choices.get(0));
+        final XdmNode node = NodeUtils.getAmbiguityContext(processor, forest, choices.get(0));
         try {
             XdmMap map = new XdmMap();
             map = map.put(_forest, forest.getXml());
@@ -300,24 +297,5 @@ public class VerboseAxe extends PriorityAxe {
     @Override
     public void forArborist(Arborist arborist) {
         // nop
-    }
-
-    public XdmNode getAmbiguityContext(Family choice) {
-        try {
-            XPathCompiler compiler = processor.newXPathCompiler();
-            XPathExecutable exec = compiler.compile(String.format("//children[@id='C%d']/parent::*", choice.id));
-            XPathSelector selector = exec.load();
-            selector.setContextItem(forest.getXml());
-            XdmNode parentNode = (XdmNode) selector.evaluateSingle();
-            if (parentNode == null) {
-                exec = compiler.compile(String.format("//*[@id='N%d']", choice.id));
-                selector = exec.load();
-                selector.setContextItem(forest.getXml());
-                parentNode = (XdmNode) selector.evaluateSingle();
-            }
-            return parentNode;
-        } catch (SaxonApiException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }

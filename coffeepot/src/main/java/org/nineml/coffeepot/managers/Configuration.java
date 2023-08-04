@@ -50,6 +50,7 @@ public class Configuration {
     public final boolean omitCsvHeaders;
     public final int repeat;
     public final boolean debug;
+    public final String axe;
 
     public Configuration(String[] args) {
         this(System.out, System.err, args);
@@ -355,6 +356,34 @@ public class Configuration {
             options.enablePragma(pragma);
         }
 
+        if (cmain.axe == null) {
+            axe = "xpath";
+        } else {
+            if ("xpath".equals(cmain.axe) || "random".equals(cmain.axe)
+                    || "priority".equals(cmain.axe) || "sequential".equals(cmain.axe)) {
+                axe = cmain.axe;
+
+                if ("sequential".equals(axe)) {
+                    options.getLogger().debug(logcategory, "Disabling priority pragma for sequential axe");
+                    options.disablePragma("priority");
+                }
+            } else {
+                options.getLogger().error(logcategory, "Unknown axe type: %s", cmain.axe);
+                axe = "xpath";
+            }
+        }
+
+        if ("random".equals(axe) && (cmain.functionLibrary != null || !cmain.choose.isEmpty())) {
+            if (cmain.functionLibrary != null) {
+                options.getLogger().error(logcategory, "The --function-library option is incompatible with the %s axe", axe);
+                cmain.functionLibrary = null;
+            }
+            if (!cmain.choose.isEmpty()) {
+                options.getLogger().error(logcategory, "The --choose option is incompatible with the %s axe", axe);
+                cmain.choose.clear();
+            }
+        }
+
         grammar = cmain.grammar;
         timing = cmain.timing;
         timeRecords = cmain.timeRecords;
@@ -628,6 +657,9 @@ public class Configuration {
 
         @Parameter(names = {"--start-symbol", "--start"}, description = "Specify the start symbol")
         public String startSymbol = null;
+
+        @Parameter(names = {"--axe"}, description = "Specify an axe")
+        public String axe = null;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

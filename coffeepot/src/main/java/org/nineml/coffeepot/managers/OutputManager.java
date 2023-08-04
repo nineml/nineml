@@ -5,18 +5,19 @@ import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.InvisibleXmlDocument;
 import org.nineml.coffeefilter.InvisibleXmlParser;
 import org.nineml.coffeefilter.trees.*;
+import org.nineml.coffeefilter.trees.StringTreeBuilder;
 import org.nineml.coffeegrinder.parser.Family;
 import org.nineml.coffeegrinder.parser.ForestNode;
 import org.nineml.coffeegrinder.parser.Symbol;
-import org.nineml.coffeegrinder.trees.Arborist;
-import org.nineml.coffeegrinder.trees.NopTreeBuilder;
-import org.nineml.coffeegrinder.trees.ParseTree;
-import org.nineml.coffeegrinder.trees.TreeSelection;
+import org.nineml.coffeegrinder.trees.*;
 import org.nineml.coffeepot.BuildConfig;
 import org.nineml.coffeepot.trees.VerboseAxe;
 import org.nineml.coffeepot.trees.XdmDataTree;
 import org.nineml.coffeepot.trees.XdmSimpleTree;
+import org.nineml.coffeepot.utils.NodeUtils;
 import org.nineml.coffeepot.utils.ParserOptions;
+import org.nineml.coffeesacks.XmlForest;
+import org.xml.sax.SAXException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,7 +48,8 @@ public class OutputManager {
     public List<TreeSelection> selectedTrees = null;
     private boolean firstResult = true;
     private InputManager inputManager = null;
-    private VerboseAxe axe = null;
+    private XmlForest forest = null;
+    private Axe axe = null;
 
     public void configure(Configuration config) {
         if (config == null) {
@@ -120,13 +122,25 @@ public class OutputManager {
             firstParse = config.parse;
         }
 
-        axe = new VerboseAxe(config, parser, doc, input);
-        for (String expr : config.choose) {
-            axe.addExpression(expr);
+        try {
+            forest = new XmlForest(config.processor, doc);
+        } catch (SaxonApiException | SAXException ex) {
+            throw new RuntimeException(ex);
         }
-        if (config.functionLibrary != null) {
-            axe.addFunctionLibrary(config.functionLibrary);
+
+        if ("random".equals(config.axe)) {
+            axe = new RandomAxe();
+        } else {
+            VerboseAxe vaxe = new VerboseAxe(config, parser, forest, doc, input);
+            for (String expr : config.choose) {
+                vaxe.addExpression(expr);
+            }
+            if (config.functionLibrary != null) {
+                vaxe.addFunctionLibrary(config.functionLibrary);
+            }
+            axe = vaxe;
         }
+
 
         Arborist walker = doc.getResult().getArborist(axe);
         if (doc.succeeded()) {
@@ -459,6 +473,25 @@ public class OutputManager {
         desc.describe(stderr, selectedTrees);
     }
 
+    public XdmNode getAmbiguityContext(Family choice) {
+        try {
+            XPathCompiler compiler = config.processor.newXPathCompiler();
+            XPathExecutable exec = compiler.compile(String.format("//children[@id='C%d']/parent::*", choice.id));
+            XPathSelector selector = exec.load();
+            selector.setContextItem(forest.getXml());
+            XdmNode parentNode = (XdmNode) selector.evaluateSingle();
+            if (parentNode == null) {
+                exec = compiler.compile(String.format("//*[@id='N%d']", choice.id));
+                selector = exec.load();
+                selector.setContextItem(forest.getXml());
+                parentNode = (XdmNode) selector.evaluateSingle();
+            }
+            return parentNode;
+        } catch (SaxonApiException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     private class AmbiguityDescription {
         final String nocheck = " ";
         final String check;
@@ -569,7 +602,7 @@ public class OutputManager {
         public void describe(PrintStream stderr, List<TreeSelection> trees) {
             for (TreeSelection selection : trees) {
                 stderr.println(path(selection.parent));
-                XdmNode context = axe.getAmbiguityContext(selection.selection);
+                XdmNode context = NodeUtils.getAmbiguityContext(config.processor, forest, selection.selection);
 
                 try {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
