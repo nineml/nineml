@@ -55,9 +55,9 @@ public class InputManager {
                 sb.append((char) inputchar);
                 inputchar = reader.read();
             }
-            input = sb.toString();
+            input = config.trim ? sb.toString().trim() : sb.toString();
         } else {
-            input = config.input;
+            input = config.trim ? config.input.trim() : config.input;
         }
 
         inputSize = input.length();

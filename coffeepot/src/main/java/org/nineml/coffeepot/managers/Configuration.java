@@ -51,6 +51,7 @@ public class Configuration {
     public final int repeat;
     public final boolean debug;
     public final String axe;
+    public final boolean trim;
 
     public Configuration(String[] args) {
         this(System.out, System.err, args);
@@ -401,6 +402,7 @@ public class Configuration {
         outputFile = cmain.outputFile;
         forest = cmain.forest;
         graph = cmain.graph;
+        trim = cmain.trim;
 
         graphOptions = cmain.graphOptions;
         if (cmain.graphFormat != null) {
@@ -660,6 +662,9 @@ public class Configuration {
 
         @Parameter(names = {"--axe"}, description = "Specify an axe")
         public String axe = null;
+
+        @Parameter(names = {"--trim"}, description = "Trim leading and trailing whitespace on input")
+        public boolean trim = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

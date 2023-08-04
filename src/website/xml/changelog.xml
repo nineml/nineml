@@ -48,6 +48,12 @@ is returned by the <literal>xml</literal> option).
 <para>Added an <option>--axe</option> option and support for a <literal>random</literal> axe.
 </para>
 </listitem>
+<listitem>
+<para>Added a <option>--trim</option> option to trim leading and trailing whitespace off
+the input. (This can be handy if you have input in a file, your editor automatically adds
+a newline at the end of the file, and your grammar doesn’t support trailing whitespace.)
+</para>
+</listitem>
 </itemizedlist>
 </revdescription>
 </revision>

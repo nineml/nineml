@@ -492,6 +492,13 @@ and <code>prefix</code> states can be suppressed.
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_trim">
+<term><option>--trim</option></term>
+<listitem>
+<para>Trim leading and trailing whitespace from the input before parsing it.
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_unbuffered">
 <term><option>--unbuffered</option></term>
 <listitem>
