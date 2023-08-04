@@ -22,6 +22,7 @@ import org.nineml.coffeegrinder.trees.Axe;
 import org.nineml.coffeegrinder.trees.ParseTree;
 import org.nineml.coffeegrinder.trees.PriorityAxe;
 import org.nineml.coffeepot.managers.Configuration;
+import org.nineml.coffeepot.utils.NodeUtils;
 import org.nineml.coffeepot.utils.ParserOptions;
 import org.nineml.coffeesacks.XmlForest;
 import org.xml.sax.InputSource;
@@ -41,14 +42,8 @@ import java.util.*;
 public class VerboseAxe extends PriorityAxe {
     public static final String logcategory = "CoffeePot";
 
-    private static final QName _name = new QName("name");
-    private static final QName _value = new QName("value");
-    private static final QName _symbol = new QName("symbol");
     private static final QName _id = new QName("id");
     private static final QName _children = new QName("children");
-    private static final QName _start = new QName("start");
-    private static final QName _length = new QName("length");
-    private static final QName _priority = new QName("priority");
 
     public static final XdmAtomicValue _input = new XdmAtomicValue("input");
     public static final XdmAtomicValue _forest = new XdmAtomicValue("forest");
@@ -60,7 +55,6 @@ public class VerboseAxe extends PriorityAxe {
     private static final QName _options = new QName("options");
     public static final String CPNS = "https://coffeepot.nineml.org/ns/functions";
     public static final StructuredQName CP_CHOOSE = new StructuredQName("cp", CPNS, "choose-alternative");
-    private final Configuration config;
     private final Processor processor;
     private final XmlForest forest;
     private final ParserOptions options;
@@ -71,16 +65,11 @@ public class VerboseAxe extends PriorityAxe {
     private boolean lastChoiceWasAmbiguous = false;
     private boolean madeAmbiguousChoice = false;
 
-    public VerboseAxe(Configuration config, InvisibleXmlParser parser, InvisibleXmlDocument document, String input) {
-        this.config = config;
+    public VerboseAxe(Configuration config, InvisibleXmlParser parser, XmlForest forest, InvisibleXmlDocument document, String input) {
         this.processor = config.processor;
         this.options = config.options;
         this.input = new XdmAtomicValue(input);
-        try {
-            forest = new XmlForest(processor, document);
-        } catch (SaxonApiException | SAXException ex) {
-            throw new RuntimeException(ex);
-        }
+        this.forest = forest;
     }
 
     public void addExpression(String expr) {
@@ -185,11 +174,6 @@ public class VerboseAxe extends PriorityAxe {
     }
 
     @Override
-    public boolean isSpecialist() {
-        return false;
-    }
-
-    @Override
     public List<Family> select(ParseTree tree, ForestNode forestNode, int count, List<Family> choices) {
         lastChoiceWasAmbiguous = false;
         List<Family> selected = new ArrayList<>();
@@ -199,14 +183,8 @@ public class VerboseAxe extends PriorityAxe {
             choiceMap.put("C" + choice.id, choice);
         }
 
-        final XdmNode node;
+        final XdmNode node = NodeUtils.getAmbiguityContext(processor, forest, choices.get(0));
         try {
-            XPathCompiler compiler = processor.newXPathCompiler();
-            XPathExecutable exec = compiler.compile(String.format("//children[@id='C%d']/parent::symbol", choices.get(0).id));
-            XPathSelector selector = exec.load();
-            selector.setContextItem(forest.getXml());
-            node = (XdmNode) selector.evaluateSingle();
-
             XdmMap map = new XdmMap();
             map = map.put(_forest, forest.getXml());
             map = map.put(_input, input);
@@ -223,8 +201,9 @@ public class VerboseAxe extends PriorityAxe {
 
             if (functionLibrary == null) {
                 for (String expr : expressions) {
-                    exec = compiler.compile(expr);
-                    selector = exec.load();
+                    XPathCompiler compiler = processor.newXPathCompiler();
+                    XPathExecutable exec = compiler.compile(expr);
+                    XPathSelector selector = exec.load();
 
                     selector.setContextItem(node);
                     XdmValue selection = selector.evaluate();
@@ -259,11 +238,12 @@ public class VerboseAxe extends PriorityAxe {
                     options.getLogger().debug("Expression %s did not make a selection", expr);
                 }
             } else  {
+                XPathCompiler compiler = processor.newXPathCompiler();
                 compiler.declareNamespace("f", "https://coffeepot.nineml.org/ns/functions");
                 compiler.declareVariable(_context);
                 compiler.declareVariable(_options);
-                exec = compiler.compile("f:choose-alternative($context, $options)");
-                selector = exec.load();
+                XPathExecutable exec = compiler.compile("f:choose-alternative($context, $options)");
+                XPathSelector selector = exec.load();
                 selector.setVariable(_context, node);
                 selector.setVariable(_options, map);
                 Map<XdmAtomicValue,XdmValue> newMap = selector.evaluateSingle().asMap();
@@ -306,116 +286,7 @@ public class VerboseAxe extends PriorityAxe {
             madeAmbiguousChoice = madeAmbiguousChoice || lastChoiceWasAmbiguous;
         }
 
-        switch (config.describeAmbiguityWith) {
-            case "text":
-                textAmbiguity(tree, node, selected.get(0));
-                break;
-            case "api-xml":
-            case "xml":
-                xmlAmbiguity(tree, node, selected.get(0));
-                break;
-            default:
-                break;
-        }
-
         return selected;
-    }
-
-    private void textAmbiguity(ParseTree tree, XdmNode node, Family selection) {
-        config.stdout.println(choiceContext(tree));
-
-        String lhs = node.getAttributeValue(_name);
-
-        final String nocheck = "        ";
-        final String check;
-        final String lquo;
-        final String rquo;
-        final String arrow;
-        if (config.options.getAsciiOnly()) {
-            check = "      X ";
-            lquo = " (";
-            rquo = ")";
-            arrow = " => ";
-        } else {
-            check = "      ✔ ";
-            lquo = " «";
-            rquo = "»";
-            arrow = " ⇒ ";
-        }
-
-        String id = "C" + selection.id;
-        XdmSequenceIterator<XdmNode> childrenIterator = node.axisIterator(Axis.CHILD, _children);
-        while (childrenIterator.hasNext()) {
-            XdmNode children = childrenIterator.next();
-
-            StringBuilder sb = new StringBuilder();
-            if (id.equals(children.getAttributeValue(_id))) {
-                sb.append(check);
-            } else {
-                sb.append(nocheck);
-            }
-            sb.append(lhs).append(lquo).append(node.getAttributeValue(_start));
-            sb.append(",").append(node.getAttributeValue(_length));
-            sb.append(rquo);
-            if (!"0".equals(children.getAttributeValue(_priority))) {
-                sb.append("/").append(children.getAttributeValue(_priority));
-            }
-            sb.append(arrow);
-
-            boolean first = true;
-            XdmSequenceIterator<XdmNode> childIterator = children.axisIterator(Axis.CHILD);
-            while (childIterator.hasNext()) {
-                XdmNode child = childIterator.next();
-                if (!first){
-                    sb.append(", ");
-                }
-                if (_symbol.equals(child.getNodeName())) {
-                    sb.append(child.getAttributeValue(_name));
-                } else {
-                    sb.append(child.getAttributeValue(_value));
-                }
-                first = false;
-            }
-
-            config.stdout.println(sb);
-        }
-    }
-
-    private void xmlAmbiguity(ParseTree tree, XdmNode node, Family selection) {
-        config.stdout.printf("%s (selected C%s)%n", choiceContext(tree), selection.id);
-        config.stdout.println(node);
-    }
-
-    private String choiceContext(ParseTree tree) {
-        ArrayList<String> segments = new ArrayList<>();
-        // Work my way backwards up the tree...
-        ParseTree branch = tree;
-        String name = tree.vertex.node.symbol.toString();
-        while (branch.parent != null) {
-            int count = 0;
-            for (ParseTree child : branch.getChildren()) {
-                if (child.vertex.node.symbol != null) {
-                    count++; // bogus bogus bogus
-                }
-            }
-            branch = branch.parent;
-        }
-
-        /*
-        StringBuilder sb = new StringBuilder();
-        sb.append("At ");
-        for (int pos = 0; pos < symbolStack.size(); pos++) {
-            String name = symbolStack.get(pos);
-            sb.append("/").append(name);
-            sb.append("[");
-            sb.append(countStack.get(pos));
-            sb.append("]");
-        }
-        return sb.toString();
-
-         */
-
-        return "BROKEN";
     }
 
     @Override

@@ -23,7 +23,7 @@ public interface Axe {
      * <p>In an ambiguous forest, some nodes will have more than one possible choice. In any given
      * tree, only one choice may be selected. This function is called to make the selection.
      * </p>
-     * <p>There will always be at least elements in the choices list when the method is called.
+     * <p>There will always be at least one element in the choices list when the method is called.
      * The method must return at least one.</p>
      * <p>The first node in the list returned is the choice selected for the tree currently under construction.
      * If only one choice is returned, the node becomes unambiguous on subsequent parses,

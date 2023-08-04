@@ -64,11 +64,11 @@ all with <option>--parse-count:all</option>:</para>
 <programlisting linenumbering="unnumbered"
 ><![CDATA[$ coffeepot -pp -g:examples/ambig01.ixml --describe-ambiguity --no-output Shimmer
 Found 2 possible parses.
-At /$$[1]
-      ✔ product «1,7» ⇒ dessert-topping
-        product «1,7» ⇒ floor-wax]]></programlisting>
+At /product
+    ✔ floor-wax«1-7»
+      dessert-topping«1-7»]]></programlisting>
 
-<para>This indicates that the characters from 1 to 8 in the input can be matched
+<para>This indicates that the characters from 1 to 7 in the input can be matched
 as a <literal>product</literal> containing a <literal>dessert-topping</literal> or
 a <literal>floor-wax</literal>. This is another case where the forest graph
 can be useful.</para>
@@ -91,10 +91,7 @@ this trivial grammar:</para>
   >expr: expr ; 'a' .</programlisting>
 </example>
 
-<para>There’s no practical way for
-<application>coffeepot</application> to enumerate infinitely many
-parses, so it essentially ignores edges in the graph if it encounters
-them a second time. Parsing “a” yields:</para>
+<para>Parsing “a” yields:</para>
 
 <programlisting linenumbering="unnumbered"
 ><![CDATA[$ coffeepot -pp -g:examples/ambig02.ixml a
@@ -107,9 +104,9 @@ the ambiguity, reveals that there are infinitely many parses:</para>
 <programlisting linenumbering="unnumbered"
 ><![CDATA[$ coffeepot -pp -g:examples/ambig02.ixml --describe-ambiguity --no-output a
 Found 2 possible parses (of infinitely many).
-At /$$[1]
-      ✔ expr «1,1» ⇒ 'a'
-        expr «1,1» ⇒ expr]]></programlisting>
+At /expr
+      expr«1-1»
+    ✔ 'a'«1-1»]]></programlisting>
 
 <para>This is also evident in the graph:</para>
 
@@ -122,26 +119,38 @@ At /$$[1]
 </mediaobject>
 </figure>
 
-<para>That loop is the source of infinite ambiguity. The parses that
-<application>coffeepot</application> will enumerate are:</para>
+<para>That loop is the source of infinite ambiguity. Subject to limitations of
+memory and time,
+<application>coffeepot</application> will enumerate an arbitrary number of them:</para>
 
 <programlisting linenumbering="unnumbered"
-><![CDATA[$ coffeepot -pp -g:examples/ambig02.ixml --parse-count:all a
+><![CDATA[$ coffeepot -pp -g:examples/ambig02.ixml --parse-count:4 a
 Found 2 possible parses (of infinitely many).
-<ixml parses="2" totalParses="2" infinitelyAmbiguous="true">
-<expr xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous">a</expr>
-<expr xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous">
+<ixml parses="4" totalParses="4" infinitelyAmbiguous="true">
+<expr xmlns:ixml='http://invisiblexml.org/NS' ixml:state='ambiguous'>a</expr>
+<expr xmlns:ixml='http://invisiblexml.org/NS' ixml:state='ambiguous'>
    <expr>a</expr>
+</expr>
+<expr xmlns:ixml='http://invisiblexml.org/NS' ixml:state='ambiguous'>
+   <expr>
+      <expr>a</expr>
+   </expr>
+</expr>
+<expr xmlns:ixml='http://invisiblexml.org/NS' ixml:state='ambiguous'>
+   <expr>
+      <expr>
+         <expr>a</expr>
+      </expr>
+   </expr>
 </expr>
 </ixml>
 ]]></programlisting>
 
 <para>The default “sequential” tree selector will choose every node
-and ever edge at least once. For graphs without loops, this matches
+and every edge at least once. For graphs without loops, this matches
 the number of parses reported. Tree construction from graphs that
 contain loops is challenging. The total number of parses reported does
-not take loops into consideration. The tree selector tries to follow
-all of the paths once, but it may not always succeed. Consider:</para>
+not take loops into consideration. Consider:</para>
 
 <programlisting language="ixml"><xi:include href="examples/horror.ixml" parse="text"/></programlisting>
 
@@ -172,12 +181,6 @@ But the graph is pernicously looped:</para>
 </mediaobject>
 </figure>
 
-<para>Asking for <emphasis>all</emphasis> of the parses will return 57 different parses.
-That’s not all of them, even by the criteria that
-<productname>coffeepot</productname> is using. The processor tries to follow
-all of the unique paths, but also tries to avoid falling into an
-infinite loop.</para>
-
 <para>The priority tree selector will always choose the path with the
 highest priority (if there is one). If all choices are made by a
 uniquely highest priority in each case, this fact is recorded.
@@ -192,8 +195,8 @@ make sure it isn’t possible for it to match in two different places.
 <section xml:id="describe-ambiguity">
 <title>Describing ambiguity</title>
 
-<para>Ambiguity can be described in one of three ways: using a compact, text format;
-using a minimal XML format; or using the full XML format that will be used when
+<para>Ambiguity can be described in two ways: using a compact, text format or
+using the full XML format that will be used when
 <link xlink:href="choose-alternative">choosing alternatives</link> with a function or
 XPath expression.</para>
 
@@ -204,91 +207,48 @@ introduced in <xref linkend="choose-alternative"/>.</para>
 <title>Textual ambiguity descriptions</title>
 <para>The text format identifies the location in the result tree with a simple XPath
 expression and then lists each option in the form “nonterminal =&gt; right-hand-side”.
-An “X” marks the selected alternative.</para>
+An “✔” marks the selected alternative.</para>
 
 <para>For example:</para>
 
-<programlisting><![CDATA[At /$$[1]/number-list[1]/$1_number-plus[3]
-      ✔ number «10,2» ⇒ hex
-        number «10,2» ⇒ decimal]]></programlisting>
+<programlisting><![CDATA[At /number-list/number
+    ✔ decimal«10-11»
+      hex«10-11»]]></programlisting>
 
-<para>This indicates that at the “number” element, in the third item of the number list,
-there are two choices “hex” or “decimal”.
-Both span input tokens 10-11. The “hex” alternative has been selected.
+<para>This indicates that at the “number” element in the number list,
+there are two choices, “hex” or “decimal”.
+Both span input tokens 10-11. The “decimal” alternative has been selected.
 </para>
 </section>
 
 <section xml:id="describe-xml">
 <title>XML ambiguity descriptions</title>
-<para>The XML format presents the same information in a small XML
+<para>The XML format presents the same information in a XML
 fragments that represent the parse trees under consideration.</para>
 
 <para>For example:</para>
 
-<programlisting><![CDATA[At /$$[1]/number-list[1]/$1_number-plus[3] (selected C3464)
-<symbol name="number" id="N3694" mark="^" start="10" length="2">
-   <parent ref="N3699">$1_number-plus</parent>
-   <children id="C3464" priority="0">
-      <symbol name="hex" ref="N3692" start="10" length="2"/>
-   </children>
-   <children id="C3465" priority="0">
-      <symbol name="decimal" ref="N3693" start="10" length="2"/>
-   </children>
-</symbol>]]></programlisting>
+<programlisting><![CDATA[At /number-list/number
+           <symbol name="number"
+                   id="N40"
+                   mark="^"
+                   start="10"
+                   end="11"
+                   length="2">
+              <parent ref="N22">$8_number-option</parent>
+<!-- ✔ -->    <children id="C20">
+                 <symbol name="decimal" ref="N49" start="10" end="11" length="2"/>
+              </children>
+              <children id="C21">
+                 <symbol name="hex" ref="N51" start="10" end="11" length="2"/>
+              </children>
+           </symbol>]]></programlisting>
 
 <para>As before, this indicates that at the “number” element,
 there are two choices, represented by separate <tag>children</tag> elements.
 </para>
 </section>
 
-<!--
-<section xml:id="describe-api-xml">
-<title>API XML ambiguity descriptions</title>
-<para>The “API” XML format is designed to provide as much information as possible
-such that it’s easy to write XPath expressions to analyze it. The result is somewhat
-less easy to read.</para>
-
-<para>These are the XML alternatives that function libraries and XPath expressions are
-evaluated against. Here, the entire document is shown, but the actual context item
-in each case is the element with the <tag class="attribute">alternative</tag> attribute.
-</para>
-
-<para>For example:</para>
-
-<programlisting><![CDATA[At /number-list[1]/number[3]
-Alternative 1 of 2 (selected):
-<number-list xmlns:a="https://nineml.org/ns/describe-ambiguity"
-              a:version="1.0"
-              name="number-list"
-              mark="^">
-   <number name="number"/>
-   <number name="number"/>
-   <number alternative="1" name="number" from="9" to="11" mark="-">
-      <hex name="hex" from="9" to="11" mark="^">
-         <a:nonterminal name="$2_hex-digit-plus" mark="-">…</a:nonterminal>
-      </hex>
-   </number>
-</number-list>
-Alternative 2 of 2:
-<number-list xmlns:a="https://nineml.org/ns/describe-ambiguity"
-              a:version="1.0"
-              name="number-list"
-              mark="^">
-   <number name="number"/>
-   <number name="number"/>
-   <number alternative="2" name="number" from="9" to="11" mark="-">
-      <decimal name="decimal" from="9" to="11" mark="^">
-         <a:nonterminal name="$3_decimal-digit-plus" mark="-">…</a:nonterminal>
-      </decimal>
-   </number>
-</number-list>]]></programlisting>
-
-<para>As before, this indicates that at the third “number” element,
-there are two choices “hex” or “decimal” and the first choice has been selected.
-</para>
-
-</section>
--->
 </section>
 
 </chapter>

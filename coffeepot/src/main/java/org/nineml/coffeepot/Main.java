@@ -23,7 +23,6 @@ import java.io.PrintStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
 
 /**
  * A command-line Invisible XML parser.
@@ -208,6 +207,9 @@ class Main {
             if (!doc.succeeded()) {
                 break;
             }
+
+            // Passing stderr here is an awful hack; need to rethink
+            outputManager.describeAmbiguity(stderr);
 
             graphOutputManager.publish(doc, outputManager.selectedNodes);
         }
@@ -433,5 +435,4 @@ class Main {
             stderr.printf("%s %ds%s%n", prefix, time, suffix);
         }
     }
-
 }

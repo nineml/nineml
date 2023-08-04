@@ -30,6 +30,10 @@ public class XmlForest {
     private BuildingContentHandler handler;
     protected final Map<String,XdmNode> choiceIndex = new HashMap<>();
     private XdmNode doc;
+    HashSet<ForestNode> processed = null;
+    HashSet<ForestNode> queued = null;
+    ArrayList<ForestNode> toBeProcessed = null;
+
 
     public XmlForest(Processor processor, InvisibleXmlDocument document) throws SaxonApiException, SAXException {
         this.processor = processor;
@@ -85,22 +89,27 @@ public class XmlForest {
         }
     }
 
-    private void buildXmlRepresentation(ForestNode root) throws SAXException {
+    private synchronized void buildXmlRepresentation(ForestNode root) throws SAXException {
+        processed = new HashSet<>();
+        queued = new HashSet<>();
+        toBeProcessed = new ArrayList<>();
+
         traverse(root, Collections.emptyList());
 
         AttributeBuilder atts;
-        HashSet<ForestNode> processed = new HashSet<>();
-        ArrayList<ForestNode> toBeProcessed = new ArrayList<>();
         toBeProcessed.add(root);
 
         while (!toBeProcessed.isEmpty()) {
             ForestNode node = toBeProcessed.remove(0);
             processed.add(node);
+            queued.remove(node);
+
+            //System.err.printf("Node: %s%n", node);
 
             final String gi;
             if (node.symbol instanceof TerminalSymbol) {
                 atts = newAttributes("value", node.symbol.toString());
-                atts.addAttribute("id", "T" + node.id);
+                atts.addAttribute("id", "N" + node.id);
                 gi = "token";
             } else {
                 atts = newAttributes("name", ((NonterminalSymbol) node.symbol).getName());
@@ -115,6 +124,122 @@ public class XmlForest {
             }
 
             atts.addAttribute("", "start", String.valueOf(node.leftExtent+1));
+            atts.addAttribute("", "end", String.valueOf(node.rightExtent));
+            atts.addAttribute("", "length", String.valueOf(node.rightExtent - node.leftExtent));
+            handler.startElement("", gi, gi, atts);
+
+            for (String key : parseAttrMap.get(node).keySet()) {
+                if (!InvisibleXml.NAME_ATTRIBUTE.equals(key)
+                        && !InvisibleXml.MARK_ATTRIBUTE.equals(key)
+                        && !InvisibleXml.TMARK_ATTRIBUTE.equals(key)) {
+                    atts = newAttributes("name", key);
+                    atts.addAttribute("value", parseAttrMap.get(node).get(key));
+                    handler.startElement("", "attribute", "attribute", atts);
+                    handler.endElement("", "attribute", "attribute");
+                }
+            }
+
+            if (parents.containsKey(node)) {
+                for (ForestNode parent : parents.get(node)) {
+                    atts = newAttributes("ref", "N" + parent.id);
+                    handler.startElement("", "parent", "parent", atts);
+                    char[] chars = ((NonterminalSymbol) parent.symbol).getName().toCharArray();
+                    handler.characters(chars, 0, chars.length);
+                    handler.endElement("", "parent", "parent");
+                }
+            }
+
+            for (Family family : node.getFamilies()) {
+                atts = newAttributes("id", "C" + family.id);
+                handler.startElement("", "children", "children", atts);
+
+                addChild(family.getLeftNode());
+                addChild(family.getRightNode());
+
+                handler.endElement("", "children", "children");
+            }
+
+            handler.endElement("", gi, gi);
+        }
+    }
+
+    private void addChild(ForestNode child) throws SAXException {
+        if (child == null) {
+            return;
+        }
+
+        if (child.symbol != null && !processed.contains(child) && !queued.contains(child)) {
+            toBeProcessed.add(child);
+            queued.add(child);
+        }
+
+        AttributeBuilder atts;
+        final String childgi;
+        if (child.symbol == null) {
+            atts = newAttributes("id", "N" + child.id);
+            childgi = "state";
+        } else if (child.symbol instanceof TerminalSymbol) {
+            atts = newAttributes("value", child.symbol.toString());
+            atts.addAttribute("ref", "N" + child.id);
+            childgi = "token";
+        } else {
+            atts = newAttributes("name", ((NonterminalSymbol) child.symbol).getName());
+            atts.addAttribute("ref", "N" + child.id);
+            childgi = "symbol";
+        }
+        atts.addAttribute("", "start", String.valueOf(child.leftExtent+1));
+        atts.addAttribute("", "end", String.valueOf(child.rightExtent));
+        atts.addAttribute("", "length", String.valueOf(child.rightExtent - child.leftExtent));
+        handler.startElement("", childgi, childgi, atts);
+
+        if (child.symbol == null) {
+            for (Family family : child.getFamilies()) {
+                atts = newAttributes("id", "C" + family.id);
+                handler.startElement("", "children", "children", atts);
+                addChild(family.getLeftNode());
+                addChild(family.getRightNode());
+                handler.endElement("", "children", "children");
+            }
+        }
+
+        handler.endElement("", childgi, childgi);
+    }
+
+    private void xbuildXmlRepresentation(ForestNode root) throws SAXException {
+        traverse(root, Collections.emptyList());
+
+        AttributeBuilder atts;
+        HashSet<ForestNode> processed = new HashSet<>();
+        HashSet<ForestNode> queued = new HashSet<>();
+        ArrayList<ForestNode> toBeProcessed = new ArrayList<>();
+        toBeProcessed.add(root);
+
+        while (!toBeProcessed.isEmpty()) {
+            ForestNode node = toBeProcessed.remove(0);
+            processed.add(node);
+            queued.remove(node);
+
+            //System.err.printf("Node: %s%n", node);
+
+            final String gi;
+            if (node.symbol instanceof TerminalSymbol) {
+                atts = newAttributes("value", node.symbol.toString());
+                atts.addAttribute("id", "N" + node.id);
+                gi = "token";
+            } else {
+                atts = newAttributes("name", ((NonterminalSymbol) node.symbol).getName());
+                atts.addAttribute("id", "N" + node.id);
+                gi = "symbol";
+            }
+
+            String mark = parseAttrMap.get(node).getOrDefault(InvisibleXml.MARK_ATTRIBUTE,
+                    parseAttrMap.get(node).getOrDefault(InvisibleXml.TMARK_ATTRIBUTE, null));
+            if (mark != null) {
+                atts.addAttribute("mark", mark);
+            }
+
+            atts.addAttribute("", "start", String.valueOf(node.leftExtent+1));
+            atts.addAttribute("", "end", String.valueOf(node.rightExtent));
             atts.addAttribute("", "length", String.valueOf(node.rightExtent - node.leftExtent));
             handler.startElement("", gi, gi, atts);
 
@@ -156,7 +281,7 @@ public class XmlForest {
                     final String childgi;
                     if (child.symbol instanceof TerminalSymbol) {
                         atts = newAttributes("value", child.symbol.toString());
-                        atts.addAttribute("ref", "T" + child.id);
+                        atts.addAttribute("ref", "N" + child.id);
                         childgi = "token";
                     } else {
                         atts = newAttributes("name", ((NonterminalSymbol) child.symbol).getName());
@@ -164,11 +289,13 @@ public class XmlForest {
                         childgi = "symbol";
                     }
                     atts.addAttribute("", "start", String.valueOf(child.leftExtent+1));
+                    atts.addAttribute("", "end", String.valueOf(child.rightExtent));
                     atts.addAttribute("", "length", String.valueOf(child.rightExtent - child.leftExtent));
                     handler.startElement("", childgi, childgi, atts);
                     handler.endElement("", childgi, childgi);
-                    if (!processed.contains(child)) {
+                    if (!processed.contains(child) && !queued.contains(child)) {
                         toBeProcessed.add(child);
+                        queued.add(child);
                     }
                 }
                 handler.endElement("", "children", "children");

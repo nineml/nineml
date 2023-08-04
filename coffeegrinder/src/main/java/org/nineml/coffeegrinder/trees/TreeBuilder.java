@@ -52,14 +52,18 @@ public interface TreeBuilder {
     void token(Token token, Map<String,String> attributes, int leftExtent, int rightExtent);
 
     /**
-     * Called at the start of an ambiguity that is not marked by a single nonterminal
+     * Called at the start of an ambiguity that is not marked by a single nonterminal.
+     * <p>The ambiguity id will distinguish this ambiguity from any other ambiguity. The numbers are not
+     * sequential or guaranteed stable across parses.</p>
+     * @param id The ambiguity id.
      * @param leftExtent The starting position in the input.
      * @param rightExtent The ending position in the input.
      */
     void startAmbiguity(int id, int leftExtent, int rightExtent);
 
     /**
-     * Called at the end of an ambiguity that is not marked by a single nonterminal
+     * Called at the end of an ambiguity that is not marked by a single nonterminal.
+     * @param id The ambiguity id.
      * @param leftExtent The starting position in the input.
      * @param rightExtent The ending position in the input.
      */

@@ -50,6 +50,8 @@ public class Configuration {
     public final boolean omitCsvHeaders;
     public final int repeat;
     public final boolean debug;
+    public final String axe;
+    public final boolean trim;
 
     public Configuration(String[] args) {
         this(System.out, System.err, args);
@@ -191,10 +193,7 @@ public class Configuration {
                 describeAmbiguityWith = "none";
             }
         } else {
-            if ("apixml".equals(cmain.describeAmbiguityWith)) {
-                cmain.describeAmbiguityWith = "api-xml";
-            }
-            if ("xml".equals(cmain.describeAmbiguityWith) || "api-xml".equals(cmain.describeAmbiguityWith)) {
+            if ("xml".equals(cmain.describeAmbiguityWith)) {
                 if (processor == null) {
                     options.getLogger().error(logcategory, "Cannot describe ambiguity with XML, no Saxon processor available");
                     describeAmbiguityWith = "none";
@@ -358,6 +357,34 @@ public class Configuration {
             options.enablePragma(pragma);
         }
 
+        if (cmain.axe == null) {
+            axe = "xpath";
+        } else {
+            if ("xpath".equals(cmain.axe) || "random".equals(cmain.axe)
+                    || "priority".equals(cmain.axe) || "sequential".equals(cmain.axe)) {
+                axe = cmain.axe;
+
+                if ("sequential".equals(axe)) {
+                    options.getLogger().debug(logcategory, "Disabling priority pragma for sequential axe");
+                    options.disablePragma("priority");
+                }
+            } else {
+                options.getLogger().error(logcategory, "Unknown axe type: %s", cmain.axe);
+                axe = "xpath";
+            }
+        }
+
+        if ("random".equals(axe) && (cmain.functionLibrary != null || !cmain.choose.isEmpty())) {
+            if (cmain.functionLibrary != null) {
+                options.getLogger().error(logcategory, "The --function-library option is incompatible with the %s axe", axe);
+                cmain.functionLibrary = null;
+            }
+            if (!cmain.choose.isEmpty()) {
+                options.getLogger().error(logcategory, "The --choose option is incompatible with the %s axe", axe);
+                cmain.choose.clear();
+            }
+        }
+
         grammar = cmain.grammar;
         timing = cmain.timing;
         timeRecords = cmain.timeRecords;
@@ -375,6 +402,7 @@ public class Configuration {
         outputFile = cmain.outputFile;
         forest = cmain.forest;
         graph = cmain.graph;
+        trim = cmain.trim;
 
         graphOptions = cmain.graphOptions;
         if (cmain.graphFormat != null) {
@@ -631,6 +659,12 @@ public class Configuration {
 
         @Parameter(names = {"--start-symbol", "--start"}, description = "Specify the start symbol")
         public String startSymbol = null;
+
+        @Parameter(names = {"--axe"}, description = "Specify an axe")
+        public String axe = null;
+
+        @Parameter(names = {"--trim"}, description = "Trim leading and trailing whitespace on input")
+        public boolean trim = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();

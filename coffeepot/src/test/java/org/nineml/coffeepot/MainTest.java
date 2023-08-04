@@ -84,7 +84,7 @@ public class MainTest extends CoffeePotTest {
         Main main = new Main();
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/smoke.ixml", "a", "--no-output"});
-            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertEquals(0, manager.stringRecords.size());
             Assertions.assertEquals("", manager.publication());
         } catch (Exception ex) {
             fail();
@@ -143,7 +143,7 @@ public class MainTest extends CoffeePotTest {
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/ambig2.ixml", "--describe-ambiguity", "x" });
             Assertions.assertEquals(1, manager.stringRecords.size());
-            Assertions.assertTrue(stdout.contains("✔ S «1,1» ⇒ 'x'"));
+            Assertions.assertTrue(stderr.contains("✔ 'x'«1-1»"));
         } catch (Exception ex) {
             fail();
         }
