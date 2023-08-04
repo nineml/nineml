@@ -17,16 +17,38 @@ notes for each component.</para>
 the individual component <filename>changelogs.xml</filename> files.</para>
 
 <revhistory>
-<revision xml:id="v311">
-<revnumber>3.1.1</revnumber>
-<date>2023-08-02</date>
+<revision xml:id="v320">
+<revnumber>3.2.0</revnumber>
+<date>2023-08-04</date>
 <revdescription>
-<para audience="coffeesacks">Fixed a bug in the construction of the graph that
+<para audience="coffeegrinder">Reworked how the <classname>Arborist</classname> classes track
+and provide descriptions of how ambiguity was resolved.</para>
+<para audience="coffeefilter"/>
+<itemizedlist audience="coffeesacks">
+<listitem>
+<para>Fixed a bug in the construction of the graph that
 an <classname>XPathAxe</classname> gets to inspect. Nodes were inadvertantly being
 processed many (many!) times in ambiguous forests making the construction very slow.</para>
-<para audience="coffeegrinder"/>
-<para audience="coffeefilter"/>
-<para audience="coffeepot"/>
+</listitem>
+<listitem>
+<para>Changed the <classname>XmlForest</classname> used for resolving ambiguities in the
+<classname>XPathAxe</classname> so that it includes nodes for intermediate states.
+</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem>
+<para>The <option>--describe-ambiguity</option> option was broken in
+the previous 3.x releases. It was a fair bit of effort to restore it. The descriptions
+have changed a bit and the <literal>api-xml</literal> option has been removed (the “API” flavor
+is returned by the <literal>xml</literal> option).
+</para>
+</listitem>
+<listitem>
+<para>Added an <option>--axe</option> option and support for a <literal>random</literal> axe.
+</para>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
 <revision xml:id="v310">

@@ -103,6 +103,21 @@ that contain a large number of characters such as <code>[L]</code> or
 <code>[LC]</code>.</para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_axe">
+<term><option>--axe:<replaceable>axe-type</replaceable></option></term>
+<listitem>
+<para>Specifies a different “axe type” for getting trees out of the forest.
+The default axe type is <literal>xpath</literal>. If neither a function library
+nor XPath expressions are provided, this axe considers
+priorities, so it’s the same as the <literal>priority</literal> axe. The
+<literal>sequential</literal> axe disables the priority pragma. The
+<literal>random</literal> axe makes a random choice at every ambiguity. For graphs with
+infinite ambiguity, this is only very likely to find a tree, not guaranteed.</para>
+<para>The <literal>random</literal> axe is incompatible with the
+<option>--function-library</option> and <option>--choose</option> options, they’re
+ignored if you specify a random axe.</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_bnf">
 <term><option>--bnf</option></term>
 <listitem>
@@ -110,7 +125,7 @@ that contain a large number of characters such as <code>[L]</code> or
 changer the parser, it simply reports if the grammar is BNF. (Why?
 Well, if you’re interested in exploring a tool like the ambiguity
 analyzer, the results can be easier to understand if the input grammar hasn’t been
-transformed in any way. This option let’s you check if that’s the case.)
+transformed in any way. This option let’s you check if that will be the case.)
 </para>
 </listitem>
 </varlistentry>
@@ -149,7 +164,7 @@ This option only applies to ambiguous parses. See also, <xref linkend="describe-
 <listitem>
 <para>Selects how ambiguity will be described. Implies <option>--describe-ambiguity</option>.
 </para>
-<para>The options are <code>text</code>, <code>xml</code>, and <code>api-xml</code>.
+<para>The options are <code>text</code> or <code>xml</code>.
 See <xref linkend="describe-ambiguity"/>.
 </para>
 </listitem>
