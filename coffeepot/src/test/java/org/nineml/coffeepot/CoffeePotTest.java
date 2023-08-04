@@ -20,7 +20,8 @@ public class CoffeePotTest {
             }
         }
         public boolean contains(String target) {
-            return toString().contains(target);
+            String lines = toString();
+            return lines.contains(target);
         }
     }
 }

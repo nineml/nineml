@@ -191,10 +191,7 @@ public class Configuration {
                 describeAmbiguityWith = "none";
             }
         } else {
-            if ("apixml".equals(cmain.describeAmbiguityWith)) {
-                cmain.describeAmbiguityWith = "api-xml";
-            }
-            if ("xml".equals(cmain.describeAmbiguityWith) || "api-xml".equals(cmain.describeAmbiguityWith)) {
+            if ("xml".equals(cmain.describeAmbiguityWith)) {
                 if (processor == null) {
                     options.getLogger().error(logcategory, "Cannot describe ambiguity with XML, no Saxon processor available");
                     describeAmbiguityWith = "none";

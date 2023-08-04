@@ -1,14 +1,17 @@
 package org.nineml.coffeepot.managers;
 
-import net.sf.saxon.s9api.BuildingContentHandler;
-import net.sf.saxon.s9api.DocumentBuilder;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XdmValue;
+import net.sf.saxon.s9api.*;
+import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.InvisibleXmlDocument;
 import org.nineml.coffeefilter.InvisibleXmlParser;
 import org.nineml.coffeefilter.trees.*;
+import org.nineml.coffeegrinder.parser.Family;
+import org.nineml.coffeegrinder.parser.ForestNode;
+import org.nineml.coffeegrinder.parser.Symbol;
 import org.nineml.coffeegrinder.trees.Arborist;
 import org.nineml.coffeegrinder.trees.NopTreeBuilder;
+import org.nineml.coffeegrinder.trees.ParseTree;
+import org.nineml.coffeegrinder.trees.TreeSelection;
 import org.nineml.coffeepot.BuildConfig;
 import org.nineml.coffeepot.trees.VerboseAxe;
 import org.nineml.coffeepot.trees.XdmDataTree;
@@ -40,9 +43,11 @@ public class OutputManager {
     private int parseCount = -1;
     private long totalParses = -1;
     private boolean infiniteParses = false;
-    public Set<Integer> selectedNodes = new HashSet<>();
+    public Set<Integer> selectedNodes = null;
+    public List<TreeSelection> selectedTrees = null;
     private boolean firstResult = true;
     private InputManager inputManager = null;
+    private VerboseAxe axe = null;
 
     public void configure(Configuration config) {
         if (config == null) {
@@ -115,7 +120,7 @@ public class OutputManager {
             firstParse = config.parse;
         }
 
-        VerboseAxe axe = new VerboseAxe(config, parser, doc, input);
+        axe = new VerboseAxe(config, parser, doc, input);
         for (String expr : config.choose) {
             axe.addExpression(expr);
         }
@@ -165,6 +170,7 @@ public class OutputManager {
         }
 
         selectedNodes = Collections.unmodifiableSet(walker.getSelectedNodes());
+        selectedTrees = Collections.unmodifiableList(walker.getSelectedTrees());
     }
 
     public void getXdmResults(InvisibleXmlParser parser, InvisibleXmlDocument doc, Arborist walker) {
@@ -297,6 +303,10 @@ public class OutputManager {
                 throw new RuntimeException("Unexpected output format!?");
         }
 
+        if (config.suppressOutput) {
+            return;
+        }
+
         try {
             String output = baos.toString("UTF-8");
             stringRecords.add(output);
@@ -369,6 +379,8 @@ public class OutputManager {
     private String publishStrings() {
         StringBuilder sb = new StringBuilder();
 
+        final String root = config.records ? "records" : "ixml";
+
         boolean outputJSON = config.outputFormat == Configuration.OutputFormat.JSON_DATA
                 || config.outputFormat == Configuration.OutputFormat.JSON_TREE;
 
@@ -393,7 +405,7 @@ public class OutputManager {
                 if  (config.options.getProvenance()) {
                     sb.append(provenance());
                 }
-                sb.append("<records");
+                sb.append("<").append(root);
                 if (firstParse != 1) {
                     sb.append(" firstParse=\"").append(firstParse).append("\"");
                 }
@@ -424,10 +436,172 @@ public class OutputManager {
             if (outputJSON) {
                 sb.append("]\n}\n");
             } else {
-                sb.append("</records>\n");
+                sb.append("</").append(root).append(">\n");
             }
         }
 
         return sb.toString();
+    }
+
+    public void describeAmbiguity(PrintStream stderr) {
+        final AmbiguityDescription desc;
+        switch (config.describeAmbiguityWith) {
+            case "text":
+                desc = new TextDescription();
+                break;
+            case "xml":
+                desc = new XmlDescription();
+                break;
+            default:
+                desc = new AmbiguityDescription();
+                break;
+        }
+        desc.describe(stderr, selectedTrees);
+    }
+
+    private class AmbiguityDescription {
+        final String nocheck = " ";
+        final String check;
+        final String lquo;
+        final String rquo;
+        final String epsilon;
+
+        public AmbiguityDescription() {
+            if (config.options.getAsciiOnly()) {
+                check = "X";
+                lquo = "(";
+                rquo = ")";
+                epsilon = "e";
+            } else {
+                check = "✔";
+                lquo = "«";
+                rquo = "»";
+                epsilon = "ε";
+            }
+        }
+
+        protected String path(ParseTree branch) {
+            Stack<Symbol> ancestors = new Stack<>();
+            while (branch.parent != null) {
+                if (branch.vertex.node.symbol != null
+                        && !branch.vertex.node.symbol.getAttributeValue(InvisibleXml.MARK_ATTRIBUTE, "^").equals("-")) {
+                    ancestors.push(branch.vertex.node.symbol);
+                }
+                branch = branch.parent;
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.append("At ");
+            if (ancestors.isEmpty()) {
+                sb.append("/");
+            } else {
+                while (!ancestors.isEmpty()) {
+                    sb.append("/");
+                    sb.append(ancestors.pop());
+                }
+            }
+            return sb.toString();
+        }
+
+        public void describe(PrintStream stderr, List<TreeSelection> trees) {
+            // nop;
+        }
+    }
+
+    private class TextDescription extends AmbiguityDescription {
+        @Override
+        public void describe(PrintStream stderr, List<TreeSelection> trees) {
+            for (TreeSelection selection : trees) {
+                stderr.println(path(selection.parent));
+
+                for (Family choice : selection.node.getFamilies()) {
+                    StringBuilder sb = new StringBuilder();
+                    if (choice.equals(selection.selection)) {
+                        sb.append("    ").append(check).append(" ");
+                    } else {
+                        sb.append("    ").append(nocheck).append(" ");
+                    }
+                    textShowChoice(sb, choice);
+                    stderr.println(sb);
+                }
+            }
+        }
+
+        private void textShowChoice(StringBuilder sb, Family choice) {
+            textShowSide(sb, choice.getLeftNode());
+            if (choice.getLeftNode() != null && choice.getRightNode() != null) {
+                sb.append(", ");
+            }
+            textShowSide(sb, choice.getRightNode());
+        }
+
+        private void textShowSide(StringBuilder sb, ForestNode node) {
+            if (node == null) {
+                return;
+            }
+
+            if (node.symbol == null) {
+                boolean first = true;
+                sb.append("[");
+                for (Symbol s : node.state.rhs.symbols) {
+                    if (!first) {
+                        sb.append(", ");
+                    }
+                    sb.append(s);
+                    first = false;
+                }
+                sb.append("]");
+            } else {
+                sb.append(node.symbol);
+            }
+
+            if (node.leftExtent == node.rightExtent) {
+                sb.append(lquo).append(epsilon).append(rquo);
+            } else {
+                sb.append(lquo).append(node.leftExtent+1).append("-").append(node.rightExtent).append(rquo);
+            }
+        }
+    }
+
+    private class XmlDescription extends AmbiguityDescription {
+        private final QName _indent = new QName("indent");
+        private final QName _omit = new QName("omit-xml-declaration");
+        @Override
+        public void describe(PrintStream stderr, List<TreeSelection> trees) {
+            for (TreeSelection selection : trees) {
+                stderr.println(path(selection.parent));
+                XdmNode context = axe.getAmbiguityContext(selection.selection);
+
+                try {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    Serializer serializer = config.processor.newSerializer(baos);
+                    serializer.setOutputProperty(_indent, "yes");
+                    serializer.setOutputProperty(_omit, "yes");
+                    serializer.serialize(context.getUnderlyingNode());
+                    String text = baos.toString();
+
+                    // Crude!
+                    String cid = String.format("<children id=\"C%d\"", selection.selection.id);
+                    String nid = String.format(" id=\"N%d\"", selection.selection.id);
+                    if (text.contains(cid)) {
+                        nid = "<<THIS NEVER OCCURS>>";
+                    } else {
+                        cid = "<<THIS NEVER OCCURS>>";
+                    }
+
+                    for (String line : text.split("\\n")) {
+                        final String indent;
+                        if (line.contains(cid) || line.contains(nid)) {
+                            indent = String.format("<!-- %s --> ", check);
+                        } else {
+                            indent = "           ";
+                        }
+
+                        stderr.printf("%s%s%n", indent, line);
+                    }
+                } catch (SaxonApiException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
     }
 }
