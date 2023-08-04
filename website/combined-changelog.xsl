@@ -30,7 +30,7 @@
 <xsl:template match="db:revhistory">
   <xsl:copy>
     <xsl:apply-templates select="@*"/>
-    <xsl:apply-templates select="$revision"/>
+    <xsl:apply-templates select="$changelog/db:revhistory/db:revision"/>
     <xsl:apply-templates/>
   </xsl:copy>
 </xsl:template>
