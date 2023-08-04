@@ -6,7 +6,9 @@ import org.nineml.coffeegrinder.parser.ParseForest;
 import org.nineml.coffeegrinder.parser.TerminalSymbol;
 import org.nineml.logging.Logger;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,6 +18,7 @@ abstract public class Arborist {
     protected final String logcategory = "Lumberjack";
 
     protected final Set<Integer> selectedNodes = new HashSet<>();
+    protected final List<TreeSelection> selectedTrees = new ArrayList<>();
     public final ParseForest forest;
     protected final Logger logger;
     protected boolean ambiguous = false;
@@ -57,6 +60,10 @@ abstract public class Arborist {
 
     public Set<Integer> getSelectedNodes() {
         return new HashSet<>(selectedNodes);
+    }
+
+    public List<TreeSelection> getSelectedTrees() {
+        return selectedTrees;
     }
 
     protected void build(TreeBuilder builder, ParseTree tree) {

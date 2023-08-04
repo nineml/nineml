@@ -93,6 +93,7 @@ public class Lumberjack extends Arborist {
             nextVertex = null;
 
             tree = new ParseTree(forest.getOptions().getMarkAmbiguities());
+            selectedTrees.clear();
             ok = seek(node, parserAttributes, tree);
 
             //System.err.printf("%s %s%n", treeNumber, ok);
@@ -197,6 +198,10 @@ public class Lumberjack extends Arborist {
             choice = vertex.choices.get(choiceIndex);
         } else {
             choice = node.getFamilies().get(0);
+        }
+
+        if (vertex.isAmbiguous) {
+            selectedTrees.add(new TreeSelection(node, tree, choice));
         }
 
         boolean goLeft = choice.getLeftNode() != null;

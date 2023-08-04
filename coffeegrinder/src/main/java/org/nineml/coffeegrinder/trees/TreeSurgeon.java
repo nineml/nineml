@@ -63,6 +63,7 @@ public class TreeSurgeon extends Arborist {
 
         seenCount.clear();
         selectedNodes.clear();
+        selectedTrees.clear();
         ParseTree tree = new ParseTree(forest.getOptions().getMarkAmbiguities());
         seek(node, parserAttributes, tree);
         build(builder, tree.left);
@@ -114,6 +115,10 @@ public class TreeSurgeon extends Arborist {
             ambiguous = remainingChoices.size() > 1;
         } else {
             choice = node.getFamilies().get(0);
+        }
+
+        if (vertex.isAmbiguous) {
+            selectedTrees.add(new TreeSelection(node, tree, choice));
         }
 
         boolean goLeft = choice.getLeftNode() != null;
