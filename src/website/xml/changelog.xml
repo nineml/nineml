@@ -17,6 +17,18 @@ notes for each component.</para>
 the individual component <filename>changelogs.xml</filename> files.</para>
 
 <revhistory>
+<revision xml:id="v321">
+<revnumber>3.2.1</revnumber>
+<date>2023-08-06</date>
+<revdescription>
+<para audience="coffeegrinder">Fixes
+<link xlink:href="https://github.com/nineml/nineml/issues/17">a bug</link> in
+prefix parsing.</para>
+<para audience="coffeefilter"/>
+<para audience="coffeesacks"/>
+<para audience="coffeepot"/>
+</revdescription>
+</revision>
 <revision xml:id="v320">
 <revnumber>3.2.0</revnumber>
 <date>2023-08-04</date>
