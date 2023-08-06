@@ -402,10 +402,8 @@ public class EarleyParser implements GearleyParser {
                             localRoots.add(item.w);
                         }
                         checkpoint = graph.size();
-                        if (consumedInput) {
-                            restartPos = inputPos+1;
-                            restartable = true;
-                        }
+                        restartable = true;
+                        restartPos = consumedInput ? inputPos + 1 : inputPos;
                     }
                 }
                 if (!localRoots.isEmpty()) {
