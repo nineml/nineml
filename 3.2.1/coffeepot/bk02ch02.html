@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Running CoffeePot</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-08-19T08:23:20Z"/><meta name="generator" content="DocBook xslTNG version 2.1.8 / 30762c2 / SAXON EE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch01.html"/><link rel="next" href="bk02ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link rel="shortcut icon" href="./icon/CoffeePot.png"/><link rel="stylesheet" href="./css/coffeepot.css"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. Installing CoffeePot" href="bk02ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. How it works" href="bk02ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="running" db-chunk="bk02ch02.html" db-id="d481e204" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Running CoffeePot</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Running CoffeePot</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-08-19T08:36:49Z"/><meta name="generator" content="DocBook xslTNG version 2.1.8 / 30762c2 / SAXON EE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch01.html"/><link rel="next" href="bk02ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link rel="shortcut icon" href="./icon/CoffeePot.png"/><link rel="stylesheet" href="./css/coffeepot.css"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. Installing CoffeePot" href="bk02ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. How it works" href="bk02ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="running" db-chunk="bk02ch02.html" db-id="d481e204" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Running CoffeePot</h2></header>
 
 
 <p><span class="application">CoffeePot</span> can be run directly from the jar file
@@ -70,7 +70,7 @@ are taken as the input, separated by single spaces.
 <p>The following additional options are also available:</p>
 
 <dl class="long-terms variablelist">
-<div id="_analyze-ambiguity" class="revadded varlistentry"><dt><span class="term"><code class="option">--analyze-ambiguity</code></span></dt><dd>
+<div id="_analyze-ambiguity" class="varlistentry"><dt><span class="term"><code class="option">--analyze-ambiguity</code></span></dt><dd>
 <p>Applies Anders Møller’s
 <a href="https://www.brics.dk/grammar/" class="link">ambiguity analyzer</a> to the grammar.
 This can help to identify where ambiguity occurs and what inputs will trigger it. The analyzer
@@ -80,7 +80,7 @@ Unicode character classes. This is especially true if it uses classes
 that contain a large number of characters such as <code>[L]</code> or
 <code>[LC]</code>.</p>
 </dd></div>
-<div id="_bnf" class="revadded varlistentry"><dt><span class="term"><code class="option">--bnf</code></span></dt><dd>
+<div id="_bnf" class="varlistentry"><dt><span class="term"><code class="option">--bnf</code></span></dt><dd>
 <p>Checks if the grammar is a “plain BNF” grammar. This doesn’t
 changer the parser, it simply reports if the grammar is BNF. (Why?
 Well, if you’re interested in exploring a tool like the ambiguity
@@ -93,7 +93,7 @@ transformed in any way. This option let’s you check if that’s the case.)
 See <a href="bk02ch06.html" class="xref xref-chapter">Chapter <span class="label">6</span>, Choosing among alternatives</a>.
 </p>
 </dd></div>
-<div id="_config" class="revadded varlistentry"><dt><span class="term"><code class="option">--config:<em class="replaceable">file</em></code></span></dt><dd>
+<div id="_config" class="varlistentry"><dt><span class="term"><code class="option">--config:<em class="replaceable">file</em></code></span></dt><dd>
 <p>Load a specific <a href="bk02ch07.html" class="link">configuration file</a>.
 </p>
 </dd></div>
@@ -113,15 +113,15 @@ This option only applies to ambiguous parses. See also, <a href="bk02ch05.html#d
 See <a href="bk02ch05.html#describe-ambiguity" class="xref xref-section">Section <span class="label">5<span class="sep">.</span>1</span>, “Describing ambiguity”</a>.
 </p>
 </dd></div>
-<div id="_disable-pragma" class="revadded varlistentry"><dt><span class="term"><code class="option">--disable-pragma:<em class="replaceable">pragma</em></code></span></dt><dd>
+<div id="_disable-pragma" class="varlistentry"><dt><span class="term"><code class="option">--disable-pragma:<em class="replaceable">pragma</em></code></span></dt><dd>
 <p>Disables the specified pragma for this parse.
 </p>
 </dd></div>
-<div id="_earley" class="revadded varlistentry"><dt><span class="term"><code class="option">--earley</code></span></dt><dd>
+<div id="_earley" class="varlistentry"><dt><span class="term"><code class="option">--earley</code></span></dt><dd>
 <p>Use the Earley parser. Alternatively, <code class="option">--gll</code>.
 </p>
 </dd></div>
-<div id="_encoding" class="revadded varlistentry"><dt><span class="term"><code class="option">--encoding:<em class="replaceable">encoding-name</em></code></span></dt><dd>
+<div id="_encoding" class="varlistentry"><dt><span class="term"><code class="option">--encoding:<em class="replaceable">encoding-name</em></code></span></dt><dd>
 <p>Use <em class="replaceable">encoding-name</em> when parsing the input.
 This must be an encoding name recognized by Java. See also
 <code class="option"><a href="#_grammar-encoding">--grammar-encoding</a></code>.
@@ -142,30 +142,30 @@ and no mixed content is allowed.</p>
 See <a href="bk02ch06.html" class="xref xref-chapter">Chapter <span class="label">6</span>, Choosing among alternatives</a>.
 </p>
 </dd></div>
-<div id="_gll" class="revadded varlistentry"><dt><span class="term"><code class="option">--gll</code></span></dt><dd>
+<div id="_gll" class="varlistentry"><dt><span class="term"><code class="option">--gll</code></span></dt><dd>
 <p>Use the GLL parser. Alternatively, <code class="option">--earley</code>.
 </p>
 </dd></div>
-<div id="_grammar-encoding" class="revadded varlistentry"><dt><span class="term"><code class="option">--grammar-encoding:<em class="replaceable">encoding-name</em></code></span></dt><dd>
+<div id="_grammar-encoding" class="varlistentry"><dt><span class="term"><code class="option">--grammar-encoding:<em class="replaceable">encoding-name</em></code></span></dt><dd>
 <p>Use <em class="replaceable">encoding-name</em> when parsing the input grammar.
 This must be an encoding name recognized by Java. See also
 <code class="option"><a href="#_encoding">--encoding</a></code>.
 </p>
 </dd></div>
-<div id="_forest" class="revchanged varlistentry"><dt><span class="term"><code class="option">--forest:<em class="replaceable">file</em></code></span></dt><dd>
+<div id="_forest" class="varlistentry"><dt><span class="term"><code class="option">--forest:<em class="replaceable">file</em></code></span></dt><dd>
 <p>Output an XML representation of the structure of the parse
 forest. This is intended as the input to visualization processes, like
 the SVG output.
 </p>
 </dd></div>
-<div id="_graph" class="revchanged varlistentry"><dt><span class="term"><code class="option">--graph:<em class="replaceable">file</em></code></span></dt><dd>
+<div id="_graph" class="varlistentry"><dt><span class="term"><code class="option">--graph:<em class="replaceable">file</em></code></span></dt><dd>
 <p>Output a diagram of the parse forest to the file. This option
 will only work if GraphViz has
 <a href="bk02ch07.html" class="link">been configured</a>. See
 also <code class="option">--graph-format</code>.
 </p>
 </dd></div>
-<div id="_graph-format" class="revadded varlistentry"><dt><span class="term"><code class="option">--graph-format:<em class="replaceable">format</em></code></span></dt><dd>
+<div id="_graph-format" class="varlistentry"><dt><span class="term"><code class="option">--graph-format:<em class="replaceable">format</em></code></span></dt><dd>
 <p>Specifies the graph file format. This must be a format
 recognized by GraphViz. If no format is provided, the default is
 taken from the extension of the <code class="option">--graph</code> file.
@@ -173,7 +173,7 @@ taken from the extension of the <code class="option">--graph</code> file.
 specified.)
 </p>
 </dd></div>
-<div id="_graph-option" class="revchanged varlistentry"><dt><span class="term"><code class="option">--graph-option:<em class="replaceable">option=value</em></code></span></dt><dd>
+<div id="_graph-option" class="varlistentry"><dt><span class="term"><code class="option">--graph-option:<em class="replaceable">option=value</em></code></span></dt><dd>
 <p>Passes the specified <code>$option</code> with <code class="literal">value</code> to the stylesheet 
 that generates the SVG. See <a href="bk02ch11.html" class="xref xref-chapter">Chapter <span class="label">11</span>, Diagrams</a>.
 </p>
@@ -208,7 +208,7 @@ Multiple line endings are not combined. In other words,
 <p>Suppress output of the parse tree.
 </p>
 </dd></div>
-<div id="_omit-csv-headers" class="revadded varlistentry"><dt><span class="term"><code class="option">--omit-csv-headers</code></span></dt><dd>
+<div id="_omit-csv-headers" class="varlistentry"><dt><span class="term"><code class="option">--omit-csv-headers</code></span></dt><dd>
 <p>When generating CSV output, the nonterminal names are used as column headers
 by default. This option causes them to be omitted.
 </p>
@@ -231,7 +231,7 @@ only grammars strictly conforming to the Invisible XML specification
 may be used.
 </p>
 </dd></div>
-<div id="_priority-style" class="revadded varlistentry"><dt><span class="term"><code class="option">--priority-style:<em class="replaceable">style</em></code></span></dt><dd>
+<div id="_priority-style" class="varlistentry"><dt><span class="term"><code class="option">--priority-style:<em class="replaceable">style</em></code></span></dt><dd>
 <p>There are two styles for managing priorities: <code class="literal">max</code> and <code class="literal">sum</code>.
 If the style is <code class="literal">max</code> (the default), the priority of a node in the graph is
 the same as the highest priority among its descendants. 
@@ -285,13 +285,13 @@ are specified, a summary of total parse time over all repeats will be printed.</
 <p>Show the grammar used by the parser.
 </p>
 </dd></div>
-<div id="_show-hidden-nonterminals" class="revadded varlistentry"><dt><span class="term"><code class="option">--show-hidden-nonterminals</code></span></dt><dd>
+<div id="_show-hidden-nonterminals" class="varlistentry"><dt><span class="term"><code class="option">--show-hidden-nonterminals</code></span></dt><dd>
 <p>Include hidden nonterminals in the output. This will include nonterminals from
 the original grammar marked with “-” and also nonterminals generated by the
 <a href="bk02ch03.html" class="link">grammar transformation</a>.
 </p>
 </dd></div>
-<div id="_show-marks" class="revadded varlistentry"><dt><span class="term"><code class="option">--show-marks</code></span></dt><dd>
+<div id="_show-marks" class="varlistentry"><dt><span class="term"><code class="option">--show-marks</code></span></dt><dd>
 <p>Include marks in the output. These are added as <code class="tag tag-element">ixml:mark</code> attributes on
 the elements.
 </p>
@@ -300,7 +300,7 @@ the elements.
 <p>Show (and log) the parse options specified in the configuration.
 </p>
 </dd></div>
-<div id="_strict-ambiguity" class="revadded varlistentry"><dt><span class="term"><code class="option">--strict-ambiguity</code></span></dt><dd>
+<div id="_strict-ambiguity" class="varlistentry"><dt><span class="term"><code class="option">--strict-ambiguity</code></span></dt><dd>
 <p>When priorities or other mechanisms are used to select a parse
 from an ambiguous forest, if those mechanisms successfully choose a unique parse,
 the result <em>will not</em> be marked as ambiguous. Using the
@@ -316,11 +316,11 @@ and <code>prefix</code> states can be suppressed.
 <p>Enables output of parse timings.
 </p>
 </dd></div>
-<div id="_time-records" class="revadded varlistentry"><dt><span class="term"><code class="option">--time-records</code></span></dt><dd>
+<div id="_time-records" class="varlistentry"><dt><span class="term"><code class="option">--time-records</code></span></dt><dd>
 <p>When using record-oriented input, this option enables output of timings for each record.
 </p>
 </dd></div>
-<div id="_trailing-newline" class="revadded varlistentry"><dt><span class="term"><code class="option">--trailing-newline</code></span></dt><dd>
+<div id="_trailing-newline" class="varlistentry"><dt><span class="term"><code class="option">--trailing-newline</code></span></dt><dd>
 <p>Force a newline at the end of the output?
 </p>
 </dd></div>
