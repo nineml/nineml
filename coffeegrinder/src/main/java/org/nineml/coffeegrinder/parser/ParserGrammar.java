@@ -102,10 +102,9 @@ public class ParserGrammar extends Grammar {
      * Get a parser for this grammar.
      *
      * <p>Returns a parser that will parse an input against the rules that define this grammar.</p>
-     * @param options the parser options.
      * @return the parser
      */
-    public GearleyParser getParser(ParserOptions options) {
+    public GearleyParser getParser() {
         if (parserType == ParserType.Earley) {
             return new EarleyParser(this, options);
         } else {
@@ -137,6 +136,14 @@ public class ParserGrammar extends Grammar {
         return report;
     }
 
+    /**
+     * Return the set of "first" symbols for the specified symbol
+     * <p>The <em>first</em> symbols of a nonterminal are all those symbols that can appear
+     * "first" in a matching parse for that nonterminal. The first set of a terminal
+     * symbol is just the symbol itself.</p>
+     * @param symbol the symbol of interest
+     * @return the first set for the symbol
+     */
     public Set<Symbol> getFirst(Symbol symbol) {
         computeFirstAndFollowSets();
 

@@ -164,7 +164,7 @@ public class EarleyResult implements GearleyResult {
         if (!prefixSucceeded()) {
             throw ParseException.attemptToContinueInvalidParse();
         }
-        EarleyParser newParser = (EarleyParser) parser.getGrammar().getParser(options);
+        EarleyParser newParser = (EarleyParser) parser.getGrammar().getParser();
         return parser.continueParsing(newParser);
     }
 
