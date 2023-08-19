@@ -48,7 +48,7 @@
 <xsl:template match="*" mode="m:html-body-script">
   <xsl:param name="rootbaseuri"/>
   <xsl:param name="chunkbaseuri"/>
-  <script src="/js/sectmarks.js"></script>
+  <script src="{$resource-base-uri}js/sectmarks.js"></script>
   <!-- hack -->
   <xsl:if test="ends-with($chunkbaseuri, '/index.html') and self::h:article">
     <div class="nineml-float" title="Part of the NineML family">
