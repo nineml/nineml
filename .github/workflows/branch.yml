@@ -7,6 +7,7 @@ jobs:
     outputs:
       branch: ${{ steps.check_step.outputs.branch }}
       reponame: ${{ steps.check_step.outputs.reponame }}
+      ninemlversion: ${{ steps.check_step.outputs.ninemlversion }}
       newrelease: ${{ steps.check_step.outputs.newrelease }}
       tag: ${{ steps.check_step.outputs.tag }}
     steps:
@@ -26,6 +27,7 @@ jobs:
           echo "branch=$branch" >> $GITHUB_OUTPUT
           raw=`cat gradle.properties|grep ninemlVersion`
           ninemlversion=${raw##*=}
+          echo "ninemlversion=$ninemlversion" >> $GITHUB_OUTPUT
           if [[ ${ninemlversion:${#ninemlversion}-1:1} =~ [0-9] ]]; then
             echo "newrelease=true" >> $GITHUB_OUTPUT
           else
@@ -48,6 +50,7 @@ jobs:
       HAVE_GPGKEYURI: ${{ secrets.ACCESS_TOKEN != '' && secrets.GPGKEYURI != '' }}
       CAN_PUBLISH: ${{ secrets.ACCESS_TOKEN != '' && secrets.GPGKEYURI != '' }}
       PRERELEASE: ${{ needs.check_branch.outputs.newrelease != 'true' }}
+      NINEMLVERSION: ${{ needs.check_branch.outputs.ninemlversion }}
       CIWORKFLOW: yes
       CI_SHA1: ${{ github.sha }}
       CI_BUILD_NUM: ${{ github.run_number }}
@@ -61,21 +64,12 @@ jobs:
 
       - name: Build and test
         run: |
+          echo Building $NINEMLVERSION on $CI_BRANCH tagged $CI_TAG
           git submodule init
           git submodule update
           ./gradlew test
           ./gradlew -PparserType=gll :coffeefilter:testSuite
-          ./gradlew -PparserType=earley dist website
-
-      - name: Deploy coffeegrinder documentation to gh-pages
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          repository-name: nineml/coffeegrinder
-          folder: coffeegrinder/build/website
-          token: ${{ secrets.ACCESS_TOKEN }}
-          branch: gh-pages
-          target-folder: /
+          ./gradlew -PparserType=earley dist docset website
 
       - name: Publish coffeegrinder release
         uses: softprops/action-gh-release@v1
@@ -86,7 +80,7 @@ jobs:
           draft: false
           prerelease: ${{ env.PRERELEASE }}
           fail_on_unmatched_files: true
-          body_path: coffeegrinder/build/changelog.txt
+          body_path: documentation/build/coffeegrinder-changelog.txt
           files: |
             coffeegrinder/build/distributions/coffeegrinder-${{ env.CI_TAG }}.zip
 
@@ -102,16 +96,6 @@ jobs:
                   publish
           rm -f `pwd`/secret.gpg
 
-      - name: Deploy coffeefilter documentation to gh-pages
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          repository-name: nineml/coffeefilter
-          folder: coffeefilter/build/website
-          token: ${{ secrets.ACCESS_TOKEN }}
-          branch: gh-pages
-          target-folder: /
-
       - name: Publish coffeefilter release
         uses: softprops/action-gh-release@v1
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
@@ -121,19 +105,9 @@ jobs:
           draft: false
           prerelease: ${{ env.PRERELEASE }}
           fail_on_unmatched_files: true
-          body_path: coffeefilter/build/changelog.txt
+          body_path: documentation/build/coffeefilter-changelog.txt
           files: |
             coffeefilter/build/distributions/coffeefilter-${{ env.CI_TAG }}.zip
-
-      - name: Deploy coffeesacks documentation to gh-pages
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          repository-name: nineml/coffeesacks
-          folder: coffeesacks/build/website
-          token: ${{ secrets.ACCESS_TOKEN }}
-          branch: gh-pages
-          target-folder: /
 
       - name: Publish coffeesacks release
         uses: softprops/action-gh-release@v1
@@ -144,19 +118,9 @@ jobs:
           draft: false
           prerelease: ${{ env.PRERELEASE }}
           fail_on_unmatched_files: true
-          body_path: coffeesacks/build/changelog.txt
+          body_path: documentation/build/coffeesacks-changelog.txt
           files: |
             coffeesacks/build/distributions/coffeesacks-${{ env.CI_TAG }}.zip
-
-      - name: Deploy coffeepot documentation to gh-pages
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          repository-name: nineml/coffeepot
-          folder: coffeepot/build/website
-          token: ${{ secrets.ACCESS_TOKEN }}
-          branch: gh-pages
-          target-folder: /
 
       - name: Publish coffeepot release
         uses: softprops/action-gh-release@v1
@@ -167,12 +131,21 @@ jobs:
           draft: false
           prerelease: ${{ env.PRERELEASE }}
           fail_on_unmatched_files: true
-          body_path: coffeepot/build/changelog.txt
+          body_path: documentation/build/coffeepot-changelog.txt
           files: |
             coffeepot/build/distributions/coffeepot-${{ env.CI_TAG }}.zip
 
-      - name: Deploy nineml.org to gh-pages
+      - name: Deploy documentation to gh-pages
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: documentation/build/website
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          target-folder: /${{ needs.check_branch.outputs.ninemlversion }}/
+
+      - name: Deploy nineml.org to gh-pages
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'docs' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           repository-name: nineml/nineml.org
@@ -180,5 +153,3 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           branch: gh-pages
           target-folder: /
-
-
