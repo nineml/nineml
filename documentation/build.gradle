@@ -1,0 +1,343 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://dev.saxonica.com/maven" }
+  }
+
+  configurations.all {
+    resolutionStrategy {
+      force 'xml-apis:xml-apis:1.4.01',
+        "${saxonGroup}:${saxonEdition}:${saxonVersion}",
+        "org.xmlresolver:xmlresolver:${xmlresolverVersion}",
+        'com.nwalsh:sinclude:4.2.1'
+    }
+  }
+
+  dependencies {
+    classpath group: saxonGroup, name: saxonEdition, version: saxonVersion
+    classpath group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion
+    classpath group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion
+  }
+}
+
+plugins {
+  id "application"
+  id 'com.nwalsh.gradle.saxon.saxon-gradle' version '0.10.5'
+  id 'com.nwalsh.gradle.relaxng.validate' version '0.10.3'
+  id 'com.nwalsh.gradle.docker.container' version '0.0.5'
+}
+
+import com.nwalsh.gradle.saxon.SaxonXsltTask
+import com.nwalsh.gradle.relaxng.validate.RelaxNGValidateTask
+import com.nwalsh.gradle.relaxng.translate.RelaxNGTranslateTask
+import com.nwalsh.gradle.docker.DockerContainer
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url "https://dev.saxonica.com/maven" }
+}
+
+configurations.all {
+  resolutionStrategy {
+    force 'xml-apis:xml-apis:1.4.01',
+      "${saxonGroup}:${saxonEdition}:${saxonVersion}",
+      "org.xmlresolver:xmlresolver:${xmlresolverVersion}",
+      'com.nwalsh:sinclude:4.2.1'
+  }
+}
+
+configurations {
+  transform.extendsFrom documentation
+  saxonpath.extendsFrom implementation
+}
+
+// Set saxonLicenseDir in gradle.properties, or from the
+// command line if you have a license in some other place.
+if (!hasProperty("saxonLicenseDir")) {
+  ext.saxonLicenseDir=System.getenv('HOME') + "/java"
+}
+
+dependencies {
+  implementation (
+    [group: "com.saxonica", name: "Saxon-EE", version: "11.4"],
+    [group: "com.nwalsh", name: "scommonmark", version: "0.0.1"]
+  )
+  saxonpath (
+    files(saxonLicenseDir)
+  )
+  documentation (
+    [group: saxonGroup, name: saxonEdition, version: saxonVersion],
+    [group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion],
+    [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion]
+  )
+}
+
+ext {
+  c_nineml = "nineml"
+}
+
+docker_container.configure {
+  workingDir = "docker"
+}
+
+// ============================================================
+
+task copyResources(
+  dependsOn: ["copyJarResources", "copyStaticResources",
+              "copyApiDoc", "copyTestReport"]) {
+  // nop
+}
+
+task copyJarResources() {
+  outputs.files fileTree(dir: "${buildDir}/website")
+
+  def dbjar = null
+  configurations.transform.each { path ->
+    if (path.toString().contains("docbook-xslTNG")) {
+      dbjar = path
+    }
+  }
+
+  doLast {
+    if (dbjar == null) {
+      throw new GradleException("Failed to locate DocBook xslTNG jar file")
+    }
+    copy {
+      into "${buildDir}/website"
+      from ({ zipTree(dbjar.toString()) }) {
+        include "org/docbook/xsltng/resources/**"
+      }
+      eachFile { fileCopyDetails ->
+        def originalPath = fileCopyDetails.path
+        fileCopyDetails.path = originalPath.replace('org/docbook/xsltng/resources/', '')
+      }
+    }
+  }
+
+  doLast {
+    delete "${buildDir}/website/org"
+  }
+}
+
+task copyStaticResources() {
+  inputs.files fileTree(dir: "${projectDir}/src/main/resources")
+  inputs.files fileTree(dir: "${projectDir}/../website/resources")
+  inputs.files fileTree(dir: "${projectDir}/src/main/xml", include: "*/images")
+  outputs.files fileTree(dir: "${buildDir}/website")
+
+  doLast {
+    copy {
+      into "${buildDir}/website"
+      from "${projectDir}/src/main/resources"
+    }
+  }
+
+  doLast {
+    copy {
+      into "${buildDir}/website"
+      from "${projectDir}/../website/resources"
+    }
+  }
+
+  [".", "coffeegrinder", "coffeefilter", "coffeesacks", "coffeepot", "references"].each { dir ->
+    doLast {
+      copy {
+        from "${projectDir}/src/main/xml/${dir}/images"
+        into "${buildDir}/website/${dir}/images"
+      }
+    }
+  }
+}
+
+task copyApiDoc(
+  dependsOn: [':coffeegrinder:javadoc', ':coffeefilter:javadoc',
+              ':coffeesacks:javadoc']
+) {
+  inputs.files fileTree(dir: "${projectDir}/../coffeegrinder/build/docs/javadoc")
+  inputs.files fileTree(dir: "${projectDir}/../coffeefilter/build/docs/javadoc")
+  inputs.files fileTree(dir: "${projectDir}/../coffeesacks/build/docs/javadoc")
+  outputs.files fileTree(dir: "${buildDir}/website/coffeegrinder/apidoc")
+  outputs.files fileTree(dir: "${buildDir}/website/coffeefilter/apidoc")
+  outputs.files fileTree(dir: "${buildDir}/website/coffeegsacks/apidoc")
+
+  ['coffeegrinder', 'coffeefilter', 'coffeesacks'].each { base ->
+    doLast {
+      copy {
+        into "${buildDir}/website/${base}/apidoc"
+        from "${projectDir}/../${base}/build/docs/javadoc"
+        include "**"
+      }
+    }
+  }
+}
+
+task copyTestReport(
+  type: Copy,
+  dependsOn: [':coffeefilter:testSuiteReport']
+) {
+  into "${buildDir}/website/coffeefilter/test-report"
+  from "${projectDir}/../coffeefilter/build/test-report"
+}
+
+// ============================================================
+
+task xmljavadoc(
+  dependsOn: [':coffeegrinder:xmljavadoc', ':coffeefilter:xmljavadoc',
+              ':coffeesacks:xmljavadoc', ':coffeepot:xmljavadoc']
+) {
+  // Just somewhere to hang dependencies
+}
+
+task docset(
+  type: SaxonXsltTask,
+  dependsOn: ["copyResources", 'xmljavadoc']
+) {
+  inputs.files "${projectDir}/src/main/xml"
+  inputs.file "${projectDir}/../website/docbook.xsl"
+  inputs.files fileTree(dir: "${projectDir}/tools")
+  outputs.files fileTree(dir: "${buildDir}/website")
+
+  input "${projectDir}/src/main/xml/nineml.xml"
+  output "${buildDir}/website/index.html"
+  stylesheet "${projectDir}/tools/docbook.xsl"
+  args(['-init:org.docbook.xsltng.extensions.Register'])
+  parameters (
+    'debug': 'x-chunks',
+    'chunk': 'index.html',
+    'chunk-output-base-uri': "${projectDir}/build/website/",
+    'relax-ng-grammar': "${projectDir}/../website/docbook.rng",
+    'nineml-version': ninemlVersion
+  )
+}
+
+task combine_doclets(
+  type: SaxonXsltTask,
+  dependsOn: [':coffeegrinder:xmljavadoc', ':coffeefilter:xmljavadoc',
+              ':coffeesacks:xmljavadoc', ':coffeepot:xmljavadoc']
+) {
+  inputs.file "${projectDir}/../coffeegrinder/build/xmldoc/doclet.xml"
+  inputs.file "${projectDir}/../coffeefilter/build/xmldoc/doclet.xml"
+  inputs.file "${projectDir}/../coffeesacks/build/xmldoc/doclet.xml"
+  inputs.file "${projectDir}/../coffeepot/build/xmldoc/doclet.xml"
+  input "${projectDir}/../coffeegrinder/build/xmldoc/doclet.xml"
+  stylesheet "${projectDir}/tools/combine-doclets.xsl"
+  output "${buildDir}/xml/combined.xml"
+  args(['-it'])
+}
+
+['DefaultLogger', 'Logger'].each { name ->
+  Task t = task "cg_${name}2db"(
+    type: SaxonXsltTask,
+    dependsOn: ['combine_doclets']
+  ) {
+    input "${buildDir}/xml/combined.xml"
+    output "${buildDir}/xml/coffeegrinder/${name}.xml"
+    stylesheet "${projectDir}/tools/doclet2db.xsl"
+    parameters([
+      'package-prefix': 'org.nineml.logging',
+      'className': name
+    ])
+  }
+  docset.dependsOn t
+}
+
+['ParserOptions', 'SourceGrammar', 'ParserGrammar', 'Grammar',
+ 'TerminalSymbol', 'NonterminalSymbol', 'Symbol', 'TokenString',
+ 'TokenCharacter', 'TokenRegex', 'Token', 'Rule', 'Arborist',
+ 'Lumberjack', 'TreeSurgeon', 'Axe', 'SequentialAxe', 'PriorityAxe',
+ 'RandomAxe', 'TreeBuilder', 'ParseForest', 'GearleyParser',
+ 'GearleyResult'].each { name ->
+  Task t = task "cg_${name}2db"(
+    type: SaxonXsltTask,
+    dependsOn: ['combine_doclets']
+  ) {
+    input "${buildDir}/xml/combined.xml"
+    output "${buildDir}/xml/coffeegrinder/${name}.xml"
+    stylesheet "${projectDir}/tools/doclet2db.xsl"
+    parameters([
+      'package-prefix': 'org.nineml.coffeegrinder',
+      'className': name
+    ])
+  }
+  docset.dependsOn t
+}
+
+['ParserOptions', 'InvisibleXml', 'InvisibleXmlParser', 'InvisibleXmlDocument'
+].each { name ->
+  Task t = task "cf_${name}2db"(
+    type: SaxonXsltTask,
+    dependsOn: ['combine_doclets']
+  ) {
+    input "${buildDir}/xml/combined.xml"
+    output "${buildDir}/xml/coffeefilter/${name}.xml"
+    stylesheet "${projectDir}/tools/doclet2db.xsl"
+    parameters([
+      'package-prefix': 'org.nineml.coffeefilter',
+      'className': name
+    ])
+  }
+  docset.dependsOn t
+}
+
+['ParserOptions'
+].each { name ->
+  Task t = task "cp_${name}2db"(
+    type: SaxonXsltTask,
+    dependsOn: ['combine_doclets']
+  ) {
+    input "${buildDir}/xml/combined.xml"
+    output "${buildDir}/xml/coffeepot/${name}.xml"
+    stylesheet "${projectDir}/tools/doclet2db.xsl"
+    parameters([
+      'package-prefix': 'org.nineml.coffeepot',
+      'className': name
+    ])
+  }
+  docset.dependsOn t
+}
+
+task manual_xinclude(type: SaxonXsltTask) {
+  input "${projectDir}/src/main/xml/nineml.xml"
+  stylesheet "${projectDir}/../website/xinclude.xsl"
+  output "${buildDir}/nineml.xml"
+  args(['-init:org.docbook.xsltng.extensions.Register'])
+}
+
+['coffeegrinder', 'coffeefilter', 'coffeesacks', 'coffeepot'].each { prod ->
+  task "${prod}_changelog_html"(
+    type: SaxonXsltTask,
+    dependsOn: ["manual_xinclude"]
+  ) {
+    input "${buildDir}/nineml.xml"
+    output "${buildDir}/${prod}-changelog.html"
+    stylesheet "${projectDir}/tools/product-changelog.xsl"
+    args(['-init:org.docbook.xsltng.extensions.Register'])
+    parameters (
+      'nineml-product': prod,
+      'nineml-version': ninemlVersion
+    )
+  }
+
+  Task t = task "${prod}_changelog"(type: SaxonXsltTask, dependsOn: ["${prod}_changelog_html"]) {
+    doFirst {
+      Html5Parser.parse("file://${buildDir}/${prod}-changelog.html",
+                        "${buildDir}/${prod}-changelog.xhtml")
+    }
+
+    input "${buildDir}/${prod}-changelog.xhtml"
+    output "${buildDir}/${prod}-changelog.txt"
+    stylesheet "${projectDir}/../website/html2txt.xsl"
+  }
+  docset.finalizedBy t
+}
+
+// ============================================================
+
+
+task helloWorld() {
+  doLast {
+    println('Hello, world.')
+  }
+}

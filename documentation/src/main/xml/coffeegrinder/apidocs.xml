@@ -1,0 +1,55 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="api_cg"
+      version="5.2">
+<title>API Documentation</title>
+
+<partintro>
+<para>The chapters that follow summarize the primary APIs in CoffeeGrinder.
+You will find additional APIs described in the
+<link xlink:href="apidoc/">Javadoc API documentation</link>.
+</para>
+</partintro>
+
+<chapter xml:id="cg_options">
+<title>Parser options</title>
+<xi:include href="../../../../build/xml/coffeegrinder/ParserOptions.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/DefaultLogger.xml"/>
+</chapter>
+
+<chapter xml:id="cg_grammars">
+<title>Grammars</title>
+<xi:include href="../../../../build/xml/coffeegrinder/Grammar.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/SourceGrammar.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/Rule.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/NonterminalSymbol.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/TerminalSymbol.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/Symbol.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/Token.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/TokenCharacter.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/TokenString.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/TokenRegex.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/ParserGrammar.xml"/>
+</chapter>
+
+<chapter xml:id="cg_parsing">
+<title>Parsing</title>
+<xi:include href="../../../../build/xml/coffeegrinder/GearleyParser.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/GearleyResult.xml"/>
+</chapter>
+
+<chapter xml:id="cg_results">
+<title>Forests, etc.</title>
+<xi:include href="../../../../build/xml/coffeegrinder/ParseForest.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/Arborist.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/Lumberjack.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/TreeSurgeon.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/Axe.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/SequentialAxe.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/PriorityAxe.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/RandomAxe.xml"/>
+<xi:include href="../../../../build/xml/coffeegrinder/TreeBuilder.xml"/>
+</chapter>
+
+</part>

@@ -1,0 +1,528 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="coffeesacks"
+      version="5.2">
+<info>
+<?db filename='coffeesacks/index.html'?>
+<mediaobject role="cover">
+  <imageobject>
+    <imagedata fileref="images/CoffeeSacks.png"/>
+  </imageobject>
+</mediaobject>
+<title>CoffeeSacks</title>
+<subtitle>A Saxon API for Invisible XML</subtitle>
+<author>
+  <personname>Norm Tovey Walsh</personname>
+</author>
+<copyright><year>2022</year><year>2023</year>
+<holder>Norm Tovey-Walsh</holder></copyright>
+<productnumber/>
+</info>
+
+<preface>
+<title>Introduction</title>
+
+<para>CoffeeSacks provides a set of
+<link xlink:href="https://saxonica.com/">Saxon</link> extension functions
+for processing Invisible XML. It is part of the
+<link xlink:href="https://nineml.org/">NineML</link> family of Invisible
+XML tools.</para>
+
+</preface>
+
+<chapter>
+<title>Invisible XML in Saxon</title>
+
+<para>The CoffeeSacks extension functions allow a stylesheet to load
+an Invisible XML grammar and process an input against it.</para>
+
+<para>The class <classname>org.nineml.coffeesacks.RegisterCoffeeSacks</classname>
+is suitable for registering the extension functions to a Saxon HE processor.</para>
+
+<para>All of the functions are in the namespace
+<uri>http://nineml.com/ns/coffeesacks</uri> which is taken to be bound to
+the <code>cs:</code> namespace prefix in this document.</para>
+
+<para>Given an Invisible XML grammar for dates in <uri>date.ixml</uri>:</para>
+
+<programlisting language="ixml">
+<xi:include href="../../../../../coffeesacks/src/test/resources/date.ixml" parse="text"/>
+</programlisting>
+
+<para>A stylesheet like the following will parse a string against that
+grammar and return the result:</para>
+
+<programlisting language="xml">
+<xi:include href="../../../../../coffeesacks/src/test/resources/date-xml-example.xsl" parse="text"/>
+</programlisting>
+
+<para>Returning:</para>
+
+<programlisting language="xml"><![CDATA[<doc>
+   <date>
+      <day>15</day>
+      <month>February</month>
+      <year>2022</year>
+   </date>
+</doc>]]></programlisting>
+
+</chapter>
+
+<chapter xml:id="loading-grammars">
+<title>Loading grammars</title>
+
+<para>Before it can be used, a parser must be constructed for the
+grammar. You can load Invisible XML grammars in either the text or XML
+syntax. You can also load grammars in the <link
+xlink:href="https://coffeegrinder.nineml.org/">CoffeeGrinder</link>
+compiled format.</para>
+
+<note>
+<para>The API has been redesigned and greatly simplified in version
+2.x. Instead of having a few different functions that take a grammar
+as an argument, there are now just a couple of functions that return a
+parser for the grammar.</para>
+</note>
+
+<para>The parser creation functions return an XPath function that
+takes a single argument, the string to be parsed. If the grammar
+cannot be parsed, an error is raised. This error can be captured with
+<link xlink:href="https://www.w3.org/TR/xslt-30/#try-catch">try/catch</link>.</para>
+
+<section>
+<title>cs:load-grammar</title>
+
+<para>This function takes the URI of an Invisible XML grammar and
+constructs a parser for that grammar.</para>
+
+<funcsynopsis language="xpath">
+<funcprototype>
+<funcdef>
+<type>function($input as xs:string) as item()</type>
+<function>cs:load-grammar</function>
+</funcdef>
+<paramdef>
+<type>xs:string</type>
+<parameter>uri</parameter>
+<phrase role="refpurpose">A URI that identifies an Invisible XML
+grammar</phrase>
+</paramdef>
+</funcprototype>
+</funcsynopsis>
+
+<funcsynopsis language="xpath">
+<funcprototype>
+<funcdef>
+<type>function($input as xs:string) as item()</type>
+<function>cs:load-grammar</function>
+</funcdef>
+<paramdef>
+<type>xs:string</type>
+<parameter>uri</parameter>
+<phrase role="refpurpose">A URI that identifies an Invisible XML
+grammar</phrase>
+</paramdef>
+<paramdef>
+<type>map(xs:string, item())</type>
+<parameter>options</parameter>
+<phrase role="refpurpose">Grammar options</phrase>
+</paramdef>
+</funcprototype>
+</funcsynopsis>
+
+<para>See <xref linkend="parser-options"/> for a description
+of the available options.</para>
+
+<para>If the return <literal>format</literal> is XML, an XML node will be returned.
+For the JSON return types, an XDM map will be returned.</para>
+
+</section>
+
+<section>
+<title>cs:make-parser</title>
+
+<para>This function takes an Invisible XML grammar and constructs a parser for that grammar.</para>
+
+<funcsynopsis language="xpath">
+<funcprototype>
+<funcdef>
+<type>function($input as xs:string) as item()</type>
+<function>cs:make-parser</function>
+</funcdef>
+<paramdef>
+<type>item()</type>
+<parameter>input</parameter>
+<phrase role="refpurpose">An input grammar</phrase>
+</paramdef>
+</funcprototype>
+</funcsynopsis>
+
+<funcsynopsis language="xpath">
+<funcprototype>
+<funcdef>
+<type>function($input as xs:string) as item()</type>
+<function>cs:make-parser</function>
+</funcdef>
+<paramdef>
+<type>item()</type>
+<parameter>input</parameter>
+<phrase role="refpurpose">An input grammar</phrase>
+</paramdef>
+<paramdef>
+<type>map(xs:string, item())</type>
+<parameter>options</parameter>
+<phrase role="refpurpose">Grammar options</phrase>
+</paramdef>
+</funcprototype>
+</funcsynopsis>
+
+<para>Exactly what this function does depends on the type of
+<code>$input</code>.</para>
+
+<variablelist>
+<varlistentry><term>XML node</term>
+<listitem>
+<para>The input is assumed to be an XML version of an invisible XML
+grammar (a “visible XML grammar”). The function will attempt to
+construct a parser for that grammar.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry><term><code>xs:anyURI</code></term>
+<listitem>
+<para>The input is assumed to be a URI that identifies the location of
+an invisible XML grammar. It will be loaded and parsed just as
+<function>cs:load-grammar</function> would.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry><term><code>xs:anyAtomicType</code></term>
+<listitem>
+<para>The string value of the input is assumed to be an Invisible XML grammar.
+The function will attempt to construct a parser for that grammar.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry><term>anything else</term>
+<listitem>
+<para>Any other input will cause an error.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>See <xref linkend="parser-options"/> for a description
+of the available options.</para>
+
+<para>If the return <literal>format</literal> is XML, an XML node will be returned.
+For the JSON return types, an XDM map will be returned.</para>
+
+</section>
+</chapter>
+
+<chapter xml:id="parsing-inputs">
+<title>Parsing inputs</title>
+
+<para>The grammar parsing functions return a function that will parse
+an input string. The parsing function returns an XML document (or a
+map). If the parse is successful, this will be a representation of the
+result of parsing the input with the grammar.</para>
+
+<para>If the parse is unsuccessful, a top-level <tag>ixml:state</tag>
+attribute (or property) with the value “<code>fail</code>” indicates
+that the parse did not succeed. The rest of the document will contain
+information that is designed to help you identify the error.</para>
+
+<para>The parser will not load a URI for you. If you want to parse an
+external document, load it with <code>unparsed-text</code> and pass the 
+resulting string to the parser.</para>
+</chapter>
+
+<chapter>
+<title>cs:hygiene-report</title>
+
+<para>Get a hygiene report for a grammar. The hygiene report will
+contain information about unproductive rules and
+undefined, unused, or unproductive symbols.</para>
+
+<funcsynopsis language="xpath">
+<funcprototype>
+<funcdef>
+<type>item()</type>
+<function>cs:hygiene-report</function>
+</funcdef>
+<paramdef>
+<type>item()</type>
+<parameter>input</parameter>
+<phrase role="refpurpose">The ixml grammar</phrase>
+</paramdef>
+</funcprototype>
+</funcsynopsis>
+
+<funcsynopsis language="xpath">
+<funcprototype>
+<funcdef>
+<type>item()</type>
+<function>cs:hygiene-report</function>
+</funcdef>
+<paramdef>
+<type>item()</type>
+<parameter>input</parameter>
+<phrase role="refpurpose">The ixml grammar</phrase>
+</paramdef>
+<paramdef>
+<type>map(xs:string, item())</type>
+<parameter>options</parameter>
+<phrase role="refpurpose">Grammar options</phrase>
+</paramdef>
+</funcprototype>
+</funcsynopsis>
+
+<para>See <xref linkend="parser-options"/> for a description
+of the available options.</para>
+
+<para>Like <function>cs:make-parser</function>, this function will accept an
+XML node, an <code>xs:anyURI</code>, or a string.</para>
+
+<para>It returns a report.</para>
+
+<para>Consider the following grammar:</para>
+
+<programlisting language="ixml">
+<xi:include href="../../../../../coffeesacks/src/test/resources/messy.ixml" parse="text"/>
+</programlisting>
+
+<para>It contains unused and undefined nonterminals.</para>
+
+<para>The XML report is in the
+<uri type="namespace">http://nineml.com/ns/coffeegrinder</uri> namespace.
+This is an example report for this grammar:</para>
+
+<programlisting language="xml"><![CDATA[<report xmlns="http://nineml.com/ns/coffeegrinder"
+        clean="false">
+   <undefined>
+      <symbol>Y</symbol>
+   </undefined>
+   <unreachable>
+      <symbol>Z</symbol>
+   </unreachable>
+   <unproductive>
+      <symbol>Y</symbol>
+      <rule>B ⇒ 'b', Y</rule>
+      <rule>S ⇒ B</rule>
+   </unproductive>
+</report>]]></programlisting>
+
+<para>In JSON, the report would be:</para>
+
+<programlisting language="json">{
+  "report": {
+    "unproductive": [
+      "B",
+      "B ⇒ 'b', Y",
+      "S ⇒ B"
+    ],
+    "unreachable": [
+      "Z"
+    ],
+    "clean": false,
+    "undefined": [
+      "Y"
+    ]
+  }
+}</programlisting>
+
+</chapter>
+
+<chapter xml:id="parser-options">
+<title>Parser options</title>
+
+<para>There are two kinds of parser options: parser construction
+options and Invisible XML parser options. For convenience, they’re
+both allowed in the same options map.
+</para>
+
+<section>
+<title>Parser construction options</title>
+
+<variablelist>
+<varlistentry>
+<term><code>choose-alternative</code>, function</term>
+<listitem>
+<para>A function that will be called to choose between
+alternatives when the parse is ambiguous. The function
+must have one argument, a sequence of elements, and must return
+an <type>xs:integer</type>. See <xref linkend="choose-alternative"/>.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>disablePragmas</code>, string</term>
+<listitem>
+<para>Pragmas to disable. The string may be a comma-separated list of pragma names,
+or the string <code>#all</code> to disable all pragmas.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>enablePragmas</code>, string</term>
+<listitem>
+<para>Pragmas to enable. The string may be a comma-separated list of pragma names,
+or the string <code>#all</code> to enable all pragmas.</para>
+<para>By default, all pragmas are enabled. If both the <code>disablePragmas</code>
+and <code>enablePragmas</code> options are supplied, they will be processed in that order.
+(If you want to enable only a single pragma, you can disable them all, then enable the
+one you want.)</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>format</code>, string</term>
+<listitem>
+<para>The output type. One of <literal>xml</literal> (an XML node; the default),
+<literal>json</literal> or <literal>json-data</literal> (a “data” map),
+or <literal>json-text</literal> (a “text” map).
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>type</code>, string</term>
+<listitem>
+<para>The input type. One of <literal>ixml</literal> (an invisible XML grammar),
+<literal>xml</literal> or <literal>vxml</literal> (a visible XML grammar),
+or <literal>cxml</literal> or <literal>compiled</literal> (a compiled
+XML grammar).
+</para>
+<para>In most circumstances, you don’t need to specify the input type.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</section>
+
+<section>
+<title>Invisible XML parser options</title>
+
+<para>The following parser options are recognized:</para>
+
+<variablelist>
+<varlistentry>
+<term><code>allowMultipleDefinitions</code>, boolean</term>
+<listitem>
+<para>If true, the parser will attempt to use a grammar that contains
+multiple definitions for a given nonterminal.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>allowUndefinedSymbols</code>, boolean</term>
+<listitem>
+<para>If true, the parser will attempt to use a grammar that contains
+undefined symbols.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>allowUnproductiveSymbols</code>, boolean</term>
+<listitem>
+<para>If true, the parser will attempt to use a grammar that contains
+unproductive symbols.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>allowUnreachableSymbols</code>, boolean</term>
+<listitem>
+<para>If true, the parser will attempt to use a grammar that contains
+unreachable symbols.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>ignoreTrailingWhitespace</code>, boolean</term>
+<listitem>
+<para>If true, trailing whitespace on the document input string is
+ignored.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>parser</code>, string</term>
+<listitem>
+<para>Selects the parser type, <code>Earley</code> for the Earley parser
+and <code>GLL</code> for the GLL parser. The Earley parser is the default.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>showBnfNonterminals</code>, boolean</term>
+<listitem>
+<para>If true, the parser will return all of the otherwise hidden nonterminals
+used in the parse.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>showMarks</code>, boolean</term>
+<listitem>
+<para>If true, the parser will return all of the nonterminals in your
+grammar as elements, irrespective of their marks. The actual mark will
+be returned in an <code>ixml:mark</code> attribute.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>strictAmbiguity</code>, boolean</term>
+<listitem>
+<para>If true, the parser will mark a result ambiguous even if a user-defined
+function was used to select alternatives. By default, if a user-defined function was
+called, the choice is considered unambiguous.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>suppressAmbiguousState</code>, boolean</term>
+<listitem>
+<para>If a parse is ambiguous, Invisible XML mandates that an
+<tag class="attribute">ixml:state</tag> attribute be added to the root
+element contining the value <code>ambiguous</code>. If this option
+is true, that state will be suppressed.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><code>suppressPrefixState</code>, boolean</term>
+<listitem>
+<para>If a parse consumes only a (proper) prefix of the input,
+Invisible XML mandates that an
+<tag class="attribute">ixml:state</tag> attribute be added to the root
+element contining the value <code>prefix</code>. If this option
+is true, that state will be suppressed.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>The function will log errors (unrecognized options or values)
+and ignore the option.</para>
+</section>
+</chapter>
+
+<chapter>
+<title>RegisterCoffeeSacks</title>
+
+<para>The class <classname>org.nineml.coffeesacks.RegisterCoffeeSacks</classname>
+can be passed to the Saxon processor on the command line as the value of the
+<option>-init</option> option to register the extension functions.</para>
+
+<para>To use this class within your own application code, instantiate the class
+and pass the underlying configuration to the <methodname>initialize</methodname> method:
+</para>
+
+<programlisting language="java" linenumbering="unnumbered"
+>RegisterCoffeeSacks register = new RegisterCoffeeSacks();
+register.initialize(processor.getUnderlyingConfiguration());</programlisting>
+
+<para>This will register the functions with the processor.</para>
+
+</chapter>
+
+<xi:include href="alternatives.xml"/>
+
+</book>

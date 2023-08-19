@@ -1,0 +1,18 @@
+     date = usdate | eudate .
+-digit0_9 = ['0'-'9'] .
+-digit1_9 = ['1'-'9'] .
+    month = digit1_9
+          | '0', digit1_9
+          | '10'
+          | '11'
+          | '12' .
+      day = digit1_9
+          | '0', digit1_9
+          | '1', digit0_9
+          | '2', digit0_9
+          | '30'
+          | '31' .
+     year = '19', digit0_9, digit0_9
+          | '2', digit0_9, digit0_9, digit0_9 .
+   usdate = day, -'/', month, -'/', year .
+   eudate = month, -'/', day, -'/', year .

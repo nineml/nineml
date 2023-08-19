@@ -79,9 +79,11 @@ dependencies {
     files("${buildDir}/resources/test")
   )
   documentation (
+    project(':coffeegrinder'),
     [group: saxonGroup, name: saxonEdition, version: saxonVersion],
     [group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion],
-    [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion]
+    [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion],
+    [group: 'com.saxonica', name: 'xmldoclet', version: xmldocletVersion],
   )
 }
 
@@ -94,9 +96,8 @@ testing {
 }
 
 java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(8)
-  }
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 println("Building with Java version ${System.getProperty('java.version')}")
@@ -181,7 +182,7 @@ task testSuiteReport(type: SaxonXsltTask, dependsOn: ["testSuite"]) {
 
   input "${projectDir}/ixml/tests/test-catalog.xml"
   stylesheet "${projectDir}/tools/test-report/test-report.xsl"
-  output "${buildDir}/website/test-report/index.html"
+  output "${buildDir}/test-report/index.html"
   parameters (
     'test-report.xml': "${buildDir}/test-report-${parserType}.xml"
   )
@@ -191,13 +192,13 @@ task testSuiteReport(type: SaxonXsltTask, dependsOn: ["testSuite"]) {
       from ("${projectDir}/tools/test-report") {
         include "*.css"
       }
-      into "${buildDir}/website/test-report"
+      into "${buildDir}/test-report"
     }
     copy {
       from ("${projectDir}/tools/test-report") {
         include "*.svg"
       }
-      into "${buildDir}/website/test-report/img"
+      into "${buildDir}/test-report/img"
     }
   }
 }
@@ -259,7 +260,16 @@ javadoc {
   options.charSet('utf-8')
 }
 
-task dist(dependsOn:["test", "jar", "javadoc"]) {
+tasks.register('xmljavadoc', Javadoc) {
+  classpath = configurations.transform
+  source = sourceSets.main.allJava
+  destinationDir = file("${buildDir}/xmldoc")
+  options.doclet = 'com.saxonica.xmldoclet.XmlDoclet'
+  options.docletpath = configurations.documentation.files.asType(List)
+  options.addStringOption("sourcepath", "${projectDir}/src/main/java")
+}
+
+task dist(dependsOn:["test", "jar", "javadoc", "testSuiteReport"]) {
   doLast {
     mkdir "${buildDir}/stage"
     mkdir "${buildDir}/stage/docs"
@@ -303,270 +313,6 @@ task sourcesJar(type: Jar, dependsOn: ['generateBuildConfig']) {
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:deprecation'
-}
-
-// ============================================================
-
-task patch_changelog(type: SaxonXsltTask) {
-  inputs.files fileTree(dir: "${projectDir}/src/website/xml")
-  inputs.files fileTree(dir: "${projectDir}/../src/website/xml")
-  outputs.files fileTree(dir: "${buildDir}/tmp/coffeefilter")
-
-  doFirst {
-    copy {
-      into "${buildDir}/tmp/coffeefilter"
-      from "${projectDir}/src/website/xml"
-      include "**/*.xml"
-      exclude "changelog.xml"
-    }
-  }
-
-  input "${projectDir}/src/website/xml/changelog.xml"
-  stylesheet "${projectDir}/../website/combined-changelog.xsl"
-  output "${buildDir}/tmp/coffeefilter/changelog.xml"
-  parameters (
-    'version': ninemlVersion,
-    'audience': 'coffeefilter'
-  )
-}
-
-task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources", "patch_changelog"]) {
-  inputs.files fileTree(dir: "${buildDir}/tmp/coffeefilter")
-
-  input "${buildDir}/tmp/coffeefilter/coffeefilter.xml"
-  stylesheet "${projectDir}/../website/xinclude.xsl"
-  output "${buildDir}/tmp/coffeefilter.xml"
-  args(['-init:org.docbook.xsltng.extensions.Register'])
-}
-
-task manual_validate(type: RelaxNGValidateTask, dependsOn: ["manual_xinclude"]) {
-  input manual_xinclude.outputs.files.singleFile
-  output "${buildDir}/xml/coffeefilter.xml"
-  schema "${projectDir}/../website/docbook.rnc"
-  compact true
-}
-
-task manual_augment(type: SaxonXsltTask, dependsOn: ["manual_validate"]) {
-  input manual_validate.outputs.files.singleFile
-  output "${buildDir}/aug/coffeefilter.xml"
-  stylesheet "${projectDir}/tools/augment.xsl"
-  parameters (
-    'version': ninemlVersion,
-    'coffeegrinder-version': ninemlVersion,
-  )
-}
-
-task website(type: SaxonXsltTask, dependsOn: ["manual_augment", "classlist", "testSuiteReport"]) {
-  inputs.file "${projectDir}/tools/docbook.xsl"
-  outputs.files fileTree(dir: "${buildDir}/website")
-
-  input manual_augment.outputs.files.singleFile
-  output "${buildDir}/website/index.html"
-  stylesheet "${projectDir}/tools/docbook.xsl"
-  args(['-init:org.docbook.xsltng.extensions.Register'])
-  parameters (
-    'mediaobject-input-base-uri': "file:${buildDir}/aug/",
-    'mediaobject-output-base-uri': "/",
-    'chunk': 'index.html',
-    'chunk-output-base-uri': "${projectDir}/build/website/"
-  )
-}
-
-task changelog(type: SaxonXsltTask, dependsOn: ["website"]) {
-  inputs.file "${projectDir}/../website/docbook.xsl"
-  outputs.file "${buildDir}/changelog.txt"
-
-  doFirst {
-    Html5Parser.parse("file://${projectDir}/build/website/changelog.html",
-                      "${buildDir}/changelog.xhtml")
-  }
-
-  input "${buildDir}/changelog.xhtml"
-  output "${buildDir}/changelog.txt"
-  stylesheet "${projectDir}/../website/changelog.xsl"
-  parameters (
-    'version': ninemlVersion
-  )
-}
-website.finalizedBy changelog
-
-task publishVersions() {
-  doLast {
-    StaticPages.versionsJson(currentReleaseVersion, ninemlVersion,
-                             "${buildDir}/website/versions.json")
-  }
-}
-website.finalizedBy publishVersions
-
-task publishError404() {
-  doLast {
-    StaticPages.error404("CoffeeFilter", currentReleaseVersion, "${buildDir}/website/404.html")
-  }
-}
-website.finalizedBy publishError404
-
-// ============================================================
-
-task intro_validate(type: RelaxNGValidateTask) {
-  input "${projectDir}/src/website/docs/invisible.xml"
-  output "${buildDir}/xml/invisible.xml"
-  schema "${projectDir}/../website/docbook.rnc"
-  compact true
-}
-
-task intro(type: SaxonXsltTask, dependsOn: ["intro_validate"]) {
-  inputs.file "${projectDir}/tools/docbook.xsl"
-  inputs.file intro_validate.outputs.files.singleFile
-  outputs.file "${buildDir}/website/docs/invisible.html"
-
-  input intro_validate.outputs.files.singleFile
-  output "${buildDir}/website/docs/invisible.html"
-  stylesheet "${projectDir}/tools/docbook.xsl"
-  args(['-init:org.docbook.xsltng.extensions.Register'])
-  parameters (
-    'mediaobject-input-base-uri': "file:${buildDir}/aug/",
-    'mediaobject-output-base-uri': "/",
-    'chunk': 'invisible.html',
-    'chunk-output-base-uri': "${buildDir}/website/docs/"
-  )
-}
-website.finalizedBy intro
-
-task writing_validate(type: RelaxNGValidateTask) {
-  input "${projectDir}/src/website/docs/writing.xml"
-  output "${buildDir}/xml/writing.xml"
-  schema "${projectDir}/../website/docbook.rnc"
-  compact true
-}
-
-task writing_copy() {
-  doFirst {
-    copy {
-      from ("${projectDir}/src/website/docs") {
-        include "*.png"
-      }
-      into "${buildDir}/xml"
-    }
-  }
-  doLast {
-    copy {
-      from ("${projectDir}/src/website/docs") {
-        include "*.png"
-      }
-      into "${buildDir}/website/docs"
-    }
-  }
-}
-
-task writing(type: SaxonXsltTask, dependsOn: ["writing_validate", "writing_copy"]) {
-  inputs.file "${projectDir}/tools/docbook.xsl"
-  inputs.file writing_validate.outputs.files.singleFile
-  outputs.file "${buildDir}/website/docs/writing.html"
-
-  input writing_validate.outputs.files.singleFile
-  output "${buildDir}/website/docs/writing.html"
-  stylesheet "${projectDir}/tools/docbook.xsl"
-  args(['-init:org.docbook.xsltng.extensions.Register'])
-  parameters (
-    'mediaobject-input-base-uri': "file:${buildDir}/xml/",
-    'mediaobject-output-base-uri': "./",
-    'chunk': 'writing.html',
-    'chunk-output-base-uri': "${buildDir}/website/docs/"
-  )
-}
-website.finalizedBy writing
-
-task website_javadoc(type: Copy, dependsOn: ["javadoc"]) {
-  from javadoc.destinationDir
-  into "${buildDir}/website/apidoc"
-}
-website.finalizedBy website_javadoc
-
-task copyResources(dependsOn: ["copyJarResources", "copyStaticResources"]) {
-  // nop
-}
-
-task copyJarResources() {
-  outputs.files fileTree(dir: "${buildDir}/website")
-
-  def dbjar = null
-  configurations.transform.each { path ->
-    if (path.toString().contains("docbook-xslTNG")) {
-      dbjar = path
-    }
-  }
-
-  doLast {
-    if (dbjar == null) {
-      throw new GradleException("Failed to locate DocBook xslTNG jar file")
-    }
-    copy {
-      into "${buildDir}/website"
-      from ({ zipTree(dbjar.toString()) }) {
-        include "org/docbook/xsltng/resources/**"
-      }
-      eachFile { fileCopyDetails ->
-        def originalPath = fileCopyDetails.path
-        fileCopyDetails.path = originalPath.replace('org/docbook/xsltng/resources/', '')
-      }
-    }
-  }
-
-  doLast {
-    delete "${buildDir}/website/org"
-  }
-}
-
-task copyStaticResources() {
-  inputs.files fileTree(dir: "${projectDir}/src/website/resources")
-  inputs.files fileTree(dir: "${projectDir}/src/website/xml")
-  inputs.files fileTree(dir: "${projectDir}/../website/resources")
-  outputs.files fileTree(dir: "${buildDir}/website")
-  outputs.files fileTree(dir: "${buildDir}/aug")
-
-  doLast {
-    copy {
-      into "${buildDir}/website"
-      from "${projectDir}/src/website/resources"
-    }
-  }
-
-  doLast {
-    copy {
-      from "${projectDir}/src/website/xml/images"
-      into "${buildDir}/website/images"
-    }
-  }
-
-  doLast {
-    copy {
-      into "${buildDir}/website"
-      from "${projectDir}/../website/resources"
-    }
-  }
-
-  // FIXME: Grotesque hack. 
-  doLast {
-    copy {
-      from "${projectDir}/src/website/xml/images"
-      into "${buildDir}/aug/images"
-    }
-  }
-
-  // FIXME: Grotesque hack. 
-  doLast {
-    copy {
-      from "${projectDir}/src/website/resources/images"
-      into "${buildDir}/aug/images"
-    }
-  }
-
-  doLast {
-    copy {
-      from "${projectDir}/src/website/xml/examples"
-      into "${buildDir}/website/examples"
-    }
-  }
 }
 
 // ============================================================

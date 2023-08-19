@@ -1,0 +1,24 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi='http://www.w3.org/2001/XInclude'
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sourcegrammar_cg"
+         version="5.2">
+<title>Source grammar</title>
+
+<?class-summary org.nineml.coffeegrinder.parser.SourceGrammar?>
+
+<section role="api-summary">
+<title>Constructor summary</title>
+<para>A new parser options object can be constructed with default options, with an explicit
+logger, or by copying an existing set of options.</para>
+
+<?constructor-summary org.nineml.coffeegrinder.parser.SourceGrammar?>
+</section>
+
+<section role="api-summary">
+<title>Method summary</title>
+<para>Public methods in the source grammar are used to update the rules.</para>
+<?method-summary org.nineml.coffeegrinder.parser.SourceGrammar?>
+</section>
+
+</chapter>

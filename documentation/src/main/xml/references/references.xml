@@ -1,0 +1,125 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="references"
+      version="5.2">
+<info>
+<?db filename='references/index.html'?>
+<mediaobject role="cover">
+  <imageobject>
+    <imagedata fileref="images/nineml.png"/>
+  </imageobject>
+</mediaobject>
+<title>References</title>
+<author>
+  <personname>Norm Tovey-Walsh</personname>
+</author>
+<copyright><year>2022</year><year>2023</year><holder>Norm Tovey-Walsh</holder></copyright>
+</info>
+
+<xi:include href="changelog.xml"/>
+<xi:include href="unichars.xml"/>
+
+<glossary>
+<title>Glossary</title>
+<glossentry>
+<glossterm>BNF</glossterm>
+<glossdef>
+<para>Backus-Naur Form, a
+“<link xlink:href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">metasyntax notation for context-free grammars</link>”.</para>
+</glossdef>
+</glossentry>
+<glossentry>
+<glossterm>EBNF</glossterm>
+<glossdef>
+<para>Extended Backus-Naur Form, an
+<link xlink:href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">extension
+of basic Backus-Naur form grammars</link>, often to make authoring
+easier.</para>
+</glossdef>
+</glossentry>
+<glossentry>
+<glossterm>Earley parser</glossterm>
+<glossdef>
+<para>The Earley parser is a
+<link xlink:href="https://en.wikipedia.org/wiki/Earley_parser">chart parser that uses
+dynamic programming</link>. It is an early (no pun intended;
+the first?<superscript><emphasis>citation needed</emphasis></superscript>) example
+of a parser that can parse all context-free languages, not just subsets in which ambiguity
+can be resolved with some constant lookahead.
+</para>
+</glossdef>
+</glossentry>
+<glossentry>
+<glossterm>GLL parser</glossterm>
+<glossdef>
+<para>A <link xlink:href="https://www.cs.rhul.ac.uk/research/languages/csle/GLLsketch.html">fully general LL
+parser</link>. An LL parser is one that operates from
+<link xlink:href="https://en.wikipedia.org/wiki/LL_parser">left-to-right using the leftmost derivation</link>.
+Informally, GLL is an LL parser that is capable of resolving ambiguous parsers.
+</para>
+</glossdef>
+</glossentry>
+<glossentry>
+<glossterm>JVM</glossterm>
+<glossdef>
+<para>The <link xlink:href="https://en.wikipedia.org/wiki/Java_virtual_machine">Java virtual machine</link>,
+the platform on which languages like Java, Scala, Groovy, Kotlin, and Clojure operate.</para> 
+</glossdef>
+</glossentry>
+<glossentry>
+<glossterm>X-stack</glossterm>
+<glossdef>
+<para>The X-stack is an informal way of referring to the collection of XML-related
+technologies used to build applications: XML, XSLT, XQuery, XProc, XForms, RESTXQ, etc.
+</para>
+</glossdef>
+</glossentry>
+</glossary>
+
+<bibliography>
+<title>Bibliography</title>
+
+<para>These are some important and/or interesting references. No claim is made that this
+is an exhaustive list.</para>
+
+<bibliomixed xml:id="Brabrand2010" xreflabel="Brabrand et al. 2010">Brabrand, Claus, Robert
+Giegerich, and Anders Möller. “Analyzing Ambiguity of Context-Free Grammars.”
+<citetitle>Science of Computer Programming</citetitle>, volume 75, number 3.
+Elsevier. (2010).
+<link xlink:href="https://cs.au.dk/~amoeller/papers/ambiguity/">https://cs.au.dk/~amoeller/papers/ambiguity/</link>. doi:<biblioid class="doi">10.1016/j.scico.2009.11.002</biblioid>.</bibliomixed>
+
+<bibliomixed xml:id="Grune2016" xreflabel="Grune 2016">Grune, Dick, et. al.
+<citetitle>Modern Compiler Design, second edition</citetitle>.
+Springer Publishing Company. ISBN: <biblioid class="isbn">978-1-4939-4472-9</biblioid>.
+01 May 2016.</bibliomixed>
+
+<bibliomixed xml:id="Loup" xreflabel="Loup">Loup.
+<citetitle xlink:href="https://loup-vaillant.fr/tutorials/earley-parsing/parser"
+>Earley Parsing Explained</citetitle>.</bibliomixed>
+
+<bibliomixed xml:id="Pemberton2022" xreflabel="Pemberton 2022">Pemberton, Steven. “Invisible
+XML Specification.” Published by the Invisible Markup Community Group
+on the web at <link xlink:href="https://invisiblexml.org/1.0/">https://invisiblexml.org/1.0/</link>.</bibliomixed>
+
+<bibliomixed xml:id="Schwarz2012" xreflabel="Schwarz 2012">Schwarz, Keith. 
+<citetitle xlink:href="https://web.stanford.edu/class/archive/cs/cs143/cs143.1128/lectures/07/Slides07.pdf"
+>Advanced Parsing Techniques</citetitle>. CS143: Compilers. Stanford University.</bibliomixed>
+
+<bibliomixed xml:id="Scott2008" xreflabel="Scott 2008">Scott, Elizabeth.
+<citetitle
+xlink:href="https://pure.royalholloway.ac.uk/en/publications/sppf-style-parsing-from-earley-recognisers"
+>SPPF-Style Parsing From Earley Recognisers</citetitle>.
+Electronic Notes in Theoretical Computer Science. 203, 2, p. 53-67, Apr 2008.</bibliomixed>
+
+<bibliomixed xml:id="Scott2010" xreflabel="Scott 2010">Scott, Elizabeth and Adrian Johnstone.
+<citetitle xlink:href="https://dotat.at/tmp/gll.pdf">GLL Parsing</citetitle>.
+Electronic Notes in Theoretical Computer Science. 253, p. 177-189, 2010.</bibliomixed>
+
+<bibliomixed xml:id="Scott2019" xreflabel="Scott 2019"
+>Scott, Elizabeth, Adrian Johnston, and L. Thomas van Binsbergen.
+<citetitle xlink:href="https://pure.royalholloway.ac.uk/en/publications/derivation-representation-using-binary-subtree-sets">Derivation representation using binary subtree sets</citetitle>.
+Science of Computer Programming. 175, p. 63-84 22 p. 15 Apr 2019.</bibliomixed>
+</bibliography>
+
+</book>

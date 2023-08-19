@@ -21,10 +21,12 @@ html {
     line-height: 1.5;
 }
 
+.set,
 .book {
     padding-bottom: 1in;
 }
 
+.set header .fill,
 .book header .fill {
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -32,6 +34,7 @@ html {
     min-height: 640px;
 }
 
+.set header,
 .book header {
     display: table;
     width: 100%;
@@ -45,24 +48,30 @@ html {
     text-align: right;
 }
 
+.set header .cover,
 .book header .cover {
     display: table-row;
 }
 
+.set header .cover .image,
 .book header .cover .image {
     display: table-cell;
     vertical-align: top;
 }
 
+.set header .cover .text,
 .book header .cover .text {
     display: table-cell;
     vertical-align: top;
 }
 
+.set header,
 .book header {
     text-align: center;
 }
 
+.set header .author,
+.set header .copyright,
 .book header .author,
 .book header .copyright {
     display: none;
@@ -74,7 +83,7 @@ main > div > header > h3 {
     padding-top: 3rem;
 }
 
-.book header .versions p {
+header .versions p {
     text-align: center;
 }
 
@@ -91,10 +100,12 @@ main > div > header > h3 {
     margin-top: 0.25em;
 }
 
+.set header img,
 .book header img {
     height: 350px;
 }
 
+.set header h1,
 .book header h1 {
     padding-top: 0.5em;
 }
@@ -131,6 +142,11 @@ main {
 }
 
 /* ============================================================ */
+
+.set nav.top,
+.book nav.top {
+    display: none;
+}
 
 nav .title {
     background-color: var(--theme-background);

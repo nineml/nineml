@@ -80,10 +80,8 @@
         <p>
           <xsl:text>Report generated on </xsl:text>
           <xsl:text>{format-dateTime($rdate, "[D01] [MNn,*-3] [Y0001] at [H01]:[m01]")}</xsl:text>
-          <xsl:text> with CoffeeFilter version </xsl:text>
+          <xsl:text> with version </xsl:text>
           <xsl:text>{$test-report/*/@coffeefilter-version/string()}</xsl:text>
-          <xsl:text> (using CoffeeGrinder version </xsl:text>
-          <xsl:text>{$test-report/*/@coffeegrinder-version/string()})</xsl:text>
           <xsl:text> from a test suite dated </xsl:text>
           <xsl:sequence select="t:date(@release-date)"/>
           <xsl:variable name="dates" as="xs:string*">
