@@ -1,7 +1,7 @@
 /**
- * CoffeeGrinder is an implementation of an Earley parser. An Earley parser is capable
+ * CoffeeGrinder implements both Earley and GLL parsers. Both are capable
  * of using ambiguous grammars. CoffeeGrinder parses (grinds?) a sequence of tokens and
- * returns a Shared Packed Parser Forest.
+ * returns a Shared Packed Parse Forest.
  * Individual parse trees can be obtained from the forest.
  *
  * <h2>References</h2>

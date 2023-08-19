@@ -75,8 +75,8 @@ public class InvisibleXmlParser {
     /**
      * Get metadata.
      *
-     * Pragmas in the prolog that aren't recognized by the processor are returned as
-     * "data" pragmas associating a URI with (a list of) values.
+     * <p>Pragmas in the prolog that aren't recognized by the processor are returned as
+     * "data" pragmas associating a URI with (a list of) values.</p>
      *
      * @return the metadata
      */

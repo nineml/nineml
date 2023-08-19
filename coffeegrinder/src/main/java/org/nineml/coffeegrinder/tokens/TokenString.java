@@ -64,7 +64,7 @@ public class TokenString extends Token {
      * Does this token match the input?
      * <p>This token matches other {@link TokenString token strings} that have the same
      * underlying string. If this is a single character string, it will also match
-     * {@link TokenCharacter TokenCharacters} that are defined with the same character.
+     * {@link TokenCharacter TokenCharacters} that are defined with the same character.</p>
      * @param input The input.
      * @return true if they match.
      */

@@ -88,7 +88,7 @@ public class InvisibleXmlDocument {
     }
 
     /**
-     * Return the underlying {@link EarleyResult} result for this parse.
+     * Return the underlying {@link GearleyResult} result for this parse.
      * @return the result
      */
     public GearleyResult getResult() {

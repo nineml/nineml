@@ -238,10 +238,10 @@ public abstract class XNode {
      * Add characters to a node.
      * <p>Ignores whitespace, throws an exception for any non-whitespace characters.</p>
      * @param chars the characters.
-     * @throws IllegalArgumentException, characters aren't allowed in most places
+     * @throws IllegalArgumentException unless <code>chars</code> is just whitespace
      */
     public void addCharacters(String chars) {
-        if ("".equals(chars.trim())) {
+        if (chars.trim().isEmpty()) {
             return;
         }
         throw new IllegalArgumentException("Unexpected characters in " + this);
