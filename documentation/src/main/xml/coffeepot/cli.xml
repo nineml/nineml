@@ -90,7 +90,7 @@ are taken as the input, separated by single spaces.
 <para>The following additional options are also available:</para>
 
 <variablelist>
-<varlistentry xml:id="_analyze-ambiguity" revisionflag="added">
+<varlistentry xml:id="_analyze-ambiguity">
 <term><option>--analyze-ambiguity</option></term>
 <listitem>
 <para>Applies Anders Møller’s
@@ -103,7 +103,7 @@ that contain a large number of characters such as <code>[L]</code> or
 <code>[LC]</code>.</para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_bnf" revisionflag="added">
+<varlistentry xml:id="_bnf">
 <term><option>--bnf</option></term>
 <listitem>
 <para>Checks if the grammar is a “plain BNF” grammar. This doesn’t
@@ -122,7 +122,7 @@ See <xref linkend="choose-alternative"/>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_config" revisionflag="added">
+<varlistentry xml:id="_config">
 <term><option>--config:<replaceable>file</replaceable></option></term>
 <listitem>
 <para>Load a specific <link linkend="configuration">configuration file</link>.
@@ -154,21 +154,21 @@ See <xref linkend="describe-ambiguity"/>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_disable-pragma" revisionflag="added">
+<varlistentry xml:id="_disable-pragma">
 <term><option>--disable-pragma:<replaceable>pragma</replaceable></option></term>
 <listitem>
 <para>Disables the specified pragma for this parse.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_earley" revisionflag="added">
+<varlistentry xml:id="_earley">
 <term><option>--earley</option></term>
 <listitem>
 <para>Use the Earley parser. Alternatively, <option>--gll</option>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_encoding" revisionflag="added">
+<varlistentry xml:id="_encoding">
 <term><option>--encoding:<replaceable>encoding-name</replaceable></option></term>
 <listitem>
 <para>Use <replaceable>encoding-name</replaceable> when parsing the input.
@@ -198,14 +198,14 @@ See <xref linkend="choose-alternative"/>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_gll" revisionflag="added">
+<varlistentry xml:id="_gll">
 <term><option>--gll</option></term>
 <listitem>
 <para>Use the GLL parser. Alternatively, <option>--earley</option>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_grammar-encoding" revisionflag="added">
+<varlistentry xml:id="_grammar-encoding">
 <term><option>--grammar-encoding:<replaceable>encoding-name</replaceable></option></term>
 <listitem>
 <para>Use <replaceable>encoding-name</replaceable> when parsing the input grammar.
@@ -214,7 +214,7 @@ This must be an encoding name recognized by Java. See also
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_forest" revisionflag="changed">
+<varlistentry xml:id="_forest">
 <term><option>--forest:<replaceable>file</replaceable></option></term>
 <listitem>
 <para>Output an XML representation of the structure of the parse
@@ -223,7 +223,7 @@ the SVG output.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_graph" revisionflag="changed">
+<varlistentry xml:id="_graph">
 <term><option>--graph:<replaceable>file</replaceable></option></term>
 <listitem>
 <para>Output a diagram of the parse forest to the file. This option
@@ -233,7 +233,7 @@ also <option>--graph-format</option>.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_graph-format" revisionflag="added">
+<varlistentry xml:id="_graph-format">
 <term><option>--graph-format:<replaceable>format</replaceable></option></term>
 <listitem>
 <para>Specifies the graph file format. This must be a format
@@ -244,7 +244,7 @@ specified.)
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_graph-option" revisionflag="changed">
+<varlistentry xml:id="_graph-option">
 <term><option>--graph-option:<replaceable>option=value</replaceable></option></term>
 <listitem>
 <para>Passes the specified <code>$option</code> with <literal>value</literal> to the stylesheet 
@@ -294,7 +294,7 @@ Multiple line endings are not combined. In other words,
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_omit-csv-headers" revisionflag="added">
+<varlistentry xml:id="_omit-csv-headers">
 <term><option>--omit-csv-headers</option></term>
 <listitem>
 <para>When generating CSV output, the nonterminal names are used as column headers
@@ -326,7 +326,7 @@ may be used.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_priority-style" revisionflag="added">
+<varlistentry xml:id="_priority-style">
 <term><option>--priority-style:<replaceable>style</replaceable></option></term>
 <listitem>
 <para>There are two styles for managing priorities: <literal>max</literal> and <literal>sum</literal>.
@@ -407,7 +407,7 @@ are specified, a summary of total parse time over all repeats will be printed.</
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_show-hidden-nonterminals" revisionflag="added">
+<varlistentry xml:id="_show-hidden-nonterminals">
 <term><option>--show-hidden-nonterminals</option></term>
 <listitem>
 <para>Include hidden nonterminals in the output. This will include nonterminals from
@@ -416,7 +416,7 @@ the original grammar marked with “-” and also nonterminals generated by the
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_show-marks" revisionflag="added">
+<varlistentry xml:id="_show-marks">
 <term><option>--show-marks</option></term>
 <listitem>
 <para>Include marks in the output. These are added as <tag>ixml:mark</tag> attributes on
@@ -431,7 +431,7 @@ the elements.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_strict-ambiguity" revisionflag="added">
+<varlistentry xml:id="_strict-ambiguity">
 <term><option>--strict-ambiguity</option></term>
 <listitem>
 <para>When priorities or other mechanisms are used to select a parse
@@ -456,14 +456,14 @@ and <code>prefix</code> states can be suppressed.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_time-records" revisionflag="added">
+<varlistentry xml:id="_time-records">
 <term><option>--time-records</option></term>
 <listitem>
 <para>When using record-oriented input, this option enables output of timings for each record.
 </para>
 </listitem>
 </varlistentry>
-<varlistentry xml:id="_trailing-newline" revisionflag="added">
+<varlistentry xml:id="_trailing-newline">
 <term><option>--trailing-newline</option></term>
 <listitem>
 <para>Force a newline at the end of the output?

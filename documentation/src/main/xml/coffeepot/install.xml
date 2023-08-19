@@ -15,7 +15,7 @@ You can <link linkend="running">run CoffeePot</link> directly from the
 
 <para>You can also get CoffeePot from Maven with the following coordinates:</para>
 
-<programlisting linenumbering="unnumbered">&lt;dependency>
+<programlisting language="xml" linenumbering="unnumbered">&lt;dependency>
   &lt;groupId>org.nineml&lt;/groupId>
   &lt;artifactId>coffeepot&lt;/artifactId>
   &lt;version><?version?>&lt;/version>
