@@ -46,13 +46,22 @@
 </xsl:variable>
 
 <xsl:template match="*" mode="m:html-body-script">
-  <xsl:param name="rootbaseuri"/>
-  <xsl:param name="chunkbaseuri"/>
+  <xsl:param name="rootbaseuri" as="xs:anyURI"/>
+  <xsl:param name="chunkbaseuri" as="xs:anyURI"/>
+
   <script src="{$resource-base-uri}js/sectmarks.js"></script>
+
   <!-- hack -->
-  <xsl:if test="ends-with($chunkbaseuri, '/index.html') and self::h:article">
+  <xsl:if test="self::h:article and ends-with(@db-chunk, '/index.html')">
     <div class="nineml-float" title="Part of the NineML family">
-      <a href="../"><img src="../icon/nineml.png" alt="NineML logo"/></a>
+      <a>
+        <xsl:attribute name="href" select="fp:relative-uri($rootbaseuri, $chunkbaseuri, './')"/>
+        <img alt="NineML logo">
+          <xsl:attribute name="src"
+                         select="fp:relative-uri($rootbaseuri, $chunkbaseuri,
+                                                 $resource-base-uri || 'icon/nineml.png')"/>
+        </img>
+      </a>
     </div>
   </xsl:if>
 </xsl:template>
