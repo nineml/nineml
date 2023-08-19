@@ -1,0 +1,121 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 5. Parser options</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-08-19T08:23:20Z"/><meta name="generator" content="DocBook xslTNG version 2.1.8 / 30762c2 / SAXON EE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch04.html"/><link rel="next" href="bk03ch06.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link rel="shortcut icon" href="./icon/CoffeeSacks.png"/><link rel="stylesheet" href="./css/coffeesacks.css"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 4. cs:hygiene-report" href="bk03ch04.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="parser-options" db-chunk="bk03ch05.html" db-id="d481e4581" class="chapter component"><header><h2>Chapter <span class="label">5</span><span class="sep">. </span>Parser options</h2></header>
+
+
+<p>There are two kinds of parser options: parser construction
+options and Invisible XML parser options. For convenience, they’re
+both allowed in the same options map.
+</p>
+
+<section id="parser-options_s1" class="section"><header><h2><span class="label">5<span class="sep">.</span>1</span><span class="sep">. </span>Parser construction options</h2></header>
+
+
+<dl class="long-terms variablelist">
+<div class="varlistentry"><dt><span class="term"><code>choose-alternative</code>, function</span></dt><dd>
+<p>A function that will be called to choose between
+alternatives when the parse is ambiguous. The function
+must have one argument, a sequence of elements, and must return
+an <code class="type">xs:integer</code>. See <a href="../coffeepot/bk02ch06.html" class="xref xref-chapter">Chapter <span class="label">6</span>, Choosing among alternatives</a>.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>disablePragmas</code>, string</span></dt><dd>
+<p>Pragmas to disable. The string may be a comma-separated list of pragma names,
+or the string <code>#all</code> to disable all pragmas.</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>enablePragmas</code>, string</span></dt><dd>
+<p>Pragmas to enable. The string may be a comma-separated list of pragma names,
+or the string <code>#all</code> to enable all pragmas.</p>
+<p>By default, all pragmas are enabled. If both the <code>disablePragmas</code>
+and <code>enablePragmas</code> options are supplied, they will be processed in that order.
+(If you want to enable only a single pragma, you can disable them all, then enable the
+one you want.)</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>format</code>, string</span></dt><dd>
+<p>The output type. One of <code class="literal">xml</code> (an XML node; the default),
+<code class="literal">json</code> or <code class="literal">json-data</code> (a “data” map),
+or <code class="literal">json-text</code> (a “text” map).
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>type</code>, string</span></dt><dd>
+<p>The input type. One of <code class="literal">ixml</code> (an invisible XML grammar),
+<code class="literal">xml</code> or <code class="literal">vxml</code> (a visible XML grammar),
+or <code class="literal">cxml</code> or <code class="literal">compiled</code> (a compiled
+XML grammar).
+</p>
+<p>In most circumstances, you don’t need to specify the input type.</p>
+</dd></div>
+</dl>
+</section>
+
+<section id="parser-options_s2" class="section"><header><h2><span class="label">5<span class="sep">.</span>2</span><span class="sep">. </span>Invisible XML parser options</h2></header>
+
+
+<p>The following parser options are recognized:</p>
+
+<dl class="long-terms variablelist">
+<div class="varlistentry"><dt><span class="term"><code>allowMultipleDefinitions</code>, boolean</span></dt><dd>
+<p>If true, the parser will attempt to use a grammar that contains
+multiple definitions for a given nonterminal.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>allowUndefinedSymbols</code>, boolean</span></dt><dd>
+<p>If true, the parser will attempt to use a grammar that contains
+undefined symbols.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>allowUnproductiveSymbols</code>, boolean</span></dt><dd>
+<p>If true, the parser will attempt to use a grammar that contains
+unproductive symbols.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>allowUnreachableSymbols</code>, boolean</span></dt><dd>
+<p>If true, the parser will attempt to use a grammar that contains
+unreachable symbols.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>ignoreTrailingWhitespace</code>, boolean</span></dt><dd>
+<p>If true, trailing whitespace on the document input string is
+ignored.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>parser</code>, string</span></dt><dd>
+<p>Selects the parser type, <code>Earley</code> for the Earley parser
+and <code>GLL</code> for the GLL parser. The Earley parser is the default.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>showBnfNonterminals</code>, boolean</span></dt><dd>
+<p>If true, the parser will return all of the otherwise hidden nonterminals
+used in the parse.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>showMarks</code>, boolean</span></dt><dd>
+<p>If true, the parser will return all of the nonterminals in your
+grammar as elements, irrespective of their marks. The actual mark will
+be returned in an <code>ixml:mark</code> attribute.</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>strictAmbiguity</code>, boolean</span></dt><dd>
+<p>If true, the parser will mark a result ambiguous even if a user-defined
+function was used to select alternatives. By default, if a user-defined function was
+called, the choice is considered unambiguous.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>suppressAmbiguousState</code>, boolean</span></dt><dd>
+<p>If a parse is ambiguous, Invisible XML mandates that an
+<code class="tag tag-attribute">ixml:state</code> attribute be added to the root
+element contining the value <code>ambiguous</code>. If this option
+is true, that state will be suppressed.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>suppressPrefixState</code>, boolean</span></dt><dd>
+<p>If a parse consumes only a (proper) prefix of the input,
+Invisible XML mandates that an
+<code class="tag tag-attribute">ixml:state</code> attribute be added to the root
+element contining the value <code>prefix</code>. If this option
+is true, that state will be suppressed.
+</p>
+</dd></div>
+</dl>
+
+<p>The function will log errors (unrecognized options or values)
+and ignore the option.</p>
+</section>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Chapter 4. cs:hygiene-report" href="bk03ch04.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk03ch04.html">Chapter <span class="label">4</span><span class="sep">. </span>cs:hygiene-report</a></div><div class="navmiddle"><a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk03ch06.html">Chapter <span class="label">6</span><span class="sep">. </span>RegisterCoffeeSacks</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="/js/sectmarks.js"></script></body></html>
