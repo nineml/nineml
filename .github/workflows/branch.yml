@@ -136,7 +136,7 @@ jobs:
             coffeepot/build/distributions/coffeepot-${{ env.CI_TAG }}.zip
 
       - name: Deploy documentation to gh-pages
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'docs' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: documentation/build/website
@@ -145,7 +145,7 @@ jobs:
           target-folder: /${{ needs.check_branch.outputs.ninemlversion }}/
 
       - name: Deploy nineml.org to gh-pages
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'docs' }}
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           repository-name: nineml/nineml.org
