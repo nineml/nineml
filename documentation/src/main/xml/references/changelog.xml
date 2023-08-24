@@ -16,6 +16,20 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v322">
+<revnumber>3.2.2</revnumber>
+<date>2023-08-24</date>
+<revdescription>
+<para>This release is mostly a large refactor of how the documentation organized, managed,
+and produced. There are also significant new sections about the CoffeeGrinder and CoffeeFilter APIs.
+</para>
+<para audience="coffeegrinder">Javadoc clarifications and improvements. Made parser options
+more consistent in parsers and results.</para>
+<para audience="coffeefilter">Javadoc clarifications and improvements.</para>
+<para audience="coffeesacks"/>
+<para audience="coffeepot">Javadoc clarifications and improvements.</para>
+</revdescription>
+</revision>
 <revision xml:id="v321">
 <revnumber>3.2.1</revnumber>
 <date>2023-08-06</date>
