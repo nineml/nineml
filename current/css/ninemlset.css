@@ -1,0 +1,184 @@
+/* Overrides from the individual books */
+
+:root {
+    --default-font-size: 12.5pt;
+    --default-line-height: 1.5rem;
+}
+
+.set .versions {
+    margin-top: inherit;
+}
+
+.division header .tools {
+    margin-top: 2rem;
+}
+
+.tools tr td,
+.tools tr th {
+    text-align: center;
+    font-size: 80%;
+}
+
+.division header .tools img {
+    height: 200px;
+}
+
+pre[class*="language-"] {
+	padding: 1em;
+	margin: 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"] {
+  padding: 0;
+  border-radius: 0;
+  white-space: normal;
+}
+
+/* ============================================================ */
+
+._sect {
+    text-indent: 0;
+    display: none;
+}
+
+._sect a {
+    text-decoration: none;
+}
+
+.chapter .sectmark {
+    text-indent: 0;
+}
+
+.chapter h2,
+.chapter h3,
+.chapter h4,
+.chapter h5 {
+    padding-left: 1.5rem;
+    margin-left: -1.5rem;
+}
+
+.chapter h2:hover,
+.chapter h3:hover,
+.chapter h4:hover,
+.chapter h5:hover {
+    padding-left: 0;
+}
+
+.chapter h2:hover ._sect,
+.chapter h3:hover ._sect,
+.chapter h4:hover ._sect,
+.chapter h5:hover ._sect {
+    color: rgb(0, 0, 0, 0.25);
+    display: inline-block;
+    width: 1.5rem;
+    text-align: center;
+}
+
+dt:hover ._sect {
+    color: rgb(0, 0, 0, 0.5);
+    display: inline-block;
+    width: 20px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+dt.synopsis {
+    padding-left: 20px;
+}
+
+dt.synopsis:hover {
+    padding-left: 0px;
+}
+
+/* ============================================================ */
+
+.api {
+    font-family: var(--mono-family);
+}
+
+.api-summary dl {
+    font-size: 85%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #7f7f7f;
+}
+
+/*
+.api-summary dl dt.method::before,
+.api-summary dl dt.constructor::before {
+    content: "✧";
+    margin-left: -1.5rem;
+    display: inline-block;
+    width: 1.5rem;
+}
+*/
+
+.api-summary dl dt {
+    background-color: var(--enabled-color);
+    /*padding-left: 0.5rem;*/
+}
+
+.api-summary dl div dt:first-child {
+    border-top: 1px solid #cccccc;
+}
+
+.api-summary dl div:first-child dt:first-child {
+    border-top: inherit;
+}
+
+.api-summary dl dt.purpose::before {
+    content: "— ";
+}
+
+.api-summary dl dt.returns::before,
+.api-summary dl dt.see::before,
+.api-summary dl dt.throws::before,
+.api-summary dl dt.throws::implements,
+.api-summary dl dt.throws::inherited,
+.api-summary dl dt.throws::overrides {
+    content: " ";
+}
+
+.api-summary dl dt.deprecated::before {
+    content: "☞";
+    font-weight: normal;
+}
+
+.api-summary dl dt.deprecated,
+.api-summary dl dt.implements,
+.api-summary dl dt.inherited,
+.api-summary dl dt.overrides,
+.api-summary dl dt.purpose,
+.api-summary dl dt.returns,
+.api-summary dl dt.see,
+.api-summary dl dt.throws {
+    padding-left: 6rem;
+    text-indent: -3rem;
+}
+
+.api-summary dl dt.inherited {
+    font-style: italic;
+}
+
+.api-summary dl dt.deprecated {
+    font-weight: bold;
+}
+
+.api-summary dl div {
+    margin-bottom: 1rem;
+    padding: 0;
+    border-radius: 4px;
+}
+
+.api-summary dd {
+    padding-right: 1rem;
+}
+
+.api-summary code {
+    border: none;
+    background-color: inherit;
+    padding: 0;
+    font-size: 100%;
+}
