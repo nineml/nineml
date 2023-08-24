@@ -122,8 +122,10 @@
                   select="subsequence($statuses, 1, 30)"/>
             </xsl:call-template>
 
-            <p>See <xsl:value-of select="count($statuses) - 30"/>
-            more statuses in yearly archives.</p>
+            <xsl:if test="count($statuses) gt 30">
+              <p>See <xsl:value-of select="count($statuses) - 30"/>
+              more statuses in yearly archives.</p>
+            </xsl:if>
           </article>
         </main>
       </body>

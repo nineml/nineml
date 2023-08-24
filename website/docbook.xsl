@@ -278,14 +278,14 @@
                           else $docbook"/>
 
     <div class="infofooter">
-      <xsl:variable name="years" select="root($db-node)/db:set/db:info/db:copyright/db:year"/>
+      <xsl:variable name="years" select="root($db-node)/*/db:info/db:copyright/db:year"/>
       <span class="copyrightfooter">
         <xsl:text>Copyright</xsl:text>
         <xsl:text> &#xA9; </xsl:text>
         <xsl:value-of select="$years[1]"/>
         <xsl:if test="count($years) gt 1">
           <xsl:text>–</xsl:text>
-          <xsl:value-of select="root($db-node)/db:set/db:info/db:copyright/db:year[last()]"/>
+          <xsl:value-of select="$years[last()]"/>
         </xsl:if>
         <xsl:text> Norman Walsh.</xsl:text>
       </span>
