@@ -16,7 +16,7 @@
   const display_versions = function(ghpages) {
     const vermap = {};
     ghpages.forEach(entry => {
-      if (entry.type === "dir") {
+      if (entry.type === "dir" && entry.name.match(/^\d/)) {
         const sortKey = sort_key(entry.name);
         vermap[sortKey] = entry.name;
       }
@@ -28,8 +28,6 @@
     verkeys.forEach(key => {
       versions.push(vermap[key]);
     });
-
-    console.log(versions);
 
     if (versions.length == 1) {
       window.location = "/" + versions[0];
