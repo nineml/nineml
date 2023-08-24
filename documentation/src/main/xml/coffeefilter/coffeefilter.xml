@@ -1,0 +1,167 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="coffeefilter"
+      version="5.2">
+<info>
+<?db filename='coffeefilter/index.html'?>
+<mediaobject role="cover">
+  <imageobject>
+    <imagedata fileref="images/CoffeeFilter.png"/>
+  </imageobject>
+</mediaobject>
+<title>CoffeeFilter</title>
+<subtitle>An Invisible XML parser in Java</subtitle>
+<author>
+  <personname>Norm Tovey-Walsh</personname>
+</author>
+<copyright><year>2022</year><year>2023</year><holder>Norm Tovey-Walsh</holder></copyright>
+<productnumber/>
+</info>
+
+<preface>
+<title>Introduction</title>
+<para>CoffeeFilter is an
+<link xlink:href="https://invisiblexml.org/">Invisible XML</link> parsing
+library.</para>
+<para>Its performance against the
+<link xlink:href="https://invisiblexml.org/test-catalog/">iXML Community Group Test Suite</link>
+is recorded in the <link xlink:href="test-report/">test report</link>.
+</para>
+</preface>
+
+<chapter xml:id="cf_general-use">
+<title>General use</title>
+
+<para>CoffeeFilter is an API for parsing with Invisible XML. You can
+use it to construct a parser for an Invisible XML grammar, then parse
+input with that parser.</para>
+
+<para>The examples in this section are taken from “running code” that you can find in
+<filename>src/test/java/org/nineml/examples/CoffeeFilterExamples</filename> in
+the repository. The code lives in the unit testing framework, but doesn’t
+depend on that framework.</para>
+
+<para>This is just an overview, consult the 
+<link xlink:href="apidoc">JavaDoc</link> for more details.</para>
+
+<section>
+<title>Constructing a parser</title>
+
+<para>The first example uses a small grammar for parsing numbers. This is very similar
+to the grammar used for the <link linkend="cg_general-use">CoffeeGrinder example</link>
+except that it’s been expressed in somewhat more idiomatic iXML.</para>
+
+<programlisting language="ixml"
+><xi:include
+  href="../../../../../coffeefilter/src/test/resources/numbers.ixml"
+  parse="text"
+/></programlisting>
+
+<para>Begin by making
+an <link linkend="c_org.nineml.coffeefilter.InvisibleXml">InvisibleXml</link>
+object.</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeefilter/src/test/java/org/nineml/examples/CoffeeFilterExamples.java"
+  fragid="search=/new ParserOptions/,/InvisibleXml/;strip"
+  parse="text"
+/></programlisting>
+
+<para>There are a number of
+<link linkend="c_org.nineml.coffeefilter.ParserOptions">options</link>
+that you can specify to control various aspects of the parse, but the
+defaults are reasonable.
+</para>
+
+</section>
+<section>
+<title>Parsing the input</title>
+
+<para>From the <classname>InvisibleXml</classname> object, we can get
+<link linkend="c_org.nineml.coffeefilter.InvisibleXmlParser">a parser</link> for
+a particular grammar and parse input with it to obtain
+<link linkend="c_org.nineml.coffeefilter.InvisibleXmlDocument">a document</link>:
+</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeefilter/src/test/java/org/nineml/examples/CoffeeFilterExamples.java"
+  fragid="search=/File grammar/,/XmlDocument/;strip"
+  parse="text"
+/></programlisting>
+
+<para>Methods on the document can be used to check if the parse succeeded. If it did,
+we can construct a result tree.</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeefilter/src/test/java/org/nineml/examples/CoffeeFilterExamples.java"
+  fragid="search=/document.succeeded/,2/}/;strip"
+  parse="text"
+/></programlisting>
+
+</section>
+<section>
+<title>Processing the results</title>
+
+<para>The <link linkend="m_org.nineml.coffeefilter.InvisibleXmlDocument.getTree__">getTree()</link>
+method returns a string. There are other methods for accessing the
+forest that can use builders to construct trees:
+</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeefilter/src/test/java/org/nineml/examples/CoffeeFilterExamples.java"
+  fragid="search=2/document.succeeded/,2/}/;strip"
+  parse="text"
+/></programlisting>
+
+<para>Builders can be used to construct a generic tree of “plain old Java objects” or
+send events to a SAX content handler to construct the tree.</para>
+
+</section>
+<section>
+<title>Ambiguous results</title>
+
+<para>In the case of ambiguous results, you can ask how many trees there are:</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeefilter/src/test/java/org/nineml/examples/CoffeeFilterExamples.java"
+  fragid="search=/getNumberOfParses/,2/}/;strip"
+  parse="text"
+/></programlisting>
+
+<para>Beware that in an infinitely ambigous forest, the number returned is wildely inaccurate
+(in as much as it is <emphasis>infinitely</emphasis> less than ∞!). It tells you something about
+how the forest divides into ambiguous branches, but doesn’t attempt to account for loops.</para>
+</section>
+
+</chapter>
+
+<chapter xml:id="cf_limitations">
+<title>Limitations</title>
+
+<para>This chapter documents an assortment of implementation defined features and limitations.
+</para>
+
+<itemizedlist>
+<listitem>
+<para>The version of Unicode available depends on the version of Java used to build the
+library. This effects which <link linkend="character-classes">character classes</link> are
+recognized.</para>
+</listitem>
+<listitem>
+<para>The ambiguity analyzer depends on its own Unicode support which does not include
+characters outside the basic multilingual plane. Also, character classes with many members
+tend to make it run more slowly.</para>
+</listitem>
+</itemizedlist>
+
+</chapter>
+
+<xi:include href="apidocs.xml"/>
+
+</book>

@@ -1,0 +1,20 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="api_cp"
+      version="5.2">
+<title>API Documentation</title>
+
+<partintro>
+<para>The chapters that follow summarize the primary APIs in CoffeePot.
+You will find additional APIs described in the
+<link xlink:href="apidoc/">Javadoc API documentation</link>.
+</para>
+</partintro>
+
+<chapter xml:id="cp_options">
+<title>Parser options</title>
+<xi:include href="../../../../build/xml/coffeepot/ParserOptions.xml"/>
+</chapter>
+
+</part>

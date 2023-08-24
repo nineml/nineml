@@ -23,19 +23,19 @@
 and a GLL parser.
 This parser forms the basis for the Invisible XML parser, but is limited to
 simple grammars. The
-<link xlink:href="https://coffeegrinder.nineml.org/apidoc/">JavaDoc</link> describes
+<link xlink:href="https://docs.nineml.org/current/coffeegrinder/">documentation</link> describes
 the API.</para>
 </listitem>
 <listitem>
 <para>CoffeeFilter is an implementation of an Invisible XML processor.
 This project provides the underlying Invisible XML parsing.
-The <link xlink:href="https://coffeefilter.nineml.org/apidoc/">JavaDoc</link> describes
+The <link xlink:href="https://docs.nineml.org/current/coffeefilter/">documentation</link> describes
 the API.</para>
 </listitem>
 <listitem>
 <para>CoffeePot is a command line tool for parsing Invisible XML grammars and transforming
 inputs with them. Consult the
-<link xlink:href="https://coffeepot.nineml.org/">user’s guide</link>
+<link xlink:href="https://docs.nineml.org/current/coffeepot/">user’s guide</link>
 for more information.
 </para>
 </listitem>
@@ -43,7 +43,7 @@ for more information.
 <para>CoffeeSacks provides a set of
 <link xlink:href="https://saxonica.com/">Saxon</link> extension functions for
 processing Invisible XML documents from with XSLT or XQuery. Consult the
-<link xlink:href="https://coffeesacks.nineml.org/">user’s guide</link>
+<link xlink:href="https://docs.nineml.org/current/coffeesacks">user’s guide</link>
 for more information.
 </para>
 </listitem>

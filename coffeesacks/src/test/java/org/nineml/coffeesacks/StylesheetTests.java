@@ -172,7 +172,7 @@ public class StylesheetTests extends TestConfiguration {
 
     @Test
     public void numbers() {
-        XdmNode stylesheet = loadStylesheet("src/website/xml/decimal.xsl");
+        XdmNode stylesheet = loadStylesheet("src/test/resources/decimal.xsl");
         XdmNode result = transform(stylesheet, stylesheet);
         String xml = serialize(result);
         Assertions.assertTrue(xml.contains("<decimal>42"));

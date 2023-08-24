@@ -5,8 +5,8 @@ import org.nineml.logging.Logger;
 
 /**
  * Options to the parser.
- * <p>This object is extended by other members of the NineML family to provide additional options.
- * It started out as a collection of public fields, but changed to a more traditional collection of
+ * <p>Parser options are extended by other members of the NineML family to provide additional options.
+ * This class started out as a collection of public fields, but changed to a more traditional collection of
  * getters and setters when it began to develop options that were not entirely independent.</p>
  */
 public class ParserOptions {
@@ -20,9 +20,9 @@ public class ParserOptions {
     private boolean markAmbiguities = false;
 
     /**
-     * Create the parser options.
+     * Create parser options.
      * <p>The initial logger will be a {@link DefaultLogger} initialized with
-     * {@link DefaultLogger#readSystemProperties readSystemProperties()}.</p>
+     * {@link DefaultLogger#readSystemProperties()}.</p>
      */
     public ParserOptions() {
         logger = new DefaultLogger();
@@ -37,7 +37,7 @@ public class ParserOptions {
     }
 
     /**
-     * Create the parser options with an explicit logger.
+     * Create parser options with an explicit logger.
      * @param logger the logger.
      */
     public ParserOptions(Logger logger) {
@@ -45,9 +45,9 @@ public class ParserOptions {
     }
 
     /**
-     * Create a new set of options from an existing set.
-     * <p>Beware that the logger and monitor are not copied, so the copied options have pointers to the
-     * same logger and monitor instances.</p>
+     * Create parser options by copying an existing set of options.
+     * <p>Note that the logger and monitor are not copied, so the created options share the same
+     * logger and progress monitor as the options copied.</p>
      * @param copy the options to copy
      */
     public ParserOptions(ParserOptions copy) {
@@ -62,15 +62,17 @@ public class ParserOptions {
     }
 
     /**
-     * Return the default parser type.
-     * @return The default parser type, "Earley" or "GLL"
+     * Get the parser type.
+     * <p>The parser type will be "Earley" or "GLL".</p>
+     * @return the current parser type, "Earley" or "GLL"
      */
     public String getParserType() {
         return parserType;
     }
 
     /**
-     * Set the default parser type.
+     * Set the parser type.
+     * <p>You must specify "Earley" or "GLL".</p>
      * @param parserType the parser type, "Earley" or "GLL"
      * @throws IllegalArgumentException if the parser type is not recognized
      */
@@ -84,14 +86,19 @@ public class ParserOptions {
 
     /**
      * Return the Earley chart even for a successful parse?
-     * @return true if the Earley chart should be returned even for an unsuccessful parse
+     * <p>If this option is enabled, the chart will be returned even for a successful parse.
+     * (If the parse fails, the chart is always returned.)</p>
+     * <p>The chart can only be returned if the Earley parser is used. The GLL parser doesn't
+     * manage the parse with state charts in the same way.</p>
+     * @return true if the Earley chart should be returned even for a successful parse.
      */
     public boolean getReturnChart() {
         return returnChart;
     }
 
     /**
-     * Set the {@link #getReturnChart()} property.
+     * Set the return chart property.
+     * <p>See {@link #getReturnChart()}.</p>
      * @param returnChart return the chart?
      */
     public void setReturnChart(boolean returnChart) {
@@ -99,10 +106,10 @@ public class ParserOptions {
     }
 
     /**
-     * If a parse fails, but some prefix of the input was successfully parsed, make that available.
-     *
-     * <p>This is optional mostly because it requires internally buffering some of the input tokens.
-     * (Probably no more than two, but I haven't tried to prove that.)</p>
+     * Is prefix parsing enabled?
+     * <p>If an Earley parse fails, but some prefix of the input was successfully parsed,
+     * make that available for continuing the parse. This is optional mostly because it requires
+     * internally buffering some of the input tokens, but probably no more than a few.</p>
      *
      * @return true if prefix parsing is enabled.
      */
@@ -111,25 +118,16 @@ public class ParserOptions {
     }
 
     /**
-     * Set the {@link #getPrefixParsing()} property.
-     * @param prefixParsing prefix parsing?
+     * Enable prefix parsing?
+     * @param prefixParsing true if prefix parsing should be enabled
      */
     public void setPrefixParsing(boolean prefixParsing) {
         this.prefixParsing = prefixParsing;
     }
 
     /**
-     * Return prunable nonterminals in parse trees?
-     * <p>If true, prunable nonterminals will be returned. Depending on how your grammar is
-     * defined, this may lead to much larger memory allocation when extracting trees from
-     * the forest.</p>
-     *
-     * @return true if prunable nonterminals will be in parse trees.
-     */
-
-    /**
-     * The parser logger.
-     * <p>The logger controls what messages are issued, and how. This component is also used by
+     * Get the parser logger.
+     * <p>The logger controls what messages are displayed, and how. This component is also used by
      * higher-level components such as CoffeeFilter, CoffeePot, and CoffeeSacks.</p>
      * @return the logger.
      */
@@ -150,10 +148,10 @@ public class ParserOptions {
     }
 
     /**
-     * The progress monitor.
-     * <p>If this option is not null, the monitor will be called before, during, and after
+     * Get the progress monitor.
+     * <p>If a progress monitor is present, it will be called before, during, and after
      * the parse.</p>
-     * @return the monitor
+     * @return the monitor, or null if no monitor is enabled
      */
     public ProgressMonitor getProgressMonitor() {
         return monitor;
@@ -169,12 +167,15 @@ public class ParserOptions {
     }
 
     /**
-     * The priority style.
-     * <p>Priorities can be computed on one of two styles: "<code>max</code>" or "<code>sum</code>".</p>
-     * <p>If the priority style is "<code>max</code>", the priority of any given node is the highest priority
-     * value in the subgraph rooted at the current node.</p>
-     * <p>If the priority style is "<code>sum</code>", the priority of any given node is the sum of the priorities
-     * of the nodes in the subgraph rooted at the current node.</p>
+     * Get the priority style.
+     * <p>Priorities can be computed on one of two styles: <code>max</code> or <code>sum</code>.</p>
+     * <ul>
+     *     <li>If the priority style is <code>max</code>, the priority of any given node is the highest priority
+     *     value in the subgraph rooted at that node.</li>
+     *     <li>If the priority style is <code>sum</code>, the priority of any given node is the sum of the priorities
+     *     of the nodes in the subgraph below it.</li>
+     * </ul>
+     * <p>The default is <code>max</code>.</p>
      * @return the priority style
      */
     public String getPriorityStyle() {
@@ -183,8 +184,9 @@ public class ParserOptions {
 
     /**
      * Set the priority style.
-     * <p>The style can be "<code>max</code>" or "<code>sum</code>". The default is "<code>max</code>".</p>
+     * <p>The style can be <code>max</code> or <code>sum</code>. </p>
      * @param style the priority style.
+     * @throws IllegalArgumentException if the style is unrecognized.
      */
     public void setPriorityStyle(String style) {
         if ("max".equals(style) || "sum".equals(style)) {
@@ -195,7 +197,7 @@ public class ParserOptions {
     }
 
     /**
-     * Should line endings be normalized?
+     * Normalize line endings?
      * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
      * string are replaced with a single #A. This only applies to sequences of characters
      * in the input.</p>
@@ -206,10 +208,8 @@ public class ParserOptions {
     }
 
     /**
-     * Set normalize line endings
-     * <p>If line endings are normalized, all occurrences of #D, #D#A, #85, and #2028 in the input
-     * string are replaced with a single #A. This only applies to sequences of characters
-     * in the input.</p>
+     * Enable normalizing line endings?
+     * <p>See {@link #getNormalizeLineEndings()}.</p>
      * @param normalize true if line endings should be normalized
      */
     public void setNormalizeLineEndings(boolean normalize) {
@@ -217,7 +217,11 @@ public class ParserOptions {
     }
 
     /**
-     * Are individual ambiguities be marked?
+     * Are ambiguities marked?
+     * <p>CoffeeGrinder doesn't use this option, but it's defined here so that it will be passed
+     * to CoffeeFilter. If ambiguities are to be marked, additional markup (attributes or processing
+     * instructions) are included in the forests returned in order to indicate where ambiguous choices
+     * were made).</p>
      * @return true if ambiguities will be normalized
      */
     public boolean getMarkAmbiguities() {
@@ -225,8 +229,8 @@ public class ParserOptions {
     }
 
     /**
-     * Set ambiguity marking.
-     * @param mark true if individual ambiguities should be marked.
+     * Shall ambiguities be marked?
+     * @param mark true if ambiguities should be marked.
      */
     public void setMarkAmbiguities(boolean mark) {
         markAmbiguities = mark;

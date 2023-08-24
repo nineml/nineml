@@ -1,0 +1,261 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="coffeegrinder"
+      version="5.2">
+<info>
+<?db filename='coffeegrinder/index.html'?>
+<mediaobject role="cover">
+  <imageobject>
+    <imagedata fileref="images/CoffeeGrinder.png"/>
+  </imageobject>
+</mediaobject>
+<title>CoffeeGrinder</title>
+<subtitle>Earley and Generalized LL parsers in Java</subtitle>
+<author>
+  <personname>Norm Tovey-Walsh</personname>
+</author>
+<copyright><year>2022</year><year>2023</year><holder>Norm Tovey-Walsh</holder></copyright>
+<productnumber/>
+</info>
+
+<preface xml:id="pref">
+<title>Introduction</title>
+
+<para>This package provides an implementation of two different parsers:
+an
+<link xlink:href="https://en.wikipedia.org/wiki/Earley_parser">Earley parser</link>
+and a
+<link xlink:href="https://pure.royalholloway.ac.uk/portal/en/publications/gll-parsing(94ca4516-d72c-41ff-b11f-24b14ba15f2d).html"
+>Generalized LL (GLL) parser</link>.
+Both parsing algorithms are able to use grammars that are ambiguous. These APIs
+parse a sequence of tokens and return a parse forest.
+Individual parse trees can be obtained from the forest.</para>
+
+<section>
+<title>Why two parsers?</title>
+
+<para>After implementing the Earley parser, I decided to implement the
+GLL parser in the hopes that it would be substantially faster than the
+Earley parser. After investing some effort optimizing the GLL
+implementation it appears to be a faster than the Earley parser, but
+not dramatically so. (Both parsers are “fast enough” for a lot of
+projects, but if your goal is parsing megabytes of input, you may be
+disappointed.)</para>
+
+<para>Both parser implementations expose the same interface. The
+Earley parser has one feature that the GLL parser does not: it is
+possible to extract a “prefix parse” and restart parsing after the
+prefix. Suppose for example, you have a grammar that recognizes
+<code>a+</code>. If you give it the input “<literal>aaabbb</literal>,
+you can extract the graph for the recognized prefix “aaa” even though
+parse as a whole did not succeed. You can subsequently restart parsing
+at “bbb” with the same or a different parser.</para>
+
+<para>Conversely, the GLL parser represents derivations not with a
+shared packed parse forest (SPPF) directly, but with binary subtree
+sets (BSRs). It may be possible to improve the performance of the GLL
+parser further by directly extracting trees from the BSRs rather than
+converting it into an SPPF first. But my initial explorations of this
+idea were unsuccessful. (There’s part of the paper that describes BSRs
+that I don’t understand.)</para>
+</section>
+</preface>
+
+<chapter xml:id="cg_general-use">
+<title>General use</title>
+
+<para>CoffeeGrinder is the lowest-level parser API. You can use it to
+build a grammar, construct a parser with that grammar, and then parse
+input with that parser. But you have to build all the pieces with Java
+APIs.</para>
+
+<para>The examples in this section are taken from “running code” that you can find in
+<filename>src/test/java/org/nineml/examples/CoffeeGrinderExamples</filename> in
+the repository. The code lives in the unit testing framework, but doesn’t
+depend on that framework.</para>
+
+<para>This is just an overview, consult the 
+<link xlink:href="apidoc">JavaDoc</link> for more details.</para>
+
+<section>
+<title>Constructing a grammar</title>
+
+<para>In this section, we’ll construct a small grammar for parsing
+numbers: integers (1, 2, -7), floating point numbers (3.14, -2.7), and
+numbers in “scientific notation” (1.0E6, -2.3E-7). The first thing you
+need to do to build a parser is construct a source grammar:
+</para>
+
+ <programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/ParserOptions/,/SourceGrammar/;strip"
+  parse="text"
+/></programlisting>
+
+<para>There are a number of
+<link linkend="c_org.nineml.coffeegrinder.parser.ParserOptions">options</link>
+that you can
+specify to control various aspects of the parse, but the defaults are reasonable.
+A <link linkend="c_org.nineml.coffeegrinder.parser.SourceGrammar">source grammar</link>
+is where you build the BNF rules for your grammar.
+</para>
+
+<para>With a grammar in hand, you add rules to it. Rules define nonterminals in terms
+of other nonterminals and terminal symbols. The example grammar for parsing numbers
+begins by defining four nonterminals: one for numbers in general and then one for each
+of the three kinds of numbers.</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/number =/,/scientific =/;strip"
+  parse="text"
+/></programlisting>
+
+<para>(All nonterminals created with the same grammar and the same
+name are “the same”, even if they’re created in different places.)</para>
+
+<para>Once created, you define nonterminals with rules:</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/number, integer/,/number, scientific/;strip"
+  parse="text"
+/></programlisting>
+
+<para>These rules say that a number is either an <code>integer</code>, a <code>floatpt</code>,
+or a <code>scientific</code>. The nonterminal <code>sign</code> is defined in terms of
+terminal symbols <code>+</code> and <code>-</code>.
+Note that the last rule defines <code>sign</code> with “nothing on the right hand side”.
+That allows <code>sign</code> to match the empty sequence (often called ε in the literature).</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/Symbol plus/,/(sign)/;strip"
+  parse="text"
+/></programlisting>
+
+<para>Additional rules define digits and the rest of the decimal forms.</para>
+
+</section>
+<section>
+<title>Constructing a parser</title>
+
+<para>Once the source grammar is complete, it must be turned into a
+<link linkend="c_org.nineml.coffeegrinder.parser.ParserGrammar">parser grammar</link>
+in order to construct a parser:</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/startSymbol/,/ParserGrammar/;strip"
+  parse="text"
+/></programlisting>
+
+<para>The parser grammar must be constructed for a particular start
+symbol, the nonterminal that the parser will be attempting to match.
+Unlike source grammars, parser grammars are immutable.</para>
+
+</section>
+<section>
+<title>Parsing the input</title>
+
+<para>From a parser grammar, we can get
+<link linkend="c_org.nineml.coffeegrinder.parser.GearleyParser">an actual parser</link>.
+And from a parser, we can get
+<link linkend="c_org.nineml.coffeegrinder.parser.GearleyResult">a result</link>:</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/GearleyParser/,/GearleyResult/;strip"
+  parse="text"
+/></programlisting>
+
+<para>Methods on the result can be used to check if the parse succeeded. If it did,
+we can construct a result tree.</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/result.succeeded/,2/}/;strip"
+  parse="text"
+/></programlisting>
+
+</section>
+<section>
+<title>Processing the results</title>
+
+<para>The result of a successful parse is a
+<link linkend="c_org.nineml.coffeegrinder.parser.ParseForest">parse forest</link>.</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/ParseForest/,/ParseForest/;strip"
+  parse="text"
+/></programlisting>
+
+<para>The parse tree (or trees, in the case of an ambiguous parse) are
+obtained from the forest with <link linkend="c_org.nineml.coffeegrinder.trees.Arborist">an
+arborist</link>.</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/getArborist/,/getArborist/;strip"
+  parse="text"
+/></programlisting>
+
+<para>There are two kinds of
+<link linkend="c_org.nineml.coffeegrinder.trees.Arborist">arborists</link>,
+<link linkend="c_org.nineml.coffeegrinder.trees.Lumberjack">lumberjacks</link>
+who
+work sequentially through the forest returning all of the parses and
+<link linkend="c_org.nineml.coffeegrinder.trees.TreeSurgeon">tree surgeons</link>
+who return a single tree. The kind of arborist you get
+is determined by <link linkend="c_org.nineml.coffeegrinder.trees.Axe">the axe</link> you use. The
+default axe is the
+<classname linkend="c_org.nineml.coffeegrinder.trees.SequentialAxe">SequentialAxe</classname> that returns
+all of the parses.
+The <classname linkend="c_org.nineml.coffeegrinder.trees.PriorityAxe">PriorityAxe</classname>
+returns the highest priority parses first.
+The <classname linkend="c_org.nineml.coffeegrinder.trees.RandomAxe">RandomAxe</classname>
+returns a random parse.</para>
+
+<para>Trees are constructed by an arborist by calling methods on a
+<link linkend="c_org.nineml.coffeegrinder.trees.TreeBuilder">tree builder</link>.
+CoffeeGrinder comes with three
+standard tree builders: <classname>GenericTreeBuilder</classname> that constructs a generic
+tree of branches and leaves; <classname>PrintStreamTreeBuilder</classname> that prints
+the results (<classname>StdoutTreeBuilder</classname> sends them to standard output);
+and <classname>StringTreeBuilder</classname> that returns them as a string.
+The print stream and string tree builders represent the trees using XML.
+</para>
+
+</section>
+<section>
+<title>Ambiguous results</title>
+
+<para>In the case of ambiguous results, you can ask how many trees there are:</para>
+
+<programlisting language="java"
+><xi:include
+  href="../../../../../coffeegrinder/src/test/java/org/nineml/examples/CoffeeGrinderExamples.java"
+  fragid="search=/getParseTreeCount/,2/}/;strip"
+  parse="text"
+/></programlisting>
+
+<para>Beware that in an infinitely ambigous forest, the number returned is wildely inaccurate
+(in as much as it is <emphasis>infinitely</emphasis> less than ∞!). It tells you something about
+how the forest divides into ambiguous branches, but doesn’t attempt to account for loops.</para>
+</section>
+</chapter>
+
+<xi:include href="apidocs.xml"/>
+<xi:include href="reference.xml"/>
+</book>

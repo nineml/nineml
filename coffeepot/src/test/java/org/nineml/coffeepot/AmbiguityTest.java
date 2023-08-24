@@ -18,7 +18,7 @@ public class AmbiguityTest {
         CoffeePotTest.WrappedPrintStream stderr = new CoffeePotTest.WrappedPrintStream();
         Main main = new Main(stdout.stream, stderr.stream);
         try {
-            OutputManager manager = main.commandLine(new String[] {"-g:src/website/xml/examples/ambig01.ixml",
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/ambig01.ixml",
                     "--parse-count:all", "Shimmer" });
             Assertions.assertEquals(2, manager.stringRecords.size());
 

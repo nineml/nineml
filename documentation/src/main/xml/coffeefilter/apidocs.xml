@@ -1,0 +1,27 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="api_cf"
+      version="5.2">
+<title>API Documentation</title>
+
+<partintro>
+<para>The chapters that follow summarize the primary APIs in CoffeeFilter.
+You will find additional APIs described in the
+<link xlink:href="apidoc/">Javadoc API documentation</link>.
+</para>
+</partintro>
+
+<chapter xml:id="cf_options">
+<title>Parser options</title>
+<xi:include href="../../../../build/xml/coffeefilter/ParserOptions.xml"/>
+</chapter>
+
+<chapter xml:id="cf_ixml">
+<title>Invisible XML</title>
+<xi:include href="../../../../build/xml/coffeefilter/InvisibleXml.xml"/>
+<xi:include href="../../../../build/xml/coffeefilter/InvisibleXmlParser.xml"/>
+<xi:include href="../../../../build/xml/coffeefilter/InvisibleXmlDocument.xml"/>
+</chapter>
+
+</part>

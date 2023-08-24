@@ -70,4 +70,4 @@ jobs:
           git submodule update
           ./gradlew test
           ./gradlew -PparserType=gll :coffeefilter:testSuite
-          ./gradlew -PparserType=earley dist website
+          ./gradlew -PparserType=earley dist docset website

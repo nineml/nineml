@@ -1,0 +1,28 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi='http://www.w3.org/2001/XInclude'
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="parseroptions_cg"
+         version="5.2">
+<title>Parser options</title>
+
+<?class-summary org.nineml.coffeegrinder.parser.ParserOptions?>
+
+<para>The extensions by <link linkend="parseroptions_cf">CoffeeFilter</link>
+and <link linkend="parseroptions_cp">CoffeePot</link> are also documented.
+</para>
+
+<section role="api-summary">
+<title>Constructor summary</title>
+<para>A new parser options object can be constructed with default options, with an explicit
+logger, or by copying an existing set of options.</para>
+
+<?constructor-summary org.nineml.coffeegrinder.parser.ParserOptions?>
+</section>
+
+<section role="api-summary">
+<title>Method summary</title>
+<para>Public methods in the options are used to query and specify option values.</para>
+<?method-summary org.nineml.coffeegrinder.parser.ParserOptions?>
+</section>
+
+</chapter>

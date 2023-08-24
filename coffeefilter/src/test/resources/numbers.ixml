@@ -1,0 +1,10 @@
+    number = integer | float | scientific .
+      sign = '+' | '-' .
+    -digit = ['0'-'9'] .
+    digits = digit+ .
+   integer = sign?, digits .
+     point = -'.' .
+     float = sign?, digits, point, digits .
+         E = -'E' .
+scientific = integer, E, sign?, digits
+           | float, E, sign?, digits .

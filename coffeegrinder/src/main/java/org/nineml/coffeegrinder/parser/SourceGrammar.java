@@ -10,9 +10,10 @@ import java.util.*;
  * A grammar for the parser.
  *
  * <p>A grammar is a list of rules. Each rule defines a non-terminal symbol as a sequence of zero or
- * more symbols (terminal or nonterminal).</p>
+ * more symbols ({@link TerminalSymbol terminals} or {@link NonterminalSymbol nonterminals}).</p>
  *
- * <p>A grammar can be used to create a parser for that grammar.</p>
+ * <p>A grammar can be used to create a parser. The parser will (successfully) parse inputs that
+ * match the rules in the grammar.</p>
  */
 public class SourceGrammar extends Grammar {
     public static final String logcategory = "Grammar";
@@ -25,7 +26,7 @@ public class SourceGrammar extends Grammar {
     protected final ParserType defaultParserType;
 
     /**
-     * Create a new grammar.
+     * Create a new grammar with default options.
      */
     public SourceGrammar() {
         this(new ParserOptions());
@@ -34,8 +35,12 @@ public class SourceGrammar extends Grammar {
     /**
      * Create a new grammar with a specific set of options.
      * @param options The options.
+     * @throws NullPointerException if options is null.
      */
     public SourceGrammar(ParserOptions options) {
+        if (options == null) {
+            throw new NullPointerException("Null options");
+        }
         id = nextGrammarId++;
         this.options = options;
         if ("Earley".equals(options.getParserType())) {
@@ -48,7 +53,6 @@ public class SourceGrammar extends Grammar {
 
     /**
      * Create a new grammar from an existing grammar.
-     * <p>This is a convenient way to extend a previously closed grammar.</p>
      * @param current the grammar to copy
      */
     public SourceGrammar(SourceGrammar current) {
@@ -77,9 +81,9 @@ public class SourceGrammar extends Grammar {
      * <p>Nonterminal symbols are uniquely identified by their name.</p>
      * <p>Any string can be used as a name.</p>
      * @param name The name of this symbol.
-     * @param attribute an attribute
+     * @param attribute an attribute.
      * @return The nonterminal for the name specified.
-     * @throws NullPointerException if the name is null or the attribute is null
+     * @throws NullPointerException if the name is null or the attribute is null.
      */
     public NonterminalSymbol getNonterminal(String name, ParserAttribute attribute) {
         if (attribute == null) {
@@ -96,7 +100,6 @@ public class SourceGrammar extends Grammar {
      * @param attributes attributes to associate with this symbol, may be null
      * @return The nonterminal for the name specified.
      * @throws NullPointerException if the name is null.
-     * @throws GrammarException if the symbol already exists and attributes are different
      */
     public NonterminalSymbol getNonterminal(String name, List<ParserAttribute> attributes) {
         options.getLogger().trace(logcategory, "Creating nonterminal %s for grammar %d", name, id);
@@ -105,8 +108,11 @@ public class SourceGrammar extends Grammar {
 
     /**
      * Add a rule to the grammar.
-     * <p>Multiple rules can exist for the same {@link NonterminalSymbol}. There must be at least
-     * one rule for every nonterminal symbol that occurs on the "right hand side" of a rule.</p>
+     * <p>Multiple rules can exist for the same {@link NonterminalSymbol}. There should be at least
+     * one rule for every nonterminal symbol that occurs on the "right hand side" of a rule.
+     * A symbol that is undefined but unreachable from the specified start symbol when parsing,
+     * isn't forbidden by CoffeeGrinder, but it is by CoffeeFilter.
+     * </p>
      * <p>Once added, a rule can never be removed.</p>
      * @param rule The rule to add
      * @throws GrammarException if any nonterminal in the rule is not from this grammar, or if the grammar is closed

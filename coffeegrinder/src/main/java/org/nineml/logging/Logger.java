@@ -65,12 +65,12 @@ public abstract class Logger {
      * Set the log levels by reading system properties.
      * <p>The properties are:</p>
      * <ul>
-     *     <li>{@link #defaultLogLevelProperty}
+     *     <li><p><code>{@link #defaultLogLevelProperty}</code></p>
      *     <p>Must be an integer specifying the initial default log level or one of the strings
      *     "silent", "error", "warning", "info", "debug", or "trace". Absent this property,
      *     the default level is 5, or "error".</p>
      *     </li>
-     *     <li>{@link #logLevelsProperty}
+     *     <li><p><code>{@link #logLevelsProperty}</code></p>
      *     <p>This property specifies a mapping between log categories and the log level for each category.
      *     The format of the property is a list of comma or space separated values of the form
      *     "category:level". The category "*" sets the default log level.</p>

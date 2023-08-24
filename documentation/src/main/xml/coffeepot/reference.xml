@@ -1,0 +1,13 @@
+<part xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi='http://www.w3.org/2001/XInclude'
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xml:id="reference_cp"
+      version="5.2">
+<title>Reference</title>
+<partintro>
+<para>These appendixes contain reference information and implementation notes.</para>
+</partintro>
+
+<xi:include href="changelog.xml"/>
+
+</part>

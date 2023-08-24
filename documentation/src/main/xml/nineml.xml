@@ -1,0 +1,99 @@
+<set xmlns="http://docbook.org/ns/docbook"
+     xmlns:xi='http://www.w3.org/2001/XInclude'
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xml:id="nineml"
+     version="5.2">
+<info>
+<mediaobject role="cover">
+  <imageobject>
+    <imagedata fileref="images/nineml.png"/>
+  </imageobject>
+</mediaobject>
+<title>NineML</title>
+<subtitle>A suite of parsing tools for the JVM</subtitle>
+<author>
+  <personname>Norm Tovey Walsh</personname>
+</author>
+<copyright>
+  <year>2022</year>
+  <year>2023</year>
+  <holder>Norm Tovey-Walsh</holder>
+</copyright>
+<productname>NineML</productname>
+<productnumber></productnumber>
+</info>
+
+<book xml:id="introduction">
+<info>
+<?db filename='introduction/index.html'?>
+<mediaobject role="cover">
+  <imageobject>
+    <imagedata fileref="images/nineml.png"/>
+  </imageobject>
+</mediaobject>
+<title>Introduction</title>
+<subtitle>A suite of parsing tools for the JVM</subtitle>
+<author>
+  <personname>Norm Tovey-Walsh</personname>
+</author>
+<copyright><year>2022</year><year>2023</year><holder>Norm Tovey-Walsh</holder></copyright>
+</info>
+<preface>
+<title>Introduction</title>
+<para>Welcome.</para>
+<para>These pages are the primary documentation for NineML. NineML is
+a suite of (inter)related projects that support parsing documents with
+<link xlink:href="https://invisiblexml.org/">Invisible XML</link> and
+writing parsers. The lower level parsing APIs are capable of more (and
+less!) than parsing iXML.</para>
+<para>At the time of this writing, August 2023, this set of documentation
+is a little bit experimental. The projects have previously been documented
+independently, but I think integrated documentation will be easier to read
+and understand (and easier to write!). But I’ve been wrong before.</para>
+</preface>
+<preface>
+<title>The NineML suite</title>
+
+<para>There are, broadly, five projects in the current NineML suite.</para>
+
+<para>If you’re interested in <emphasis>using</emphasis> Invisible XML, combining a grammar with
+some input to produce XML (or JSON, or CSV), then you probably want to start
+with <citetitle xlink:href="#coffeepot">CoffeePot</citetitle>.</para>
+
+<para>If you’re interested in doing that <emphasis>inside</emphasis> other
+<glossterm>X-stack</glossterm> technologies
+such as XSLT stylesheets or XProc pipelines, you may also be interested in
+<citetitle xlink:href="#coffeesacks">CoffeeSacks</citetitle> or
+<citetitle>CoffeePress</citetitle>. (CoffeePress, the XProc step implementation, isn’t as
+far a long at the moment; I’m planning to work on that.)</para>
+
+<para>If you want to integrate Invisible XML processing into
+<emphasis>your own</emphasis> projects on the <glossterm>JVM</glossterm>, start
+with <citetitle xlink:href="#coffeefilter">CoffeeFilter</citetitle>.
+</para>
+
+<para>Finally, if you want to write your own applications on top of a general
+<glossterm baseform="Earley parser">Earley</glossterm> or
+<glossterm baseform="GLL parser">GLL</glossterm> parser,
+start with <citetitle xlink:href="#coffeegrinder">CoffeeGrinder</citetitle>.
+</para>
+
+<section>
+<title>Dependencies</title>
+
+<para>CoffeeFilter uses CoffeeGrinder, CoffeeSacks uses CoffeeFilter, and CoffeePot uses
+CoffeeFilter and CoffeeSacks. CoffeePress uses CoffeeFilter.</para>
+
+<para>At the implementation level, the ambiguity analyzer feature of CoffeeGrinder also
+depends on Anders Möller’s <link xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link>.
+</para>
+</section>
+</preface>
+</book>
+
+<xi:include href="coffeepot/coffeepot.xml"/>
+<xi:include href="coffeesacks/coffeesacks.xml"/>
+<xi:include href="coffeefilter/coffeefilter.xml"/>
+<xi:include href="coffeegrinder/coffeegrinder.xml"/>
+<xi:include href="references/references.xml"/>
+</set>

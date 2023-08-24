@@ -1,0 +1,601 @@
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xi='http://www.w3.org/2001/XInclude'
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xml:id="changelog"
+          version="5.2">
+<info>
+<?db filename='../changelog.html'?>
+<title>Unified change log</title>
+</info>
+
+<para>This appendix is a unified change log for all of the NineML
+components in this repository.</para>
+
+<!--
+N.B.: the log is used automatically in the release notes for each component.
+-->
+
+<revhistory role="changelog">
+<revision xml:id="v322">
+<revnumber>3.2.2</revnumber>
+<date>2023-08-24</date>
+<revdescription>
+<para>This release is mostly a large refactor of how the documentation organized, managed,
+and produced. There are also significant new sections about the CoffeeGrinder and CoffeeFilter APIs.
+</para>
+<para audience="coffeegrinder">Javadoc clarifications and improvements. Made parser options
+more consistent in parsers and results.</para>
+<para audience="coffeefilter">Javadoc clarifications and improvements.</para>
+<para audience="coffeesacks"/>
+<para audience="coffeepot">Javadoc clarifications and improvements.</para>
+</revdescription>
+</revision>
+<revision xml:id="v321">
+<revnumber>3.2.1</revnumber>
+<date>2023-08-06</date>
+<revdescription>
+<para audience="coffeegrinder">Fixes
+<link xlink:href="https://github.com/nineml/nineml/issues/17">a bug</link> in
+prefix parsing.</para>
+<para audience="coffeefilter"/>
+<para audience="coffeesacks"/>
+<para audience="coffeepot"/>
+</revdescription>
+</revision>
+<revision xml:id="v320">
+<revnumber>3.2.0</revnumber>
+<date>2023-08-04</date>
+<revdescription>
+<para audience="coffeegrinder">Reworked how the <classname>Arborist</classname> classes track
+and provide descriptions of how ambiguity was resolved.</para>
+<para audience="coffeefilter"/>
+<itemizedlist audience="coffeesacks">
+<listitem>
+<para>Fixed a bug in the construction of the graph that
+an <classname>XPathAxe</classname> gets to inspect. Nodes were inadvertantly being
+processed many (many!) times in ambiguous forests making the construction very slow.</para>
+</listitem>
+<listitem>
+<para>Changed the <classname>XmlForest</classname> used for resolving ambiguities in the
+<classname>XPathAxe</classname> so that it includes nodes for intermediate states.
+</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem>
+<para>The <option>--describe-ambiguity</option> option was broken in
+the previous 3.x releases. It was a fair bit of effort to restore it. The descriptions
+have changed a bit and the <literal>api-xml</literal> option has been removed (the “API” flavor
+is returned by the <literal>xml</literal> option).
+</para>
+</listitem>
+<listitem>
+<para>Added an <option>--axe</option> option and support for a <literal>random</literal> axe.
+</para>
+</listitem>
+<listitem>
+<para>Added a <option>--trim</option> option to trim leading and trailing whitespace off
+the input. (This can be handy if you have input in a file, your editor automatically adds
+a newline at the end of the file, and your grammar doesn’t support trailing whitespace.)
+</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+<revision xml:id="v310">
+<revnumber>3.1.0</revnumber>
+<date>2023-08-01</date>
+<revdescription>
+<itemizedlist audience="coffeegrinder">
+<listitem>
+<para>Added support for marking horizontal ambiguities with processing
+instructions.</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeefilter">
+<listitem>
+<para>Added support for specifying an alternate start symbol for parsing.
+This is not conformant behavior, but is useful for converted grammars that may
+have otherwise unreachable states.</para>
+</listitem>
+<listitem>
+<para>Added more checks for grammars provided in XML form. Removed some unused rules
+from the internal pragmas grammar.</para>
+</listitem>
+<listitem>
+<para>Improved the way ambiguity is detected and reported.</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeesacks">
+<listitem>
+<para>Refactored the way parser options are constructed. There’s now a separate
+options object for each grammar and parser.
+</para>
+</listitem>
+<listitem>
+<para>Cleaned up the names of the parser options that can be passed in the XPath
+options map.</para>
+</listitem>
+<listitem>
+<para>Fixed a bug where the default Axe failed to report ambiguous choices if there
+were no selectors (XPath expressions or functions) provided at all.
+</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem>
+<para>Hygiene issues with the grammar are now logged at the debug level.
+</para>
+</listitem>
+<listitem>
+<para>Added a <option>--start-symbol</option> option to select an alternate start symbol.
+</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision xml:id="v300">
+<revnumber>3.0.0</revnumber>
+<date>2023-07-29</date>
+<revdescription>
+<itemizedlist audience="coffeegrinder">
+<listitem>
+<para>Many improvements and bug fixes in the GLL parser. It is now often (slightly)
+faster than the Earley parser and should be just as reliable.
+</para>
+</listitem>
+<listitem>
+<para>Refactored how trees are returned from the forest. In principle, it is possible
+to retrieve all of the trees.</para>
+</listitem>
+<listitem>
+<para>When prefix parsing is enabled, it is now possible to continue the parse with
+a different parser.</para>
+</listitem>
+<listitem>
+<para>Refactored tests to use JUnit 5 exclusively, many new and improved tests.</para>
+</listitem>
+<listitem>
+<para>Refactored and improved how and where terminals can be matched with regular
+expressions. Regular expression matches work with both parsers.</para>
+</listitem>
+<listitem>
+<para>Many improvements to the <filename>forest2dot.xsl</filename> stylesheet that
+produces forest diagrams.</para>
+</listitem>
+<listitem><para>Added an option to analyze the grammar for ambiguity
+with Anders Møller’s
+<link xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link>.
+(Note that the analyzer jar file is included in the repository, but
+it isn’t bundled with CoffeeGrinder, you need to add it to your class
+path. It is bundled with CoffeePot.)</para>
+</listitem>
+<listitem>
+<para>Parser attributes (used internally to track marks and other
+features) have been renamed so that they’re all URIs. Added an
+attribute to track nonterminal priority. (To guide selection in
+ambiguous forests.)
+</para>
+</listitem>
+<listitem>
+<para>Added an option to normalize line endings on input.
+</para>
+</listitem>
+<listitem>
+<para>Added an option to mark ambiguities. When enabled, this option
+identifies places in the tree where an ambiguous choice was made.
+(It currently only works for “vertical” ambiguities between nonterminals.)
+</para>
+</listitem>
+</itemizedlist>
+
+<itemizedlist audience="coffeefilter">
+<listitem>
+<para>All of the NineML core components have been updated to version 3.0.0; 
+CoffeeFilter incorporates the changes in
+<link xlink:href="https://coffeegrinder.nineml.org/changelog.html#v300">CoffeeGrinder</link>
+3.0.0.</para>
+</listitem>
+<listitem>
+<para>Added support for the <link xlink:href="https://invisiblexml.org/pr/193/index.html">renaming
+proposal</link> provided that the grammar identifies itself as version 1.1 (or 1.1-nineml).
+</para>
+</listitem>
+<listitem>
+<para>Refactored how pragmas are processed; removed the unused “token” pragma.</para>
+</listitem>
+<listitem><para>Removed the “rewrite” pragma; it can be replaced with standard features:
+deletion and insertion. Removed the default priority pragma because it didn’t actually seem
+useful.
+</para></listitem>
+<listitem><para>Removed the notion of compiled grammars and the cache of compiled grammars.
+</para></listitem>
+<listitem>
+<para>Added an option to omit headers when generating CSV output.</para>
+</listitem>
+<listitem>
+<para>Added support for the “mark ambiguities” option. When enabled
+<code>n:ambiguous="true"</code> attributes are added to the XML
+trees.</para>
+</listitem>
+</itemizedlist>
+
+<itemizedlist audience="coffeesacks">
+<listitem>
+<para>All of the NineML core components have been updated to version 3.0.0; 
+CoffeeSacks incorporates the changes in
+<link xlink:href="https://coffeegrinder.nineml.org/changelog.html#v300">CoffeeGrinder</link>
+and
+<link xlink:href="https://coffeefilter.nineml.org/changelog.html#v300">CoffeeFilter</link>
+3.0.0.</para>
+</listitem>
+<listitem>
+<para>The API for resolving ambiguities has been completely refactored to align with 
+CoffeeGrinder.</para>
+</listitem>
+</itemizedlist>
+
+<itemizedlist audience="coffeepot">
+<listitem>
+<para>All of the NineML core components have been updated to version 3.0.0; 
+CoffeePot incorporates the changes in
+<link xlink:href="https://coffeegrinder.nineml.org/changelog.html#v300">CoffeeGrinder</link>,
+<link xlink:href="https://coffeefilter.nineml.org/changelog.html#v300">CoffeeFilter</link>,
+and
+<link xlink:href="https://coffeesacks.nineml.org/changelog.html#v300">CoffeeSacks</link>,
+3.0.0.</para>
+</listitem>
+<listitem>
+<para>Many new command line options and configuration properties have been
+added; a few have been renamed or removed.</para>
+</listitem>
+<listitem>
+<para>CoffeePot will now work with either Saxon 11 or Saxon 12.</para>
+</listitem>
+<listitem><para>Undefined symbols are no longer allowed, even when not in pedantic mode.
+Undefined symbols are almost always an error and lead to very confusing error messages.
+</para></listitem>
+<listitem><para>Added an option to analyze the grammar for ambiguity
+with Anders Møller’s <link
+xlink:href="https://www.brics.dk/grammar/">ambiguity analyzer</link>.
+</para>
+</listitem>
+<listitem>
+<para>Support for compiled grammars and grammar compilation has been removed.
+</para>
+</listitem>
+<listitem>
+<para>Fixed a number of small serialization bugs.</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>2.2.3</revnumber>
+<date>2023-06-15</date>
+<revdescription>
+<para audience='coffeefilter'>Fixed a typo: <methodname>setStrictAmbiguity</methodname> was setting the wrong
+internal flag.</para>
+    <itemizedlist audience='coffeesacks'>
+    <listitem>
+    <para>If a user-supplied function is called to choose an alternative, assume an
+    <emphasis>unambiguous</emphasis> choice has always been made.
+    Support the <literal>strictAmbiguity</literal> option to override this behavior.
+    </para>
+    </listitem>
+    <listitem>
+    <para>Support the <code>disablePragmas</code> and <code>enablePragmas</code> options
+    to selectively disable or enable individual pragma types.
+    </para>
+    </listitem>
+    </itemizedlist>
+    <itemizedlist audience='coffeepot'>
+    <listitem>
+    <para>Support <code>disable-pragmas</code> and <code>enable-pragmas</code> in the
+    options property file and <code>--disable-pragma</code> and <code>--enable-pragma</code>
+    on the command line.</para>
+    </listitem>
+    <listitem>
+    <para>Support <code>--graph-svg-option</code> on the command line to set options for
+    the SVG graph output.</para>
+    </listitem>
+    <listitem>
+    <para>Improved support for reporting infinitely ambiguous
+    grammars. A loop that extends through several non-terminals will
+    now be detected and reported <emphasis>if</emphasis> the parse
+    tree generated attempted to traverse that loop. The processor
+    doesn’t enumerate every possible parse, so it may fail to detect
+    loops that are on branches it does not explore.</para>
+    </listitem>
+    </itemizedlist>
+</revdescription>
+</revision>
+<revision>
+<revnumber>2.2.2</revnumber>
+<date>2023-06-15</date>
+<revdescription>
+<itemizedlist audience='coffeefilter'>
+<listitem>
+<para>Added options to enable and disable pragmas. Individual pragmas can be enabled or
+disabled by name. Specify the name <code>#all</code> to enable or disable them all.</para>
+</listitem>
+<listitem>
+<para>Added a <code>strictAmbiguity</code> option. If <code>strictAmbiguity</code> is true,
+then a grammar will be marked ambiguous even if user-supplied priorities uniquely determined
+every outcome. Added an event builder option to track whether or not any ambiguous choices
+were made.</para>
+</listitem>
+<listitem>
+<para>Added a warning message if a priority pragma is applied to a literal. Parsing doesn’t
+distinguish between different occurrences of literals so the priority is unavailable when
+resolving ambiguities.</para>
+</listitem>
+</itemizedlist>
+<para audience='coffeesacks'>Never released.</para>
+    <para audience='coffeepot'>Fixed bug where CoffeePot had a runtime dependency on
+    Saxon EE. (It can use Saxon EE, and EE is required for loading dynamic function
+    libraries, but EE isn’t required for basic functionality.)</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>2.2.1</revnumber>
+<date>2023-05-17</date>
+<revdescription>
+<para audience="coffeegrinder">Fixed a small bug in the presentation of alternative parses when
+there is ambiguity. Nonterminal symbols in the alternative choices did
+not necessarily have the correct attributes.</para>
+<para audience='coffeefilter'/>
+    <para audience='coffeesacks'>Further refined the way XML is constructed for choosing alternatives. The
+    “left” and “right” sides of each alternative are now sorted so that the “left” alternative
+    always matches input tokens that precede the “right” alternative. The CoffeeGrinder update
+    also assures that the attributes associated with nonterminal symbols are correct.
+    </para>
+    <para audience='coffeepot'>Fixed bug where choices were not always presented in a
+    logical order (earlier matches before later matches) when
+    displaying alternatives. Updated CoffeeGrinder and fixed
+    stylesheet so that marks on nonterminals are included when
+    describing ambiguity.</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>2.2.0</revnumber>
+<date>2023-05-06</date>
+<revdescription>
+<itemizedlist audience="coffeegrinder">
+<listitem>
+<para>CoffeeGrinder now carefully distinguishes between nonterminals
+with different attributes. This introduces new nonterminals into
+the grammar. These can be examined by calling
+<methodname>resolveDuplicates</methodname> on the
+<classname>SourceGrammar</classname>.</para>
+<para>If, for example, you have two instances of a nonterminal
+“B” in the grammar, where one has a mark attribute of “^” and the
+other a mark attribute of “@”, after resolving duplicates there
+will be two nonterminals in the grammar, “B” and “B₁”. They will
+match the same inputs, but is now possible to distinguish between
+them in the parse forest.</para>
+<para>One particular use for this feature is the priority attribute
+supported by CoffeeFilter. This attribute allows the grammar author
+to associate priorities with nonterminals in ambiguous grammars to
+guide the parse.</para>
+</listitem>
+<listitem>
+<para audience="coffeegrinder">All of the infrastructure associated with “pruning” nonterminals
+that lead to ε has been removed. (It hasn’t actually be used for at
+least a couple of releases.)
+</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience='coffeefilter'>
+<listitem>
+<para>Leveraging changes to the CoffeeGrinder implementation, the priority
+pragma now works correctly.
+</para>
+</listitem>
+<listitem>
+<para>References to “pruning” nonterminals has been removed (because it’s been
+removed from CoffeeGrinder).
+</para>
+</listitem>
+</itemizedlist>
+    <para audience='coffeesacks'>Updated the way the <link linkend="choose-alternative">choose alternative</link>
+    function is called to assure that the first element in the list is always the
+    current “best” choice.</para>
+    <para audience='coffeepot'>Changed the <link linkend="cli">--show-grammar</link> option to display the
+    grammar after duplicates have been resolved. Also changed the display to include marks.
+    Documented the <literal linkend="pragma-priority">priority</literal> pragma.
+    Removed the <literal>combine</literal>
+    and <literal>regex</literal> pragmas from the documentation; I’m not convinced they work
+    correctly.</para>
+</revdescription>
+</revision>
+<revision>
+  <revnumber>2.1.0</revnumber>
+  <date>2023-04-23</date>
+  <revdescription>
+  <para audience="coffeegrinder">Updated the API for choosing among
+  alternatives to supply the immediate context.</para>
+  <para audience='coffeefilter'/>
+    <para audience='coffeesacks'>Added <link linkend="choose-alternative">support</link>
+    for providing a function to choose among alternative parses.</para>
+    <para audience='coffeepot'>Added <link linkend="choose-alternative">support</link>
+    for choosing between ambiguous parses using either an extension function or
+    XPath expressions.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.0.3</revnumber>
+  <date>2023-04-15</date>
+  <revdescription>
+    <para audience='coffeefilter'>Corrected the encoding of the C0 and C1 control characters. Changed the encoding of
+    <literal>&gt;</literal> so that it is always encoded as <literal>&amp;gt;</literal>. (This assures
+    that the output will never accidentally enclude <literal>]]&gt;</literal> which marks
+    the end of a CDATA section.)</para>
+    <itemizedlist audience='coffeesacks'>
+      <listitem>
+        <para>If a UTF-8 grammar or input file begins with a byte-order-mark (BOM), the
+        BOM is ignored. Set the “ignore BOM” option to
+        <literal>false</literal> to disable this behavior.</para>
+      </listitem>
+      <listitem>
+        <para>Updated to use CoffeeFilter version 2.0.3 which supports ignoring the BOM
+        and fixes errors in the serialization fo control characters (that’s not actually
+        relevant to CoffeeSacks which doesn’t serialize the results).
+        </para>
+      </listitem>
+      <listitem>
+        <para>The build system has been updated to use Gradle version 8.0.2.</para>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist audience='coffeepot'>
+      <listitem>
+        <para>Updated to use CoffeeFilter version 2.0.3 which corrects errors in
+        the serialization of control characters in attributes and text content (and changes
+        the serialization of <literal>&gt;</literal> to always be <literal>&amp;gt;</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>If a UTF-8 grammar or input file begins with a byte-order-mark (BOM), the
+        BOM is ignored. A new configuration property <literal>ignore-bom</literal> can be
+        set to <literal>false</literal> to disable this behavior.</para>
+      </listitem>
+      <listitem>
+        <para>The build system has been updated to use Gradle version 8.0.2.</para>
+      </listitem>
+    </itemizedlist>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.0.2</revnumber>
+  <date>2023-04-14</date>
+  <revdescription>
+    <para audience='coffeefilter'>Fix encoding of characters per the
+  <link xlink:href="https://www.w3.org/TR/xslt-xquery-serialization-31/#xml-output">XML Output Method</link>
+  of <citetitle>XSLT and XQuery Serialization 3.1</citetitle>.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.0.1</revnumber>
+  <date>2023-04-13</date>
+  <revdescription>
+    <itemizedlist audience='coffeefilter'>
+      <listitem>
+        <para>Fixed <link xlink:href="https://github.com/nineml/coffeefilter/issues/98">#98</link>.
+        Added an option to ignore the Unicode BOM on UTF-8 files. It’s
+        enabled by default.</para>
+      </listitem>
+      <listitem>
+        <para>Resolved <link xlink:href="https://github.com/nineml/coffeefilter/pull/97">#97</link>.
+        Improved the encoding of carriage returns in the output. If a
+        carriage return in the output is not followed by a line feed,
+        it will be encoded as <code>&amp;#d;</code> so that an XML
+        parse of the output won’t normalize it away.</para>
+      </listitem>
+      <listitem>
+        <para>Fixed <link xlink:href="https://github.com/nineml/coffeefilter/issues/96">#96</link>.
+        Improved error reporting. In the case where a parse fails with
+        an unexpected character, if the character is not a visible ASCII character,
+        the output includes the codepoint of the character.</para>
+      </listitem>
+      <listitem>
+        <para>Tinkered with the GitHub branch workflow so that it won’t attempt to use the SSH private
+        key if it isn’t configured as a secret.</para>
+      </listitem>
+    </itemizedlist>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>2.0.0</revnumber>
+  <date>2023-04-10</date>
+  <revdescription>
+  <para>Making the 2.x code base the current release.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>1.99.1</revnumber>
+  <date>2022-06-17</date>
+  <revdescription>
+  <para audience="coffeegrinder">Second pre-release with GLL support;
+  substantial refactoring of the internals and a new API for getting
+  trees from the parse forest.
+  </para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>1.99.0</revnumber>
+  <date>2022-06-08</date>
+  <revdescription>
+  <para audience="coffeegrinder">First pre-release that included GLL parser support. Updated to the
+Invisible XML 1.0 grammar.</para>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>1.1.0</revnumber>
+  <date>2022-04-16</date>
+  <revdescription>
+  <para audience="coffeegrinder">Internal changes to support the 15 April 2022 Invisible XML “insertions” feature, version 1.1.0</para>
+    <para audience='coffeefilter'>Support for the 15 April 2022 specification, version 1.1.0</para>
+    <para audience='coffeefilter'>The most significant changes are:</para>
+    <orderedlist audience='coffeefilter'>
+      <listitem><para>The “<symbol>repeat0</symbol>” and “<symbol>repeat1</symbol>”
+      separator characters are now doubled: “<literal>item*','</literal>” becomes
+      “<literal>item**','</literal>”, and “<literal>item+','</literal>” becomes
+      “<literal>item++','</literal>”.</para>
+      </listitem>
+      <listitem><para>The semantics of “^” before a literal have changed. It now
+      signals an insertion. The grammar fragment “<literal>'a', ^'-', 'b'</literal>”
+      matches an “a” followed <emphasis>immediately</emphasis> by a “b”, but the
+      XML output will be “a-b”. The text marked “^” matches nothing but is inserted
+      in the output. The insertion character
+      <link xlink:href="https://github.com/invisibleXML/ixml/issues/72">may change</link>.
+    </para>
+      </listitem>
+      <listitem><para>At least one whitespace character or comment is required
+      between rules. (This is very unlikely to have any practical consequence
+      since most grammar authors start a new rule on a new line. But where
+      “<literal>a:'1'.b:'2'.</literal> used to be allowed, you must now
+      write “<literal>a:'1'. b:'2'.</literal>. This avoids
+      <link xlink:href="https://github.com/invisibleXML/ixml/issues/48">an ambiguity</link>
+      in the grammar.)</para>
+      </listitem>
+    </orderedlist>
+    <para audience='coffeesacks'>Support for the 15 April 2022 specification, version 1.1.0</para>
+    <para audience='coffeepot'>Support for the 15 April 2022 specification, version 1.1.0</para>
+    <para audience='coffeepot'>The most significant changes are:</para>
+    <orderedlist audience='coffeepot'>
+      <listitem><para>The “<symbol>repeat0</symbol>” and “<symbol>repeat1</symbol>”
+      separator characters are now doubled: “<literal>item*','</literal>” becomes
+      “<literal>item**','</literal>”, and “<literal>item+','</literal>” becomes
+      “<literal>item++','</literal>”.</para>
+      </listitem>
+      <listitem><para>The semantics of “^” before a literal have changed. It now
+      signals an insertion. The grammar fragment “<literal>'a', ^'-', 'b'</literal>”
+      matches an “a” followed <emphasis>immediately</emphasis> by a “b”, but the
+      XML output will be “a-b”. The text marked “^” matches nothing but is inserted
+      in the output. The insertion character
+      <link xlink:href="https://github.com/invisibleXML/ixml/issues/72">may change</link>.
+    </para>
+      </listitem>
+      <listitem><para>At least one whitespace character or comment is required
+      between rules. (This is very unlikely to have any practical consequence
+      since most grammar authors start a new rule on a new line. But where
+      “<literal>a:'1'.b:'2'.</literal> used to be allowed, you must now
+      write “<literal>a:'1'. b:'2'.</literal>. This avoids
+      <link xlink:href="https://github.com/invisibleXML/ixml/issues/48">an ambiguity</link>
+      in the grammar.)</para>
+      </listitem>
+    </orderedlist>
+  </revdescription>
+</revision>
+<revision>
+  <revnumber>1.0.0</revnumber>
+  <date>2022-03-20</date>
+  <revdescription>
+  <para>Initial release, version 1.0.0</para>
+  </revdescription>
+</revision>
+</revhistory>
+
+</appendix>

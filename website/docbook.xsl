@@ -31,14 +31,16 @@
 
 <xsl:param name="section-toc-depth" select="1"/>
 
-<xsl:param name="resource-base-uri" select="'/'"/>
+<!--
+<xsl:param name="resource-base-uri" select="'./'"/>
+-->
 
 <xsl:param name="sections-inherit-from" select="'component section'"/>
 <xsl:param name="callout-default-column" select="50"/>
 
 <xsl:param name="chunk-section-depth" select="0"/>
 <xsl:param name="chunk-include" as="xs:string*"
-           select="('parent::db:book')"/>
+           select="('parent::db:set', 'parent::db:book', 'parent::db:part')"/>
 
 <xsl:param name="persistent-toc" select="'true'"/>
 <xsl:variable name="v:toc-open" as="element()">
@@ -60,6 +62,37 @@
               xmlns:db="http://docbook.org/ns/docbook"
               xmlns="http://www.w3.org/1999/xhtml">
   <xsl:document>
+    <db:set>
+      <header>
+        <tmp:apply-templates select="db:mediaobject[@role='cover']"/>
+        <tmp:apply-templates select="db:title">
+          <h1><tmp:content/></h1>
+        </tmp:apply-templates>
+        <tmp:apply-templates select="db:subtitle">
+          <h2><tmp:content/></h2>
+        </tmp:apply-templates>
+        <tmp:apply-templates select="db:author">
+          <div class="author">
+            <h3><tmp:content/></h3>
+          </div>
+        </tmp:apply-templates>
+        <tmp:apply-templates select="db:releaseinfo">
+          <p class="releaseinfo">
+            <tmp:content/>
+          </p>
+        </tmp:apply-templates>
+        <tmp:apply-templates select="db:pubdate">
+          <p class="pubdate"><tmp:content/></p>
+        </tmp:apply-templates>
+        <tmp:apply-templates select="db:legalnotice"/>
+        <tmp:apply-templates select="db:abstract"/>
+        <tmp:apply-templates select="db:revhistory"/>
+        <tmp:apply-templates select="db:copyright"/>
+        <tmp:apply-templates select="db:productnumber"/>
+        <tmp:apply-templates select="db:productname"/>
+      </header>
+    </db:set>
+
     <db:book>
       <header>
         <tmp:apply-templates select="db:mediaobject[@role='cover']"/>
@@ -87,6 +120,7 @@
         <tmp:apply-templates select="db:revhistory"/>
         <tmp:apply-templates select="db:copyright"/>
         <tmp:apply-templates select="db:productname"/>
+        <tmp:apply-templates select="db:productnumber"/>
       </header>
     </db:book>
   </xsl:document>
@@ -107,7 +141,7 @@
   <!-- hack -->
   <xsl:if test="ends-with($chunkbaseuri, '/index.html')">
     <div class="nineml-float" title="Part of the NineML family">
-      <a href="https://nineml.org/"><img src="/icon/nineml.png" alt="NineML logo"/></a>
+      <a href="https://nineml.org/"><img src="{$resource-base-uri}iconx/nineml.png" alt="NineML logo"/></a>
     </div>
   </xsl:if>
 </xsl:template>
@@ -125,14 +159,16 @@
 
   <xsl:if test="$chunk">
     <span class="nav">
-      <a title="{$docbook/db:book/db:info/db:title}" href="{$top/@db-chunk/string()}">
-        <i class="fas fa-home"></i>
-      </a>
+      <xsl:if test="exists($top)">
+        <a title="{$docbook/db:book/db:info/db:title}" href="{fp:relative-link(., $top)}">
+          <i class="fas fa-home"></i>
+        </a>
+      </xsl:if>
       <xsl:text>&#160;</xsl:text>
 
       <xsl:choose>
         <xsl:when test="exists($prev)">
-          <a href="{$prev/@db-chunk/string()}" title="{f:title-content($prev)}">
+          <a title="{f:title-content($prev, true())}" href="{fp:relative-link(., $prev)}">
             <i class="fas fa-arrow-left"></i>
           </a>
         </xsl:when>
@@ -146,7 +182,7 @@
 
       <xsl:choose>
         <xsl:when test="exists($up)">
-          <a title="{f:title-content($up)}" href="{$up/@db-chunk/string()}">
+          <a title="{f:title-content($up, true())}" href="{fp:relative-link(., $up)}">
             <i class="fas fa-arrow-up"></i>
           </a>
         </xsl:when>
@@ -160,8 +196,7 @@
 
       <xsl:choose>
         <xsl:when test="exists($next)">
-          <a title="{f:title-content($next)}"
-             href="{$next/@db-chunk/string()}">
+          <a title="{f:title-content($next, true())}" href="{fp:relative-link(., $next)}">
             <i class="fas fa-arrow-right"></i>
           </a>
         </xsl:when>
@@ -192,21 +227,21 @@
     <div class="navrow">
       <div class="navleft">
         <xsl:if test="count($prev)>0">
-          <a title="{f:title-content($prev)}" href="{$prev/@db-chunk/string()}">
+          <a title="{f:title-content($prev, true())}" href="{fp:relative-link(., $prev)}">
             <i class="fas fa-arrow-left"></i>
           </a>
         </xsl:if>
       </div>
       <div class="navmiddle">
         <xsl:if test="exists($top)">
-          <a title="{f:title-content($top)}" href="{$top/@db-chunk/string()}">
+          <a title="{f:title-content($top, true())}" href="{fp:relative-link(., $top)}">
             <i class="fas fa-home"></i>
           </a>
         </xsl:if>
       </div>
       <div class="navright">
         <xsl:if test="count($next)>0">
-          <a title="{f:title-content($next)}" href="{$next/@db-chunk/string()}">
+          <a title="{f:title-content($next, true())}" href="{fp:relative-link(., $next)}">
             <i class="fas fa-arrow-right"></i>
           </a>
         </xsl:if>
@@ -215,17 +250,25 @@
 
     <div class="navrow">
       <div class="navleft navtitle">
-        <xsl:value-of select="f:title-content($prev)"/>
+        <xsl:if test="count($prev)>0">
+          <a href="{fp:relative-link(., $prev)}">
+            <xsl:sequence select="f:title-content($prev)"/>
+          </a>
+        </xsl:if>
       </div>
       <div class="navmiddle">
         <xsl:if test="count($up) gt 0">
-          <a title="{f:title-content($up)}" href="{$up/@db-chunk/string()}">
+          <a title="{f:title-content($up, true())}" href="{fp:relative-link(., $up)}">
             <i class="fas fa-arrow-up"></i>
           </a>
         </xsl:if>
       </div>
       <div class="navright navtitle">
-        <xsl:value-of select="f:title-content($next)"/>
+        <xsl:if test="count($next)>0">
+          <a href="{fp:relative-link(., $next)}">
+            <xsl:sequence select="f:title-content($next)"/>
+          </a>
+        </xsl:if>
       </div>
     </div>
 
@@ -235,14 +278,14 @@
                           else $docbook"/>
 
     <div class="infofooter">
-      <xsl:variable name="years" select="root($db-node)/db:book/db:info/db:copyright/db:year"/>
+      <xsl:variable name="years" select="root($db-node)/*/db:info/db:copyright/db:year"/>
       <span class="copyrightfooter">
         <xsl:text>Copyright</xsl:text>
         <xsl:text> &#xA9; </xsl:text>
         <xsl:value-of select="$years[1]"/>
         <xsl:if test="count($years) gt 1">
           <xsl:text>–</xsl:text>
-          <xsl:value-of select="root($db-node)/db:book/db:info/db:copyright/db:year[last()]"/>
+          <xsl:value-of select="$years[last()]"/>
         </xsl:if>
         <xsl:text> Norman Walsh.</xsl:text>
       </span>
@@ -276,6 +319,12 @@
 
 <xsl:function name="f:title-content" as="node()*">
   <xsl:param name="node" as="element()?"/>
+  <xsl:sequence select="f:title-content($node, false())"/>
+</xsl:function>
+
+<xsl:function name="f:title-content" as="node()*">
+  <xsl:param name="node" as="element()?"/>
+  <xsl:param name="as-string" as="xs:boolean"/>
 
   <xsl:variable name="header" select="($node/h:header, $node/h:article/h:header)[1]"/>
 
@@ -291,8 +340,15 @@
                         then $title
                         else ($node/h:div[@class='refnamediv']
                                  /h:p/h:span[@class='refname'])[1]"/>
- 
-  <xsl:sequence select="$title/node()"/>
+
+  <xsl:choose>
+    <xsl:when test="$as-string">
+      <xsl:value-of select="string($title)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:sequence select="$title/node()"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:function>
 
 </xsl:stylesheet>

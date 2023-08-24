@@ -21,7 +21,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     /**
      * Create the parser options.
      * <p>The initial logger will be a {@link DefaultLogger} initialized with
-     * {@link DefaultLogger#readSystemProperties readSystemProperties()}.</p>
+     * {@link DefaultLogger#readSystemProperties()}.</p>
      */
     public ParserOptions() {
         super();

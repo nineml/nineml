@@ -73,9 +73,16 @@ dependencies {
     fileTree(dir: "${projectDir}/lib", include: '*.jar')
   )
   documentation (
+    project(':coffeegrinder'),
+    project(':coffeefilter'),
+    project(':coffeesacks'),
+    [group: 'com.beust', name: 'jcommander', version: '1.81' ],
+    [group: 'org.fusesource.jansi', name: 'jansi', version: '2.4.0'],
     [group: saxonGroup, name: saxonEdition, version: saxonVersion],
     [group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion],
-    [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion]
+    [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion],
+    [group: 'com.saxonica', name: 'xmldoclet', version: xmldocletVersion],
+    fileTree(dir: "${projectDir}/lib", include: '*.jar')
   )
 }
 
@@ -88,9 +95,8 @@ testing {
 }
 
 java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(8)
-  }
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 ext {
@@ -182,6 +188,15 @@ task copyRuntimeLibraries(
 }
 jar.finalizedBy(copyRuntimeLibraries)
 
+tasks.register('xmljavadoc', Javadoc) {
+  classpath = configurations.transform
+  source = sourceSets.main.allJava
+  destinationDir = file("${buildDir}/xmldoc")
+  options.doclet = 'com.saxonica.xmldoclet.XmlDoclet'
+  options.docletpath = configurations.documentation.files.asType(List)
+  options.addStringOption("sourcepath", "${projectDir}/src/main/java")
+}
+
 task dist(dependsOn: ["jar", "test"]) {
   doLast {
     mkdir "${buildDir}/stage"
@@ -216,194 +231,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 task sourcesJar(type: Jar, dependsOn: ['generateBuildConfig']) {
   archiveClassifier = 'sources'
   from sourceSets.main.allSource
-}
-
-// ============================================================
-
-task patch_changelog(type: SaxonXsltTask) {
-  inputs.files fileTree(dir: "${projectDir}/src/website/xml")
-  inputs.files fileTree(dir: "${projectDir}/../src/website/xml")
-  outputs.files fileTree(dir: "${buildDir}/tmp/coffeepot")
-
-  doFirst {
-    copy {
-      into "${buildDir}/tmp/coffeepot"
-      from "${projectDir}/src/website/xml"
-      exclude "changelog.xml"
-    }
-  }
-
-  input "${projectDir}/src/website/xml/changelog.xml"
-  stylesheet "${projectDir}/../website/combined-changelog.xsl"
-  output "${buildDir}/tmp/coffeepot/changelog.xml"
-  parameters (
-    'version': ninemlVersion,
-    'audience': 'coffeepot'
-  )
-}
-
-task manual_xinclude(type: SaxonXsltTask, dependsOn: ["copyResources", "patch_changelog"]) {
-  inputs.files fileTree(dir: "${buildDir}/tmp/coffeepot")
-
-  input "${buildDir}/tmp/coffeepot/coffeepot.xml"
-  stylesheet "${projectDir}/../website/xinclude.xsl"
-  output "${buildDir}/tmp/coffeepot.xml"
-  args(['-init:org.docbook.xsltng.extensions.Register'])
-}
-
-task manual_validate(type: RelaxNGValidateTask, dependsOn: ["manual_xinclude"]) {
-  input manual_xinclude.outputs.files.singleFile
-  output "${buildDir}/xml/coffeepot.xml"
-  schema "${projectDir}/../website/docbook.rnc"
-  compact true
-}
-
-task manual_augment(type: SaxonXsltTask, dependsOn: ["manual_validate"]) {
-  input manual_validate.outputs.files.singleFile
-  output "${buildDir}/aug/coffeepot.xml"
-  stylesheet "${projectDir}/tools/augment.xsl"
-  parameters (
-    'version': ninemlVersion,
-    'coffeegrinder-version': ninemlVersion,
-    'coffeefilter-version': ninemlVersion
-  )
-}
-
-task website(type: SaxonXsltTask, dependsOn: ["manual_augment"]) {
-  inputs.file "${projectDir}/tools/docbook.xsl"
-  inputs.file "${projectDir}/../website/docbook.xsl"
-  outputs.files fileTree(dir: "${buildDir}/website")
-
-  input manual_augment.outputs.files.singleFile
-  output "${buildDir}/website/index.html"
-  stylesheet "${projectDir}/tools/docbook.xsl"
-  args(['-init:org.docbook.xsltng.extensions.Register'])
-  parameters (
-    'mediaobject-input-base-uri': "file:${buildDir}/aug/",
-    'mediaobject-output-base-uri': "/",
-    'chunk': 'index.html',
-    'chunk-output-base-uri': "${projectDir}/build/website/"
-  )
-}
-
-task changelog(type: SaxonXsltTask, dependsOn: ["website"]) {
-  inputs.file "${projectDir}/../website/docbook.xsl"
-  outputs.file "${buildDir}/changelog.txt"
-
-  doFirst {
-    Html5Parser.parse("file://${projectDir}/build/website/changelog.html",
-                      "${buildDir}/changelog.xhtml")
-  }
-
-  input "${buildDir}/changelog.xhtml"
-  output "${buildDir}/changelog.txt"
-  stylesheet "${projectDir}/../website/changelog.xsl"
-  parameters (
-    'version': ninemlVersion
-  )
-}
-website.finalizedBy changelog
-
-task publishVersions() {
-  doLast {
-    StaticPages.versionsJson(currentReleaseVersion, ninemlVersion,
-                             "${buildDir}/website/versions.json")
-  }
-}
-website.finalizedBy publishVersions
-
-task publishError404() {
-  doLast {
-    StaticPages.error404("CoffeePot", currentReleaseVersion, "${buildDir}/website/404.html")
-  }
-}
-website.finalizedBy publishError404
-
-task copyResources(dependsOn: ["copyJarResources", "copyStaticResources"]) {
-  // nop
-}
-
-task copyJarResources() {
-  outputs.files fileTree(dir: "${buildDir}/website")
-
-  def dbjar = null
-  configurations.transform.each { path ->
-    if (path.toString().contains("docbook-xslTNG")) {
-      dbjar = path
-    }
-  }
-
-  doLast {
-    if (dbjar == null) {
-      throw new GradleException("Failed to locate DocBook xslTNG jar file")
-    }
-    copy {
-      into "${buildDir}/website"
-      from ({ zipTree(dbjar.toString()) }) {
-        include "org/docbook/xsltng/resources/**"
-      }
-      eachFile { fileCopyDetails ->
-        def originalPath = fileCopyDetails.path
-        fileCopyDetails.path = originalPath.replace('org/docbook/xsltng/resources/', '')
-      }
-    }
-  }
-
-  doLast {
-    delete "${buildDir}/website/org"
-  }
-}
-
-task copyStaticResources() {
-  inputs.files fileTree(dir: "${projectDir}/src/website/resources")
-  inputs.files fileTree(dir: "${projectDir}/../website/resources")
-  inputs.files fileTree(dir: "${projectDir}/src/website/xml")
-  outputs.files fileTree(dir: "${buildDir}/website")
-  outputs.files fileTree(dir: "${buildDir}/aug")
-
-  doLast {
-    copy {
-      into "${buildDir}/website"
-      from "${projectDir}/src/website/resources"
-    }
-  }
-
-  doLast {
-    copy {
-      into "${buildDir}/website"
-      from "${projectDir}/../website/resources"
-    }
-  }
-
-  doLast {
-    copy {
-      from "${projectDir}/src/website/xml/images"
-      into "${buildDir}/website/images"
-    }
-  }
-
-  // FIXME: Grotesque hack. 
-  doLast {
-    copy {
-      from "${projectDir}/src/website/xml/images"
-      into "${buildDir}/aug/images"
-    }
-  }
-
-  // FIXME: Grotesque hack. 
-  doLast {
-    copy {
-      from "${projectDir}/src/website/resources/images"
-      into "${buildDir}/aug/images"
-    }
-  }
-
-  doLast {
-    copy {
-      from "${projectDir}/src/website/xml/examples"
-      into "${buildDir}/website/examples"
-    }
-  }
 }
 
 // ============================================================
