@@ -38,34 +38,34 @@
       <div class="products">
         <div class="row">
           <div class="product">
-            <a href="https://coffeegrinder.nineml.org/">
+            <a href="https://docs.nineml.org/current/coffeegrinder">
               <img src="images/CoffeeGrinder.png" width="300"/>
             </a>
-            <h3><a href="https://coffeegrinder.nineml.org">CoffeeGrinder</a></h3>
+            <h3><a href="https://docs.nineml.org/current/coffeegrinder">CoffeeGrinder</a></h3>
             <p>Earley and GLL parsers</p>
           </div>
           <div class="product">
-            <a href="https://coffeefilter.nineml.org/">
+            <a href="https://docs.nineml.org/current/coffeefilter">
               <img src="images/CoffeeFilter.png" width="300"/>
             </a>
-            <h3><a href="https://coffeefilter.nineml.org">CoffeeFilter</a></h3>
+            <h3><a href="https://docs.nineml.org/current/coffeefilter">CoffeeFilter</a></h3>
             <p>An Invisible XML parser</p>
           </div>
         </div>
         <div class="row">
           <div class="product">
-            <a href="https://coffeepot.nineml.org/">
+            <a href="https://docs.nineml.org/current/coffeepot">
               <img src="images/CoffeePot.png" width="300"/>
             </a>
-            <h3><a href="https://coffeepot.nineml.org">CoffeePot</a></h3>
+            <h3><a href="https://docs.nineml.org/current/coffeepot">CoffeePot</a></h3>
             <p>An Invisible XML processor</p>
           </div>
           <div class="product">
-            <a href="https://coffeesacks.nineml.org/">
+            <a href="https://docs.nineml.org/current/coffeesacks">
               <img src="images/CoffeeSacks.png" width="300"/>
             </a>
-            <h3><a href="https://coffeesacks.nineml.org">CoffeeSacks</a></h3>
-            <p>A Saxon API for Invisible XML</p>
+            <h3><a href="https://docs.nineml.org/current/coffeesacks">CoffeeSacks</a></h3>
+            <p>Saxon APIs for Invisible XML</p>
           </div>
         </div>
         <div class="row">
