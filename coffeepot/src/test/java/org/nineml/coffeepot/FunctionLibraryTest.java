@@ -1,13 +1,25 @@
 package org.nineml.coffeepot;
 
+import net.sf.saxon.s9api.Processor;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.nineml.coffeepot.managers.OutputManager;
 
 public class FunctionLibraryTest extends CoffeePotTest {
+    private static boolean saxonEE = false;
+
+    @BeforeAll
+    public static void setup() {
+        Processor processor = new Processor(true);
+        saxonEE = "EE".equals(processor.getSaxonEdition());
+    }
+
     @Test
     public void ambig1SelectAB() {
+        Assumptions.assumeTrue(saxonEE, "Saxon-EE is not available; skipping function library test");
+
         WrappedPrintStream stdout = new WrappedPrintStream();
         WrappedPrintStream stderr = new WrappedPrintStream();
         Main main = new Main(stdout.stream, stderr.stream);
@@ -23,6 +35,8 @@ public class FunctionLibraryTest extends CoffeePotTest {
 
     @Test
     public void ambig1SelectAC() {
+        Assumptions.assumeTrue(saxonEE, "Saxon-EE is not available; skipping function library test");
+
         WrappedPrintStream stdout = new WrappedPrintStream();
         WrappedPrintStream stderr = new WrappedPrintStream();
         Main main = new Main(stdout.stream, stderr.stream);
@@ -38,6 +52,8 @@ public class FunctionLibraryTest extends CoffeePotTest {
 
     @Test
     public void ambig1SelectBC() {
+        Assumptions.assumeTrue(saxonEE, "Saxon-EE is not available; skipping function library test");
+
         WrappedPrintStream stdout = new WrappedPrintStream();
         WrappedPrintStream stderr = new WrappedPrintStream();
         Main main = new Main(stdout.stream, stderr.stream);
@@ -53,6 +69,8 @@ public class FunctionLibraryTest extends CoffeePotTest {
 
     @Test
     public void ambig1SelectD() {
+        Assumptions.assumeTrue(saxonEE, "Saxon-EE is not available; skipping function library test");
+
         WrappedPrintStream stdout = new WrappedPrintStream();
         WrappedPrintStream stderr = new WrappedPrintStream();
         Main main = new Main(stdout.stream, stderr.stream);
@@ -68,6 +86,8 @@ public class FunctionLibraryTest extends CoffeePotTest {
 
     @Test
     public void ambig3loop10() {
+        Assumptions.assumeTrue(saxonEE, "Saxon-EE is not available; skipping function library test");
+
         WrappedPrintStream stdout = new WrappedPrintStream();
         WrappedPrintStream stderr = new WrappedPrintStream();
         Main main = new Main(stdout.stream, stderr.stream);
@@ -81,5 +101,4 @@ public class FunctionLibraryTest extends CoffeePotTest {
             Assertions.fail();
         }
     }
-
 }

@@ -18,11 +18,16 @@ N.B.: the log is used automatically in the release notes for each component.
 <revhistory role="changelog">
 <revision xml:id="v322">
 <revnumber>3.2.2</revnumber>
-<date>2023-08-24</date>
+<date>2023-08-26</date>
 <revdescription>
-<para>This release is mostly a large refactor of how the documentation organized, managed,
-and produced. There are also significant new sections about the CoffeeGrinder and CoffeeFilter APIs.
+<para>This release is mostly a large refactor of how the documentation
+is organized, managed, and produced. There are also significant new
+sections about the CoffeeGrinder and CoffeeFilter APIs.
 </para>
+<para>Other aspects of the build have also been improved: the Maven artifacts now
+explicitly identify either Saxon 11 or Saxon 12 as dependencies; build automation now
+tests against both versions of Saxon, and the default build dependency is
+Saxon-HE.</para>
 <para audience="coffeegrinder">Javadoc clarifications and improvements. Made parser options
 more consistent in parsers and results.</para>
 <para audience="coffeefilter">Javadoc clarifications and improvements.</para>
