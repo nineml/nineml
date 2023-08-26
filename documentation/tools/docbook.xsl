@@ -377,7 +377,7 @@
         </xsl:for-each>
       </dt>
       <dd>
-        <p>No significant changes; dependencies updated to latest version.</p>
+        <p>No significant changes; dependencies updated to the latest version.</p>
       </dd>
     </div>
   </xsl:if>

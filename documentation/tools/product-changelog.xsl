@@ -65,7 +65,7 @@
 </xsl:template>
 
 <xsl:template match="db:para[empty(node())]" priority="10">
-  <p>No significant changes; dependencies updated to latest version.</p>
+  <p>No significant changes; dependencies updated to the latest version.</p>
 </xsl:template>
 
 <xsl:template match="db:link">
