@@ -216,6 +216,39 @@ tasks.withType(JavaCompile) {
 
 // ============================================================
 
+def pomXml() {
+  // Do some surgery on the POM dependencies. Remove Saxon-HE and Saxon-EE whatever,
+  // add Saxon-HE with the saxonPomVersionList
+
+  return {
+    Node pom = asNode()
+    NodeList pomNodes = pom.value()
+    Node dependencies = null
+    pomNodes.forEach { pomit ->
+      if (pomit.name().getNamespaceURI() == 'http://maven.apache.org/POM/4.0.0'
+          && pomit.name().getLocalPart() == 'dependencies') {
+        dependencies = pomit;
+      }
+    }
+
+    Iterator iterator = dependencies.iterator()
+    while (iterator.hasNext()) {
+      Node dep = iterator.next()
+      NodeList str = dep.get("artifactId")
+      if ("Saxon-HE".equals(str.get(0).value().get(0))
+          || "Saxon-EE".equals(str.get(0).value().get(0))) {
+        iterator.remove()
+      }
+    }
+
+    def dependencyNode = dependencies.appendNode('dependency')
+    dependencyNode.appendNode('groupId', 'net.sf.saxon')
+    dependencyNode.appendNode('artifactId', 'Saxon-HE')
+    dependencyNode.appendNode('version', saxonPomVersionList)
+    dependencyNode.appendNode('scope', 'runtime')
+  }
+}
+
 signing {
   sign publishing.publications
 }
@@ -249,6 +282,8 @@ publishing {
             name = 'Norman Walsh'
           }
         }
+
+        withXml pomXml()
       }
 
       groupId = "org.nineml"

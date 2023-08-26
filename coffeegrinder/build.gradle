@@ -90,8 +90,6 @@ java {
   targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-println("Building with Java version ${System.getProperty('java.version')}")
-
 buildConfig {
   packageName("org.nineml.${grinderName}")
   buildConfigField('String', 'TITLE', "\"${grinderTitle}\"")
