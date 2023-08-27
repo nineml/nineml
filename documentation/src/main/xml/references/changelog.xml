@@ -16,6 +16,15 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v323">
+<revnumber>3.2.3</revnumber>
+<date>2023-08-27</date>
+<revdescription>
+<para>Fixes a bug in the Maven POM file (the version range reference was incorrect).
+There are other changes in this release.
+</para>
+</revdescription>
+</revision>
 <revision xml:id="v322">
 <revnumber>3.2.2</revnumber>
 <date>2023-08-26</date>
