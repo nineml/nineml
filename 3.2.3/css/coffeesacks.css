@@ -1,0 +1,21 @@
+/* CoffeeSacks */
+
+.funcprototype table {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-top: 1px solid #899DAA;
+    border-bottom: 1px solid #899DAA;
+    width: 100%;
+}
+
+.funcprototype table tbody tr td {
+    border-bottom: 1px dashed #899DAA;
+}
+
+.funcprototype table tbody tr td:first-child {
+    width: 5em;
+}
+
+.literal {
+    white-space: nowrap;
+}
