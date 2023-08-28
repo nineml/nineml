@@ -72,6 +72,12 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="db:emphasis">
+  <xsl:text>*</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>*</xsl:text>
+</xsl:template>
+
 <xsl:template match="db:code|db:literal|db:classname|db:option|db:filename">
   <code>
     <xsl:apply-templates/>
