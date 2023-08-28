@@ -72,7 +72,7 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="db:code|db:literal|db:classname|db:option">
+<xsl:template match="db:code|db:literal|db:classname|db:option|db:filename">
   <code>
     <xsl:apply-templates/>
   </code>
