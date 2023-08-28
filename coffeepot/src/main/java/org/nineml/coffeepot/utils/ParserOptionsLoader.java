@@ -86,8 +86,27 @@ public class ParserOptionsLoader {
                 }
             }
 
+            // We try to read .nineml.properties first from the current working directory
+            // and then from the users home directory. The original intent was to read
+            // from the home directory, but I accidentally used user.dir instead of
+            // user.home. To maintain compatibility, look in the current directory and
+            // then the home directory. That's reasonable anyway.
+
             String fs = System.getProperty("file.separator");
             String fn = System.getProperty("user.dir");
+            if (fn.endsWith(fs)) {
+                fn += "." + propfn;
+            } else {
+                fn += fs + "." + propfn;
+            }
+
+            propfile = new File(fn);
+            if (propfile.exists() && propfile.canRead()) {
+                options.getLogger().debug("CoffeePot", "Loading properties: %s", fn);
+                return loadFromFile(propfile);
+            }
+
+            fn = System.getProperty("user.home");
             if (fn.endsWith(fs)) {
                 fn += "." + propfn;
             } else {
