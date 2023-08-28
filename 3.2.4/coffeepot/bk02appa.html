@@ -1,0 +1,310 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Property files</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-08-28T16:38:10Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch10.html"/><link rel="next" href="bk02ch11.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeePot.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 10. Parsing records" href="bk02ch10.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 11. Diagrams" href="bk02ch11.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="property-files" db-chunk="bk02appa.html" db-id="d481e2744" class="appendix component"><header><h2>Appendix <span class="label">A</span><span class="sep">. </span>Property files</h2><h3>A worked example</h3></header>
+
+
+
+<p>Introduction…</p>
+
+<section id="pf001" class="section"><header><h2><span class="label">A<span class="sep">.</span>1</span><span class="sep">. </span>A first attempt</h2></header>
+
+
+<p>Suppose that we wanted to read Java-style property files, like this one:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code># This is a comment.
+name1 : value1
+name2 = value2
+</code></pre></div>
+
+<p>Where:</p>
+
+<ol class="orderedlist" type="1">
+<li><p>Lines consist of name/value pairs, separated by “:” or
+“=”; whitespace around the separator is irrelevant.</p>
+</li>
+<li>
+<p>If the first non-whitespace character in a line is “!” or “#”,
+it is a comment.</p>
+</li>
+</ol>
+
+<p>Our first attempt to parse this grammar might look something like
+<a href="examples/prop1.ixml" class="link">prop1.ixml</a>:</p>
+
+<p>FIXME:</p>
+
+
+<p>Judicious use of “-” characters before terminals and
+non-terminals keeps the output clean. If you run this through
+<span class="application">coffeepot</span>, you’ll get:</p>
+
+<div class="pre-wrap"><pre class="screen verbatim"><code><code class="computeroutput">$ coffeepot -v -g:examples/prop1.ixml -i:examples/example1.properties -pp
+Loading ixml grammar: examples/prop1.ixml
+Loading input from examples/example1.properties
+There are 2 possible parses.
+&lt;property-file xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
+   &lt;name-value&gt;# This is a comment.&lt;/name-value&gt;
+   &lt;name-value&gt;name1 : value1&lt;/name-value&gt;
+   &lt;name-value&gt;name2 = value2&lt;/name-value&gt;
+&lt;/property-file&gt;</code></code></pre></div>
+
+<p>That looks reasonable for our initial grammar, but you might
+wonder where the ambiguity arises. Let’s find out with the <code class="option">--describe-ambiguity</code>
+option:</p>
+
+<div class="pre-wrap"><pre class="screen verbatim"><code><code class="computeroutput">$ coffeepot -v -g:examples/prop1.ixml -i:examples/example1.properties --describe-ambiguity -pp
+Loading ixml grammar: examples/prop1.ixml
+Loading input from examples/example1.properties
+There are 2 possible parses.
+Ambiguity:
+$2, 0, 51
+        line, 0, 21 / $3ⁿ, 21, 51
+        line, 0, 21 / $3ⁿ, 21, 51
+&lt;property-file xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
+   &lt;name-value&gt;# This is a comment.&lt;/name-value&gt;
+   &lt;name-value&gt;name1 : value1&lt;/name-value&gt;
+   &lt;name-value&gt;name2 = value2&lt;/name-value&gt;
+&lt;/property-file&gt;</code></code></pre></div>
+
+<p>When you ask <span class="application">coffeepot</span> to describe ambiguity, or when
+it fails to parse your document and attempts to report errors, it has little choice
+at the moment except to expose some of the inner workings of the parser.
+This is described more thoroughly in <a href="bk02ch03.html" class="xref xref-chapter">Chapter <span class="label">3</span>, How it works</a>.
+</p>
+
+<p>This output indicates that the nonterminal “$2”, covering the range of
+characters 0-51 has two different derivations. Sometimes it’s useful to look at the graph
+. You can get an SVG version of it with the <code class="option">--graph-svg</code> option:</p>
+
+<div id="prop1.svg" class="figure formalobject"><header><div class="title">Figure <span class="label">A<span class="sep">.</span>1</span><span class="sep">. </span>Part of the parse forest</div></header>
+
+<div class="mediaobject"><div class="media image"><picture class="imageobject"><img src="../coffeepot/images/prop1.png"/></picture></div></div>
+</div>
+
+<p>There you can see that the culprit is that a line can be either
+a <code>comment</code> or a <code>name-value</code>. Does that seem strange?
+Well, look back at our proto-grammar:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>comment: s, -["#!"], char*, NL .
+name-value: char*, NL .</code></pre></div>
+
+<p>It says that a comment has to begin with a “#” or “!”, so line 1
+could be a comment, but all that <code>name-value</code> says at the moment is that
+it doesn’t include newlines. So it could also match the first line!
+</p>
+
+</section>
+
+<section id="pf002" class="section"><header><h2><span class="label">A<span class="sep">.</span>2</span><span class="sep">. </span>Refining name-value</h2></header>
+
+
+<p>It’s reasonably straight-forward to improve on <code>name-value</code>
+in <a href="examples/prop2.ixml" class="link">prop2.ixml</a>:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>name-value: s, name, s, -[":="], s, value, NL.
+name: namestart, namefollower* .
+value: ~[Zs; #9; #d], char* .
+
+-namestart: ["_"; L] .
+-namefollower: namestart; ["-.·‿⁀"; Nd; Mn] .
+</code></pre></div>
+
+<p>Here we’re saying that a <code>name-value</code> is a name, followed
+by a “:” or “=” separator, followed by a value; a name is a name start character
+followed by zero or more name follower characters, and a value is something
+that isn’t whitespace followed by any characters.</p>
+
+<p>This does a good job on our sample file:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop2.ixml -i:examples/example1.properties -pp
+Loading ixml grammar: examples/prop2.ixml
+Loading input from examples/example1.properties
+&lt;property-file&gt;
+   &lt;comment&gt; This is a comment.&lt;/comment&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name1&lt;/name&gt;
+      &lt;value&gt;value1&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name2&lt;/name&gt;
+      &lt;value&gt;value2&lt;/value&gt;
+   &lt;/name-value&gt;
+&lt;/property-file&gt;</code></pre></div>
+
+</section>
+
+<section id="pf003" class="section"><header><h2><span class="label">A<span class="sep">.</span>3</span><span class="sep">. </span>More line options</h2></header>
+
+
+<p>The format for property files is actually a bit more complicated.
+They allow blank lines, continuation lines, and several flavors of escaped
+characters:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code># This is a comment.
+name1 : value1
+name2 = value2
+name3 = apple,\
+        banana,\
+        pear
+
+name4 = a\tb
+name5 = a\u2192b 
+name6 = c:\\path\\to\\thing
+</code></pre></div>
+
+<p>In fact, the format
+<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Properties.html#load(java.io.Reader)" class="link">as described by Java</a> allows even more escaping,
+and allows names without values, which we’re not going to try to cover
+now. The Java description is a fine example of a messy, procedural
+description of a file format. Their parsing description is explicitly
+two-pass, though it’s unclear if that’s necessary or if the author was
+just describing what their code does.
+</p>
+
+<p>Before looking at the solution, have a go at extending the
+grammar to support blank lines and continuations. Blank lines are
+easy, continuations are a little more complicated.</p>
+
+<div class="mediaobject"><div class="media image"><picture class="imageobject"><img src="../coffeepot/images/SpoilerBreak.png"/></picture></div></div>
+
+<p>Here’s one solution:
+in <a href="examples/prop3.ixml" class="link">prop3.ixml</a>:</p>
+
+<p>FIXME:</p>
+
+
+<p>Now we get:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop3.ixml -i:examples/example.properties --describe-ambiguity -pp
+Loading ixml grammar: examples/prop3.ixml
+Loading input from examples/example.properties
+&lt;property-file&gt;
+   &lt;comment&gt; This is a comment.&lt;/comment&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name1&lt;/name&gt;
+      &lt;value&gt;value1&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name2&lt;/name&gt;
+      &lt;value&gt;value2&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name3&lt;/name&gt;
+      &lt;value&gt;apple,banana,pear&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;blank/&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name4&lt;/name&gt;
+      &lt;value&gt;a\tb&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name5&lt;/name&gt;
+      &lt;value&gt;a\u2192b &lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name6&lt;/name&gt;
+      &lt;value&gt;c:\\path\\to\\thing&lt;/value&gt;
+   &lt;/name-value&gt;
+&lt;/property-file&gt;</code></pre></div>
+
+<p>Note that “apple”, “banana”, and “pear” have been correctly combined
+into a single value. The blank line is explicit, but we could suppress it by
+putting “-” before it’s name.</p>
+
+</section>
+<section id="pf004" class="section"><header><h2><span class="label">A<span class="sep">.</span>4</span><span class="sep">. </span>Character escapes</h2></header>
+
+
+<p>The last thing we’ll look at are characater escapes. The property file
+format says that tab, carriage return, and newline can be escaped as
+“\t”, “\r”, and “\n”, respectively. This also requires introducing an escape
+for “\”, “\\”. In addition, Java-style Unicode references are allowed:
+“\uHHHH” where “HHHH” is any four hexidecimal digits.</p>
+
+<p>As before, you might want to think about this before you look at the
+solution.</p>
+
+<div class="mediaobject"><div class="media image"><picture class="imageobject"><img src="../coffeepot/images/SpoilerBreak.png"/></picture></div></div>
+
+<p>The solution
+in <a href="examples/prop4.ixml" class="link">prop4.ixml</a> is:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>-char: ~["\";#a] ; tab; cr ; nl ; bs ; uref .
+
+tab: -"\t" .
+cr: -"\r" .
+nl: -"\n" .
+-bs: "\", -"\" .
+
+uref: -"\u", digit, digit, digit, digit .
+-digit: ["0"-"9"; "a"-"f"; "A"-"F"] .
+</code></pre></div>
+
+<p>We augment <code>char</code> so that it’s a non-backslash character or
+a backslash followed by one of “t”, “r”, “n”, or “\”. Or it’s a “\u”
+followed by four hexidecimal digits.</p>
+
+<p>Here we encounter an interesting consequence of the design of
+Invisible XML version 1.0. Although for the “\\” case, we can suppress
+one backslash and output the other, there’s nothing we can do, for
+example, to replace “\t” with a literal tab character. Instead,
+we leave <code>&lt;tab/&gt;</code>, etc. in the output where they can be
+cleaned up later.</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop4.ixml -i:examples/example.properties --describe-ambiguity -pp
+Loading ixml grammar: examples/prop4.ixml
+Loading input from examples/example.properties
+&lt;property-file&gt;
+   &lt;comment&gt; This is a comment.&lt;/comment&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name1&lt;/name&gt;
+      &lt;value&gt;value1&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name2&lt;/name&gt;
+      &lt;value&gt;value2&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name3&lt;/name&gt;
+      &lt;value&gt;apple,banana,pear&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;blank/&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name4&lt;/name&gt;
+      &lt;value&gt;a&lt;tab/&gt;b&lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name5&lt;/name&gt;
+      &lt;value&gt;a&lt;uref&gt;2192&lt;/uref&gt;b &lt;/value&gt;
+   &lt;/name-value&gt;
+   &lt;name-value&gt;
+      &lt;name&gt;name6&lt;/name&gt;
+      &lt;value&gt;c:\path\to\thing&lt;/value&gt;
+   &lt;/name-value&gt;
+&lt;/property-file&gt;</code></pre></div>
+</section>
+
+<section id="pf005" class="section"><header><h2><span class="label">A<span class="sep">.</span>5</span><span class="sep">. </span>Challenges for the reader</h2></header>
+
+
+<p>The example grammar in this chapter doesn’t cover all of the
+features of property files. If you’re looking for a challenge,
+consider these improvements:</p>
+
+<ol class="orderedlist" type="1">
+<li>
+<p>The property file format also specifies that unnecessarily escaped
+characters are allowed, but the escaping is ignored. An occurrence of
+<code>\"</code> is the same as <code>"</code>.</p>
+</li>
+<li>
+<p>The property file format allows “=” and “:” to occur in property names
+if they are escaped as <code>\=</code> and <code>\:</code>, respectively.
+</p>
+</li>
+<li>
+<p>In a property file, the “end of file” marks the end of a value. In
+the grammar presented in this chapter, a terminating newline is required.
+Can this be fixed?</p>
+</li>
+</ol>
+</section>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Chapter 10. Parsing records" href="bk02ch10.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Chapter 11. Diagrams" href="bk02ch11.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk02ch10.html">Chapter <span class="label">10</span><span class="sep">. </span>Parsing records</a></div><div class="navmiddle"><a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk02ch11.html">Chapter <span class="label">11</span><span class="sep">. </span>Diagrams</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>
