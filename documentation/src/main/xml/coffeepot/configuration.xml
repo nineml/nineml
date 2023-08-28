@@ -7,13 +7,14 @@
 
 <para>When <application>CoffeePot</application> starts, it looks for a
 configuration file, a Java properties file. If a file named
-<filename>.nineml.properties</filename> is found in the user’s home
-directory, that file is loaded. If that file doesn’t exist,
-<application>CoffeePot</application> searches for 
-<filename>nineml.properties</filename> (no leading “.”) on the
-class path.</para>
+<filename>.nineml.properties</filename> is found in the current
+directory, that file is loaded. If it isn’t found in the current
+directory, it’s loaded from the user’s home directory. If it doesn’t
+exist there either, <application>CoffeePot</application> searches for
+<filename>nineml.properties</filename> (no leading “.”) on the class
+path.</para>
 
-<para>An example <filename>nineml.properties</filename> file:</para>
+<para>An example <filename>.nineml.properties</filename> file:</para>
 
 <programlisting>default-log-level=info
 graphviz=/usr/bin/dot
