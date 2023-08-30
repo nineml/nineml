@@ -1,0 +1,9 @@
+poem: NL*, line+.
+line: word++(punct+), punct?, NL?.
+-punct: -[" "|","|"."|":"|";"|"-"|#a|#d]+.
+word: firstsyl, syl*.
+firstsyl: -consonant*, -syl.
+syl: -vowel+, -consonant+ | -vowel+, -punct?.
+consonant: "Ngh"|"NGH"|"ngh"|"Th"|"TH"|"th"|"Rh"|"RH"|"rh"|"Ph"|"PH"|"ph"|"Nh"|"NH"|"nh"|"Ng"|"NG"|"ng"|"Mh"|"MH"|"mh"|"Ll"|"LL"|"ll"|"Ff"|"FF"|"ff"|"Ch"|"CH"|"ch"|"T"|"t"|"S"|"s"|"R"|"r"|"P"|"p"|"N"|"n"|"M"|"m"|"L"|"l"|"J"|"j"|"H"|"h"|"G"|"g"|"F"|"f"|"D"|"d"|"C"|"c"|"B"|"b".
+vowel: "wyw"|"Wyw"|"WYW"|"wow"|"Wow"|"WOW"|"wiw"|"Wiw"|"WIW"|"wew"|"Wew"|"WEW"|"waw"|"Waw"|"WAW"|"ŵy"|"Ŵy"|"ŴY"|"âu"|"ÂU"|"yw"|"Yw"|"YW"|"wy"|"Wy"|"WY"|"uw"|"Uw"|"UW"|"ow"|"Ow"|"OW"|"ou"|"Ou"|"OU"|"oi"|"Oi"|"OI"|"oe"|"Oe"|"OE"|"iw"|"Iw"|"IW"|"ew"|"EW"|"eu"|"Eu"|"EU"|"ei"|"Ei"|"EI"|"aw"|"Aw"|"AW"|"au"|"Au"|"AU"|"ai"|"Ai"|"AI"|"ae"|"Ae"|"AE"|"ỳ"|"Ỳ"|"ẃ"|"Ẃ"|"ẁ"|"Ẁ"|"ŷ"|"Ŷ"|"ŵ"|"Ŵ"|"ý"|"Ý"|"û"|"Û"|"ö"|"Ö"|"ô"|"Ô"|"ó"|"Ó"|"ò"|"Ò"|"ï"|"Ï"|"î"|"Î"|"í"|"Í"|"ì"|"Ì"|"ë"|"Ë"|"ê"|"Ê"|"é"|"É"|"è"|"È"|"â"|"Â"|"á"|"Á"|"à"|"À"|"y"|"Y"|"w"|"W"|"u"|"U"|"o"|"O"|"i"|"I"|"e"|"E"|"a"|"A".
+-NL = -#d?, -#a .

@@ -124,6 +124,13 @@ public class Family {
         // is sometimes the parent of the actual state. It's not clear why, but this seems
         // to only happen when the state is a simple X=>Y⸳ state. Since we need the
         // position-2 item and there isn't one, look at the w.state for the answer.
+
+        // But what if w.state only has one token on the right hand side??? This
+        // is very, very uncommon, but I'm really not sure if -1 is the right thing.
+        if (w.state.position == 1) {
+            return getAttributes(w.getSymbol(), w.state.rhs.get(w.state.position - 1));
+        }
+
         return getAttributes(w.getSymbol(), w.state.rhs.get(w.state.position - 2));
     }
 
