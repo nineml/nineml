@@ -24,4 +24,9 @@ public class IAlt extends XNonterminal {
         newnode.copyChildren(getChildren());
         return newnode;
     }
+
+    @Override
+    protected boolean emptyAlt() {
+        return children.isEmpty();
+    }
 }

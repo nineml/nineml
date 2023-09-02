@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IPragma extends XNonterminal {
-    public enum PragmaType { UNDEFINED, DISCARD_EMPTY, METADATA, PRIORITY, REGEX, RENAME, XMLNS, CSV_HEADING };
+    public enum PragmaType { UNDEFINED, DISCARD_EMPTY, METADATA, PRIORITY, REGEX, RENAME, XMLNS, /* CSV_HEADING, */ STRICT };
     public static final Map<PragmaType, String> pragmaTypeNames;
     static {
         HashMap<PragmaType, String> names = new HashMap<>();
@@ -17,6 +17,7 @@ public class IPragma extends XNonterminal {
         names.put(PragmaType.RENAME, "rename");
         names.put(PragmaType.XMLNS, "xmlns");
         //names.put(PragmaType.CSV_HEADING, "csv heading");
+        names.put(PragmaType.STRICT, "strict");
         pragmaTypeNames = Collections.unmodifiableMap(names);
     }
 

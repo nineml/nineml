@@ -1,0 +1,6 @@
+{[+pragma strict "https://gyfre.org/ns/pragma/strict"]}
+{[+strict]}
+
+S = A, B .
+A = "a" .
+

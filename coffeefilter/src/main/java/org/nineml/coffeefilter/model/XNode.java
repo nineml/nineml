@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 public abstract class XNode {
     public static final String ninemlpragmas = "https://nineml.org/ns/pragma/";
     public static final String ninemloptions = "https://nineml.org/ns/pragma/options/";
+    public static final String strictpragma = "https://gyfre.org/ns/pragma/strict";
 
     protected static final String logcategory = "InvisibleXml";
     protected static final Pattern pragmaDecl = Pattern.compile("^(\\S+)\\s+(['\"])(.*)(['\"])\\s*$");
@@ -116,20 +117,20 @@ public abstract class XNode {
                 }
                 break;
             case "literal":
-                String str = attributes.getValue("string");
+                String lstr = attributes.getValue("string");
                 tmark = attributes.getValue("tmark");
                 if (tmark == null) {
-                    child = new ILiteral(this, '^', str, attributes.getValue("hex"));
+                    child = new ILiteral(this, '^', lstr, attributes.getValue("hex"));
                 } else {
                     if (tmark.length() != 1) {
                         throw new IllegalArgumentException("tmark attribute must be a single character");
                     }
-                    child = new ILiteral(this, tmark.charAt(0), str, attributes.getValue("hex"));
+                    child = new ILiteral(this, tmark.charAt(0), lstr, attributes.getValue("hex"));
                 }
                 break;
             case "insertion":
-                str = attributes.getValue("string");
-                child = new IInsertion(this, str, attributes.getValue("hex"));
+                String istr = attributes.getValue("string");
+                child = new IInsertion(this, istr, attributes.getValue("hex"));
                 break;
             case "member":
                 // Must have exactly one of:
@@ -376,6 +377,8 @@ public abstract class XNode {
 
         if (uri.startsWith(ninemlpragmas)) {
             return parseNineMLPragma(pragma, uri.substring(ninemlpragmas.length()), data);
+        } else if (strictpragma.equals(uri)) {
+            return parseStrictPragma(pragma, data);
         } else {
             if (pragma.parent instanceof IProlog) {
                 return new IPragmaMetadata(pragma.parent, uri, data);
@@ -428,6 +431,10 @@ public abstract class XNode {
         getRoot().options.getLogger().error(logcategory, "Malformed %s pragma: %s",
                 pragma.getName(), pragma.getPragmaData());
         return null;
+    }
+
+    private IPragma parseStrictPragma(IPragma pragma, String data) {
+        return new IPragmaStrict(pragma.parent, data);
     }
 
     private String unquotedData(String data) {
@@ -519,7 +526,7 @@ public abstract class XNode {
                                 addPragma(parsed);
                             }
                         } else {
-                            data = pragma.pragmaData.trim();
+                            data = pragma.pragmaData == null ? "" : pragma.pragmaData.trim();
                             IPragma parsed = parsePragma(pragma, uri, data);
                             if (parsed != null) {
                                 addPragma(parsed);
@@ -803,6 +810,15 @@ public abstract class XNode {
             }
         }
         return trees;
+    }
+
+    protected boolean emptyAlt() {
+        for (XNode child : children) {
+            if (child.emptyAlt()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private ArrayList<XNode> makeTrees(ArrayList<XNode> copyChildren, ArrayList<ArrayList<XNode>> forest, int pos) {

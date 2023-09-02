@@ -62,6 +62,8 @@ public class IxmlException extends RuntimeException {
     public static IxmlException failedToLoadIxmlGrammar(Exception ex) { return getException("I002", new String[] { ex.getMessage() }, ex); }
     public static IxmlException internalError(String message) { return getException("I003", message); }
     public static IxmlException internalError(String message, Exception ex) { return getException("I002", new String[] { message }, ex); }
+    public static IxmlException forbiddenEmptyAlt(String name) { return getException("I004", name); }
+
     public static IxmlException sniffingFailed(String systemId) { return getException("L001", systemId); }
     public static IxmlException failedtoParse(String systemId, Exception ex) {
         return getException("P004", new String[] {systemId, ex.getMessage() }, ex);

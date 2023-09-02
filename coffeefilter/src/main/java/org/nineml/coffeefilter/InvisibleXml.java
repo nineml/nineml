@@ -338,22 +338,12 @@ public class InvisibleXml {
 
             InvisibleXmlParser parser = new InvisibleXmlParser(ixml, options, doc.getResult().getParseTime());
 
-            HygieneReport report = parser.getHygieneReport();
-            if (!report.isClean()) {
-                if (!report.getUndefinedSymbols().isEmpty() && !options.getAllowUndefinedSymbols()) {
-                    // Treat this like a failed parse.
-                    parser = new InvisibleXmlParser(doc, IxmlException.undefinedSymbols(report.getUndefinedSymbols()), doc.parseTime());
-                }
-                if (!report.getUnreachableSymbols().isEmpty() && !options.getAllowUnreachableSymbols()) {
-                    // Treat this like a failed parse.
-                    parser = new InvisibleXmlParser(doc, IxmlException.unreachableSymbols(report.getUnreachableSymbols()), doc.parseTime());
-                }
-                if (!report.getUnproductiveRules().isEmpty() && !(options.getAllowUnproductiveSymbols())) {
-                    // Treat this like a failed parse.
-                    parser = new InvisibleXmlParser(doc, IxmlException.unproductiveSymbols(report.getUnproductiveSymbols()), doc.parseTime());
-                }
-            }
-
+            // The strict pragma effects the options; copy the values over in case they changed
+            options.setAllowEmptyAlts(builderOptions.getAllowEmptyAlts());
+            options.setAllowUnproductiveSymbols(builderOptions.getAllowUnproductiveSymbols());
+            options.setAllowUnreachableSymbols(builderOptions.getAllowUnreachableSymbols());
+            options.setAllowUndefinedSymbols(builderOptions.getAllowUndefinedSymbols());
+            options.setAllowMultipleDefinitions(builderOptions.getAllowMultipleDefinitions());
             return parser;
         } catch (Exception ex) {
             return new InvisibleXmlParser(doc, ex, doc.parseTime());

@@ -1,0 +1,6 @@
+{[+pragma strict "https://gyfre.org/ns/pragma/strict"]}
+{[+strict allow-empty-alt]}
+
+S = A, B .
+A = "a" | .
+B = "b" .
