@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":2,"i1":2,"i2":8,"i3":1,"i4":2,"i5":2,"i6":2,"i7":2,"i8":2,"i9":2,"i10":2,"i11":2,"i12":2,"i13":8,"i14":8,"i15":2,"i16":2,"i17":2,"i18":2,"i19":2,"i20":2,"i21":2,"i22":2,"i23":2,"i24":2,"i25":2,"i26":8,"i27":2,"i28":2,"i29":2,"i30":2,"i31":1,"i32":1,"i33":2,"i34":2,"i35":2,"i36":2,"i37":2,"i38":2,"i39":2,"i40":8,"i41":2,"i42":2,"i43":2,"i44":2,"i45":2,"i46":2,"i47":2,"i48":2,"i49":8,"i50":2,"i51":2,"i52":1,"i53":2,"i54":2,"i55":2,"i56":2,"i57":4,"i58":2,"i59":2,"i60":2,"i61":2,"i62":1,"i63":2,"i64":2,"i65":2,"i66":2,"i67":2,"i68":2,"i69":2,"i70":2,"i71":2,"i72":2,"i73":2,"i74":2,"i75":2,"i76":2,"i77":2,"i78":2,"i79":2,"i80":2,"i81":2,"i82":2,"i83":1,"i84":2,"i85":2,"i86":1,"i87":2,"i88":8,"i89":2};
+var data = {"i0":2,"i1":2,"i2":8,"i3":1,"i4":2,"i5":2,"i6":2,"i7":2,"i8":2,"i9":2,"i10":2,"i11":2,"i12":2,"i13":8,"i14":8,"i15":2,"i16":2,"i17":2,"i18":2,"i19":2,"i20":2,"i21":2,"i22":2,"i23":2,"i24":2,"i25":2,"i26":8,"i27":2,"i28":2,"i29":2,"i30":2,"i31":1,"i32":1,"i33":2,"i34":2,"i35":2,"i36":2,"i37":2,"i38":2,"i39":2,"i40":8,"i41":2,"i42":2,"i43":2,"i44":2,"i45":2,"i46":2,"i47":2,"i48":2,"i49":8,"i50":2,"i51":2,"i52":1,"i53":2,"i54":2,"i55":2,"i56":2,"i57":4,"i58":2,"i59":2,"i60":2,"i61":2,"i62":1,"i63":2,"i64":2,"i65":2,"i66":2,"i67":2,"i68":2,"i69":2,"i70":2,"i71":2,"i72":2,"i73":2,"i74":2,"i75":2,"i76":2,"i77":2,"i78":2,"i79":2,"i80":2,"i81":2,"i82":2,"i83":2,"i84":1,"i85":2,"i86":2,"i87":1,"i88":2,"i89":8,"i90":2};
 var tabs = {65535:["t0","All Classes"],1:["t1","Interface Summary"],2:["t2","Class Summary"],4:["t3","Enum Summary"],8:["t4","Exception Summary"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -571,7 +571,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr id="i79" class="rowColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/tokens/TokenEOF.html" title="class in org.nineml.coffeegrinder.tokens">TokenEOF</a></td>
 <th class="colLast" scope="row">
-<div class="block">A single character <a href="org/nineml/coffeegrinder/tokens/Token.html" title="class in org.nineml.coffeegrinder.tokens"><code>Token</code></a>.</div>
+<div class="block">A token that matches end of file.</div>
 </th>
 </tr>
 <tr id="i80" class="altColor">
@@ -593,40 +593,46 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </th>
 </tr>
 <tr id="i83" class="rowColor">
+<td class="colFirst"><a href="org/nineml/coffeegrinder/tokens/TokenUndefined.html" title="class in org.nineml.coffeegrinder.tokens">TokenUndefined</a></td>
+<th class="colLast" scope="row">
+<div class="block">A token that can match nothing.</div>
+</th>
+</tr>
+<tr id="i84" class="altColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/trees/TreeBuilder.html" title="interface in org.nineml.coffeegrinder.trees">TreeBuilder</a></td>
 <th class="colLast" scope="row">
 <div class="block">The tree builder interface.</div>
 </th>
 </tr>
-<tr id="i84" class="altColor">
+<tr id="i85" class="rowColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/trees/TreeNumber.html" title="class in org.nineml.coffeegrinder.trees">TreeNumber</a></td>
 <th class="colLast" scope="row">
 <div class="block">A numbering of potential trees.</div>
 </th>
 </tr>
-<tr id="i85" class="rowColor">
+<tr id="i86" class="altColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/trees/TreeSelection.html" title="class in org.nineml.coffeegrinder.trees">TreeSelection</a></td>
 <th class="colLast" scope="row">&nbsp;</th>
 </tr>
-<tr id="i86" class="altColor">
+<tr id="i87" class="rowColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/trees/TreeSelector.html" title="interface in org.nineml.coffeegrinder.trees">TreeSelector</a></td>
 <th class="colLast" scope="row">
 <div class="block">The tree selector is responsible for choosing among ambiguous parses.</div>
 </th>
 </tr>
-<tr id="i87" class="rowColor">
+<tr id="i88" class="altColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/trees/TreeSurgeon.html" title="class in org.nineml.coffeegrinder.trees">TreeSurgeon</a></td>
 <th class="colLast" scope="row">
 <div class="block">A specialist Arborist.</div>
 </th>
 </tr>
-<tr id="i88" class="altColor">
+<tr id="i89" class="rowColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/exceptions/TreeWalkerException.html" title="class in org.nineml.coffeegrinder.exceptions">TreeWalkerException</a></td>
 <th class="colLast" scope="row">
 <div class="block">Tree walking exceptions.</div>
 </th>
 </tr>
-<tr id="i89" class="rowColor">
+<tr id="i90" class="altColor">
 <td class="colFirst"><a href="org/nineml/coffeegrinder/trees/Vertex.html" title="class in org.nineml.coffeegrinder.trees">Vertex</a></td>
 <th class="colLast" scope="row">&nbsp;</th>
 </tr>

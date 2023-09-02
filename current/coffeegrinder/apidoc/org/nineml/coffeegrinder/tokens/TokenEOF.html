@@ -143,7 +143,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">TokenEOF</span>
 extends <a href="Token.html" title="class in org.nineml.coffeegrinder.tokens">Token</a></pre>
-<div class="block">A single character <a href="Token.html" title="class in org.nineml.coffeegrinder.tokens"><code>Token</code></a>.</div>
+<div class="block">A token that matches end of file.
+ <p>This token is used by the GLL parser.</p></div>
 </li>
 </ul>
 </div>
@@ -296,9 +297,7 @@ extends <a href="Token.html" title="class in org.nineml.coffeegrinder.tokens">To
 <h4>matches</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;matches&#8203;(<a href="Token.html" title="class in org.nineml.coffeegrinder.tokens">Token</a>&nbsp;input)</pre>
 <div class="block">Does this token match the input?
- <p>This token matches other <a href="TokenEOF.html" title="class in org.nineml.coffeegrinder.tokens"><code>token characters</code></a> that have the same
- character as well as <a href="TokenString.html" title="class in org.nineml.coffeegrinder.tokens"><code>TokenStrings</code></a> that are one character long and
- contain the same character.</p></div>
+ <p>The <code>TokenEOF</code> is a singleton. It matches itself, nothing else.</p></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Token.html#matches(org.nineml.coffeegrinder.tokens.Token)">matches</a></code>&nbsp;in class&nbsp;<code><a href="Token.html" title="class in org.nineml.coffeegrinder.tokens">Token</a></code></dd>
