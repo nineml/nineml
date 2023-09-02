@@ -61,7 +61,7 @@ if (!hasProperty("saxonLicenseDir")) {
 
 dependencies {
   implementation (
-    [group: "com.saxonica", name: "Saxon-EE", version: "11.4"],
+    [group: "com.saxonica", name: "Saxon-EE", version: saxonVersion],
     [group: "com.nwalsh", name: "scommonmark", version: "0.0.1"]
   )
   saxonpath (
