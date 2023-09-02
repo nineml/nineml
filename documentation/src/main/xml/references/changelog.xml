@@ -16,6 +16,25 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v325">
+<revnumber>3.2.5</revnumber>
+<date>2023-09-02</date>
+<revdescription>
+<para audience="coffeegrinder">Allow undefined tokens in grammars
+by defining them such that they match nothing. Fixed a bug where
+undefined symbols were not identified as unreachable (even when
+they were). Fixed (or worked around a bug) where extracting a tree
+from the GLL parse forest could fail.
+</para>
+<para audience="coffeefilter">Moved the pragmas documentation from
+CoffeePot to CoffeeFilter. Implemented the “strict” pragma.</para>
+<para audience="coffeesacks">Fixed a bug where the
+choose alternatives function couldn’t be a curried function.
+</para>
+<para audience="coffeepot">Moved the pragmas documentation from
+CoffeePot to CoffeeFilter.</para>
+</revdescription>
+</revision>
 <revision xml:id="v324">
 <revnumber>3.2.4</revnumber>
 <date>2023-08-28</date>
