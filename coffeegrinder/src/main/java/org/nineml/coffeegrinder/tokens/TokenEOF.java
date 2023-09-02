@@ -1,12 +1,8 @@
 package org.nineml.coffeegrinder.tokens;
 
-import org.nineml.coffeegrinder.util.ParserAttribute;
-
-import java.util.Collection;
-import java.util.Collections;
-
 /**
- * A single character {@link Token}.
+ * A token that matches end of file.
+ * <p>This token is used by the GLL parser.</p>
  */
 public class TokenEOF extends Token {
     public static final TokenEOF EOF = new TokenEOF();
@@ -25,9 +21,7 @@ public class TokenEOF extends Token {
 
     /**
      * Does this token match the input?
-     * <p>This token matches other {@link TokenEOF token characters} that have the same
-     * character as well as {@link TokenString TokenStrings} that are one character long and
-     * contain the same character.</p>
+     * <p>The {@code TokenEOF} is a singleton. It matches itself, nothing else.</p>
      * @param input The input.
      * @return true if they match.
      */
