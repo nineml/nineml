@@ -1,7 +1,7 @@
 package org.nineml.coffeesacks;
 
 import net.sf.saxon.expr.XPathContext;
-import net.sf.saxon.functions.hof.UserFunctionReference;
+import net.sf.saxon.functions.AbstractFunction;
 import net.sf.saxon.ma.map.KeyValuePair;
 import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.om.Sequence;
@@ -39,7 +39,7 @@ public class XPathAxe implements Axe {
 
     protected XPathContext context = null;
     private XdmMap accumulator = new XdmMap();
-    protected UserFunctionReference.BoundUserFunction chooseAlternatives = null;
+    protected AbstractFunction chooseAlternatives = null;
     private boolean madeAmbiguousChoice = false;
     private boolean lastChoiceWasAmbiguous = false;
 
@@ -50,7 +50,7 @@ public class XPathAxe implements Axe {
         this.input = new XdmAtomicValue(input);
     }
 
-    public void setChooseFunction(XPathContext context, UserFunctionReference.BoundUserFunction chooseFunction) {
+    public void setChooseFunction(XPathContext context, AbstractFunction chooseFunction) {
         this.context = context;
         this.chooseAlternatives = chooseFunction;
     }

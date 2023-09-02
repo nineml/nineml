@@ -3,8 +3,8 @@ package org.nineml.coffeesacks;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.Callable;
 import net.sf.saxon.expr.XPathContext;
+import net.sf.saxon.functions.AbstractFunction;
 import net.sf.saxon.functions.CallableFunction;
-import net.sf.saxon.functions.hof.UserFunctionReference;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.ma.map.MapType;
@@ -18,13 +18,18 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.tree.iter.AtomicIterator;
 import net.sf.saxon.type.FunctionItemType;
 import net.sf.saxon.type.SpecificFunctionType;
-import net.sf.saxon.value.*;
+import net.sf.saxon.value.AnyURIValue;
+import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.SequenceType;
+import net.sf.saxon.value.StringValue;
 import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.InvisibleXmlDocument;
 import org.nineml.coffeefilter.InvisibleXmlParser;
 import org.nineml.coffeefilter.ParserOptions;
-import org.nineml.coffeefilter.trees.*;
+import org.nineml.coffeefilter.trees.DataTree;
+import org.nineml.coffeefilter.trees.DataTreeBuilder;
+import org.nineml.coffeefilter.trees.SimpleTree;
+import org.nineml.coffeefilter.trees.SimpleTreeBuilder;
 import org.nineml.coffeegrinder.trees.Arborist;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -152,7 +157,7 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
 
     protected Sequence functionFromParser(XPathContext context,
                                           InvisibleXmlParser parser,
-                                          UserFunctionReference.BoundUserFunction chooseAlternative,
+                                          AbstractFunction chooseAlternative,
                                           Map<String, String> options) throws XPathException {
         if (parser.constructed()) {
             SequenceType[] argTypes = new SequenceType[]{SequenceType.SINGLE_STRING};
@@ -172,11 +177,23 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                 if (ctype.getArgumentTypes().length != 2) {
                     throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_CHOOSE_FUNCTION, "The choose-alternative function must have two arguments");
                 }
+
+                // The primary type for function arguments under Saxon 11 (for a curried function, anyway) appears to be item()*
+                // instead of the more specific type in the underlying declaration (element(), for example).
+                //
+                // As a workaround, if the specific type check fails, accept item()*. This type check is really to help developers,
+                // by failing early if the declared type of the function is wrong. If you declare it as item()*, it'll pass this test,
+                // but it'll fail at runtime, so I'm not going to fuss too much about checking for Saxon 11 or what have you.
+
                 if (ctype.getArgumentTypes()[0].getPrimaryType() != NodeKindTest.ELEMENT) {
-                    throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_CHOOSE_FUNCTION, "The first argument to the choose-alternative function must be an element");
+                    if (!(ctype.getArgumentTypes()[0].getPrimaryType() instanceof net.sf.saxon.type.AnyItemType)) {
+                        throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_CHOOSE_FUNCTION, "The first argument to the choose-alternative function must be an element");
+                    }
                 }
                 if (ctype.getArgumentTypes()[1].getPrimaryType() != MapType.ANY_MAP_TYPE) {
-                    throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_CHOOSE_FUNCTION, "The second argument to the choose-alternative function must be a map");
+                    if (!(ctype.getArgumentTypes()[0].getPrimaryType() instanceof net.sf.saxon.type.AnyItemType)) {
+                        throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_CHOOSE_FUNCTION, "The second argument to the choose-alternative function must be a map");
+                    }
                 }
             }
 
@@ -217,7 +234,7 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
             while (next != null) {
                 String key = next.getStringValue();
                 if ("choose-alternative".equals(key)) {
-                    UserFunctionReference.BoundUserFunction ref = (UserFunctionReference.BoundUserFunction) get.invoke(item, next);
+                    AbstractFunction ref = (AbstractFunction) get.invoke(item, next);
                     options.put(key, ref);
                 } else {
                     GroundedValue value = (GroundedValue) get.invoke(item, next);
@@ -449,10 +466,10 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
 
     private class InvisibleXmlParserFunction implements Callable {
         private final InvisibleXmlParser parser;
-        private final UserFunctionReference.BoundUserFunction chooseAlternative;
+        private final AbstractFunction chooseAlternative;
         private final Map<String,String> options;
 
-        public InvisibleXmlParserFunction(InvisibleXmlParser parser, UserFunctionReference.BoundUserFunction chooseAlternative, Map<String, String> options) {
+        public InvisibleXmlParserFunction(InvisibleXmlParser parser, AbstractFunction chooseAlternative, Map<String, String> options) {
             this.parser = parser;
             this.chooseAlternative = chooseAlternative;
             this.options = options;

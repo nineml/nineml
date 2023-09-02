@@ -21,8 +21,8 @@ of them.</para>
 <para>That may not suit your needs. CoffeeSacks provides a way to
 examine the alternatives and select one. You can supply a
 <code>choose-alternative</code> function in the parser options. This
-must be a function that takes a single argument, a list of elements,
-and returns an integer.</para>
+must take two arguments, an element and a map, and return a map.
+</para>
 
 <para>The function receives a context element that identifies its
 location in the parse forest and a map that describes the current

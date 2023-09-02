@@ -87,7 +87,7 @@ public class MakeParser extends CommonDefinition {
 
         @Override
         public Sequence call(XPathContext context, Sequence[] sequences) throws XPathException {
-            UserFunctionReference.BoundUserFunction chooseAlternative = null;
+            AbstractFunction chooseAlternative = null;
             HashMap<String, String> options = new HashMap<>();
             final ParserOptions popts;
             if (sequences.length > 1) {
@@ -96,7 +96,7 @@ public class MakeParser extends CommonDefinition {
                     Map<String,Object> parsedMap = parseMap((MapItem) item);
                     for (Map.Entry<String,Object> entry : parsedMap.entrySet()) {
                         if ("choose-alternative".equals(entry.getKey())) {
-                            chooseAlternative = (UserFunctionReference.BoundUserFunction) entry.getValue();
+                            chooseAlternative = (AbstractFunction) entry.getValue();
                         } else {
                             options.put(entry.getKey(), (String) entry.getValue());
                         }
