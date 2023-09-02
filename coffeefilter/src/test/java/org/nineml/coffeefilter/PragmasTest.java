@@ -3,6 +3,7 @@ package org.nineml.coffeefilter;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.nineml.coffeefilter.exceptions.IxmlException;
 import org.nineml.coffeegrinder.parser.Grammar;
 import org.nineml.coffeegrinder.util.DefaultProgressMonitor;
 
@@ -274,5 +275,4 @@ public class PragmasTest {
             fail();
         }
     }
-
 }

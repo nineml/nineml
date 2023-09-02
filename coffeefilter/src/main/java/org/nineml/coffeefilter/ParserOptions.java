@@ -20,6 +20,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
     private boolean allowUnreachableSymbols = true;
     private boolean allowUnproductiveSymbols = true;
     private boolean allowMultipleDefinitions = false;
+    private boolean allowEmptyAlts = true;
     private boolean prettyPrint = false;
     private boolean showChart = false;
     private String graphviz = null;
@@ -71,6 +72,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
         allowUnreachableSymbols = copy.allowUnreachableSymbols;
         allowUnproductiveSymbols = copy.allowUnproductiveSymbols;
         allowMultipleDefinitions = copy.allowMultipleDefinitions;
+        allowEmptyAlts = copy.allowEmptyAlts;
         prettyPrint = copy.prettyPrint;
         showChart = copy.showChart;
         graphviz = copy.graphviz;
@@ -199,6 +201,27 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
      */
     public void setAllowMultipleDefinitions(boolean allow) {
         allowMultipleDefinitions = allow;
+    }
+
+    /**
+     * Allow empty string to represent an alternative?
+     * <p>This is a purely stylistic option. Invisible XML allows the empty string to represent
+     * an empty alternative, {@code S = "a" | .} That defines {@code S} to be either @code{"a"} or
+     * empty, "nothing". Another way to represent an empty alternative is with an empty pair
+     * of parentheses, {@code S = "a" | () .}. That's more visually distinct and can be enforced
+     * with this option.</p>
+     * @return true if the empty string can represent an alternative.
+     */
+    public boolean getAllowEmptyAlts() {
+        return allowEmptyAlts;
+    }
+
+    /**
+     * Set the {@link #getAllowEmptyAlts()} ()} property.
+     * @param allow allow empty string to represent an alternative?
+     */
+    public void setAllowEmptyAlts(boolean allow) {
+        allowEmptyAlts = allow;
     }
 
     /**

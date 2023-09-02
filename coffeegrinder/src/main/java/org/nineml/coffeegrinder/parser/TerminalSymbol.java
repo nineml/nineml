@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class TerminalSymbol extends Symbol {
     public static final TerminalSymbol EPSILON = new TerminalSymbol(TokenEPSILON.EPSILON);
     public static final TerminalSymbol EOF = new TerminalSymbol(TokenEOF.EOF);
+    public static final TerminalSymbol UNDEFINED = new TerminalSymbol(TokenUndefined.undefined);
     protected Token token;
 
     /**

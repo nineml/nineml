@@ -31,6 +31,7 @@ public class Ixml extends XNonterminal {
     protected IRule emptyProduction = null;
     protected String version = "1.0";
     protected final RuleRewriter ruleRewriter;
+
     /**
      * Construct an Ixml.
      */
@@ -155,18 +156,6 @@ public class Ixml extends XNonterminal {
      * of other transformations.</p>
      */
     public void simplifyGrammar(ParserOptions options) {
-        // Make sure there's only one rule for each nonterminal before we begin.
-        HashSet<String> definedSymbols = new HashSet<>();
-        for (XNode node : children) {
-            if (node instanceof IRule) {
-                IRule rule = (IRule) node;
-                if (definedSymbols.contains(rule.getName()) && !options.getAllowMultipleDefinitions()) {
-                    throw IxmlException.multipleDefinitionsOfSymbol(rule.getName());
-                }
-                definedSymbols.add(rule.getName());
-            }
-        }
-
         for (XNode child : children) {
             XNode copied = child.copy();
             setupDerivation(child, copied);
@@ -174,8 +163,46 @@ public class Ixml extends XNonterminal {
 
         flatten();
 
+        // Figure out what hygiene rules we have to enforce strictly
+        boolean first = true;
+        for (IPragma pragma : pragmas) {
+            if (pragma instanceof IPragmaStrict) {
+                if (first) {
+                    options.setAllowMultipleDefinitions(false);
+                    options.setAllowUndefinedSymbols(false);
+                    options.setAllowUnproductiveSymbols(false);
+                    options.setAllowUnreachableSymbols(false);
+                    options.setAllowEmptyAlts(false);
+                    first = false;
+                }
+                IPragmaStrict strict = (IPragmaStrict) pragma;
+                options.setAllowMultipleDefinitions(options.getAllowMultipleDefinitions() || strict.allowMultipleDefinitions());
+                options.setAllowUndefinedSymbols(options.getAllowUndefinedSymbols() || strict.allowUndefined());
+                options.setAllowUnproductiveSymbols(options.getAllowUnproductiveSymbols() || strict.allowUnproductive());
+                options.setAllowUnreachableSymbols(options.getAllowUnreachableSymbols() || strict.allowUnreachable());
+                options.setAllowEmptyAlts(options.getAllowEmptyAlts() || strict.allowEmptyAlt());
+            }
+        }
+
+        if (!options.getAllowMultipleDefinitions()) {
+            HashSet<String> definedSymbols = new HashSet<>();
+            for (XNode node : children) {
+                if (node instanceof IRule) {
+                    IRule rule = (IRule) node;
+                    if (definedSymbols.contains(rule.getName()) && !options.getAllowMultipleDefinitions()) {
+                        throw IxmlException.multipleDefinitionsOfSymbol(rule.getName());
+                    }
+                    definedSymbols.add(rule.getName());
+                }
+            }
+        }
+
         ArrayList<XNode> newchildren = new ArrayList<>();
         for (IRule rule : ruleChildren()) {
+            if (!options.getAllowEmptyAlts() && rule.emptyAlt()) {
+                throw IxmlException.forbiddenEmptyAlt(rule.name);
+            }
+
             if (!rule.children.isEmpty() && rule.children.get(0) instanceof IAlt) {
                 for (XNode alt : rule.children) {
                     if (!(alt instanceof IAlt)) {
@@ -203,6 +230,17 @@ public class Ixml extends XNonterminal {
         simplify();
         flattenNonterminals();
         constructGrammar(options);
+
+        HygieneReport report = grammar.getHygieneReport(grammar.getNonterminal(startRule));
+        if (!options.getAllowUndefinedSymbols() && !report.getUndefinedSymbols().isEmpty()) {
+            throw IxmlException.undefinedSymbols(report.getUndefinedSymbols());
+        }
+        if (!options.getAllowUnreachableSymbols() && !report.getUnreachableSymbols().isEmpty()) {
+            throw IxmlException.unreachableSymbols(report.getUnreachableSymbols());
+        }
+        if (!options.getAllowUnproductiveSymbols() && !report.getUnproductiveSymbols().isEmpty()) {
+            throw IxmlException.unproductiveSymbols(report.getUnproductiveSymbols());
+        }
     }
 
     private void setupDerivation(XNode original, XNode copy) {

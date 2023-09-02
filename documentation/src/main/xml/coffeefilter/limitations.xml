@@ -1,0 +1,24 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi='http://www.w3.org/2001/XInclude'
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="cf_limitations"
+         version="5.2">
+<title>Limitations</title>
+
+<para>This chapter documents an assortment of implementation defined features and limitations.
+</para>
+
+<itemizedlist>
+<listitem>
+<para>The version of Unicode available depends on the version of Java used to build the
+library. This effects which <link linkend="character-classes">character classes</link> are
+recognized.</para>
+</listitem>
+<listitem>
+<para>The ambiguity analyzer depends on its own Unicode support which does not include
+characters outside the basic multilingual plane. Also, character classes with many members
+tend to make it run more slowly.</para>
+</listitem>
+</itemizedlist>
+
+</chapter>

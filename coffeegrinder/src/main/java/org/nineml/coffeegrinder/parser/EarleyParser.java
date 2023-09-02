@@ -4,6 +4,7 @@ import org.nineml.coffeegrinder.exceptions.ParseException;
 import org.nineml.coffeegrinder.tokens.Token;
 import org.nineml.coffeegrinder.tokens.TokenCharacter;
 import org.nineml.coffeegrinder.tokens.TokenRegex;
+import org.nineml.coffeegrinder.tokens.TokenUndefined;
 import org.nineml.coffeegrinder.util.ParserAttribute;
 import org.nineml.coffeegrinder.util.StopWatch;
 
@@ -48,12 +49,12 @@ public class EarleyParser implements GearleyParser {
 
         parserInput = new ParserInput(options, grammar.usesRegex);
 
-        List<Rule> usefulRules = usefulSubset(grammar.getRules());
+        List<Rule> allRules = allRules(grammar.getRules());
 
         // I actually only care about the rules, so copy them.
         HashSet<NonterminalSymbol> nulled = new HashSet<>();
         Rho = new HashMap<>();
-        for (Rule rule : usefulRules) {
+        for (Rule rule : allRules) {
             if (!Rho.containsKey(rule.getSymbol())) {
                 Rho.put(rule.getSymbol(), new ArrayList<>());
             }
@@ -90,33 +91,23 @@ public class EarleyParser implements GearleyParser {
         return ParserType.Earley;
     }
 
-    private List<Rule> usefulSubset(List<Rule> initiallist) {
-        ArrayList<Rule> currentList = new ArrayList<>();
-        ArrayList<Rule> rules = new ArrayList<>(initiallist);
-        boolean done = false;
-        while (!done) {
-            done = true;
-            currentList.clear();
-            currentList.addAll(rules);
-            rules.clear();
-
-            HashSet<NonterminalSymbol> defined = new HashSet<>();
-            for (Rule rule : currentList) {
-                defined.add(rule.getSymbol());
+    private List<Rule> allRules(List<Rule> initialList) {
+        HashSet<NonterminalSymbol> defined = new HashSet<>();
+        HashSet<NonterminalSymbol> used = new HashSet<>();
+        for (Rule rule : initialList) {
+            defined.add(rule.symbol);
+            for (Symbol symbol : rule.getRhs().symbols) {
+                if (symbol instanceof NonterminalSymbol) {
+                    used.add((NonterminalSymbol) symbol);
+                }
             }
-            for (Rule rule : currentList) {
-                boolean exclude = false;
-                for (Symbol symbol : rule.getRhs().symbols) {
-                    if (symbol instanceof NonterminalSymbol && !defined.contains(symbol)) {
-                        options.getLogger().debug(logcategory, "Ignoring rule with undefined symbol: %s", rule);
-                        exclude = true;
-                        done = false;
-                        break;
-                    }
-                }
-                if (!exclude) {
-                    rules.add(rule);
-                }
+        }
+
+        ArrayList<Rule> rules = new ArrayList<>(initialList);
+        for (NonterminalSymbol symbol : used) {
+            if (!defined.contains(symbol)) {
+                Rule rule = new Rule(symbol, TerminalSymbol.UNDEFINED);
+                rules.add(rule);
             }
         }
 

@@ -144,7 +144,7 @@ class Main {
             if (config.bnf && grammarURI != null) {
                 checkBnf(grammarURI);
             }
-            hygeineReport();
+            hygieneReport();
         } else {
             if (parser.getException() != null) {
                 stderr.printf("Failed to parse grammar: %s%n", parser.getException().getMessage());
@@ -223,7 +223,7 @@ class Main {
         }
     }
 
-    private void hygeineReport() {
+    private void hygieneReport() {
         HygieneReport report = parser.getHygieneReport();
 
         if (!report.isClean()) {
@@ -263,11 +263,9 @@ class Main {
                 options.getLogger().debug(logcategory, "Unreachable symbols: %s", sb);
             }
 
-            boolean unusable = false;
             sep = "";
             sb = new StringBuilder();
             for (NonterminalSymbol symbol : report.getUndefinedSymbols()) {
-                unusable = unusable || !report.getUnreachableSymbols().contains(symbol);
                 if (options.getPedantic() || !symbol.symbolName.startsWith("$")) {
                     sb.append(sep).append(symbol);
                     sep = ", ";
@@ -275,9 +273,6 @@ class Main {
             }
             if (!sb.toString().isEmpty()) {
                 options.getLogger().debug(logcategory, "Undefined symbols: %s", sb);
-                if (unusable) {
-                    throw new RuntimeException("Cannot use grammar with reachable undefined symbols");
-                }
             }
         }
 
