@@ -51,6 +51,10 @@ public class HygieneReport {
             rulesBySymbol = parserGrammar.getRulesBySymbol();
         }
 
+        for (NonterminalSymbol nt : undefinedSymbols()) {
+            addUndefined(nt);
+        }
+
         HashSet<NonterminalSymbol> reachable = new HashSet<>();
         walk(seed, reachable);
         for (Rule rule : rules) {
@@ -59,8 +63,10 @@ public class HygieneReport {
             }
         }
 
-        for (NonterminalSymbol nt : undefinedSymbols()) {
-            addUndefined(nt);
+        for (NonterminalSymbol nt : undefinedSymbols) {
+            if (!reachable.contains(nt)) {
+                addUnreachable(nt);
+            }
         }
 
         // What about unproductive non-terminals?
