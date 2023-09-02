@@ -416,4 +416,20 @@ public class MainTest extends CoffeePotTest {
             fail();
         }
     }
+
+    @Test
+    public void issue_29() {
+        // This test is the only test I have that exercises the weird condition on line 128
+        // of Family where the GLL parser has returned an oddly formatted SPPF where
+        // w.state has only one symbol on the right hand side
+        Main main = new Main();
+        try {
+            String input = "Y bardd ddwylaw";
+            OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/poem.ixml", "--gll", "-pp", input });
+            Assertions.assertEquals(1, manager.stringRecords.size());
+            Assertions.assertTrue(manager.stringRecords.get(0).contains("<poem"));
+        } catch (Exception ex) {
+            fail();
+        }
+    }
 }
