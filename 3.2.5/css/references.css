@@ -1,0 +1,9 @@
+/* references */
+
+.changelog .revdescription {
+    font-size: 80%;
+}
+
+.changelog .revdescription dl {
+    margin-top: 1rem;
+}
