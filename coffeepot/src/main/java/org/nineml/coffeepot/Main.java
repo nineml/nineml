@@ -144,7 +144,7 @@ class Main {
             if (config.bnf && grammarURI != null) {
                 checkBnf(grammarURI);
             }
-            hygeineReport();
+            hygieneReport();
         } else {
             if (parser.getException() != null) {
                 stderr.printf("Failed to parse grammar: %s%n", parser.getException().getMessage());
@@ -223,7 +223,7 @@ class Main {
         }
     }
 
-    private void hygeineReport() {
+    private void hygieneReport() {
         HygieneReport report = parser.getHygieneReport();
 
         if (!report.isClean()) {
