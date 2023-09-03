@@ -339,7 +339,12 @@ public class OutputManager {
                     Grammar grammar = parser.getGrammar();
                     for (CsvColumn column : columns) {
                         for (Rule rule : grammar.getRules()) {
-                            if (column.getName().equals(rule.symbol.getName())) {
+                            String name = rule.symbol.getName();
+                            if (rule.getSymbol().hasAttribute(InvisibleXml.NAME_ATTRIBUTE)) {
+                                name = rule.getSymbol().getAttributeValue(InvisibleXml.NAME_ATTRIBUTE, name);
+                            }
+
+                            if (column.getName().equals(name)) {
                                 String heading = rule.getSymbol().getAttributeValue(InvisibleXml.CSV_HEADING_ATTRIBUTE, null);
                                 if (heading != null) {
                                     column.setHeader(heading);
