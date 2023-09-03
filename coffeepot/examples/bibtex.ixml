@@ -1,4 +1,4 @@
-bibtex: item+itemsep, s* .
+bibtex: item++itemsep, s* .
 itemsep: s+ .
 
 -item: comment ; entry .
@@ -10,7 +10,7 @@ entry: -"@", @type, s*, -'{', s*, @citekey, fields?, s*, -'}' .
 type: -name .
 citekey: -name .
 
--fields: -',', field+fsep .
+-fields: -',', field++fsep .
 
 field: s*, name, s*, -'=', s*, value .
 value: quotedvalue; bracedvalue; atomicvalue .
