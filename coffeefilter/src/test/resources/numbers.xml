@@ -1,0 +1,81 @@
+<ixml>
+   <rule name='number'>
+      <alt>
+         <nonterminal name='integer'/>
+      </alt>
+      <alt>
+         <nonterminal name='float'/>
+      </alt>
+      <alt>
+         <nonterminal name='scientific'/>
+      </alt>
+   </rule>
+   <rule name='sign'>
+      <alt>
+         <literal string='+'/>
+      </alt>
+      <alt>
+         <literal string='-'/>
+      </alt>
+   </rule>
+   <rule mark='-' name='digit'>
+      <alt>
+         <inclusion>
+            <member from='0' to='9'/>
+         </inclusion>
+      </alt>
+   </rule>
+   <rule name='digits'>
+      <alt>
+         <repeat1>
+            <nonterminal name='digit'/>
+         </repeat1>
+      </alt>
+   </rule>
+   <rule name='integer'>
+      <alt>
+         <option>
+            <nonterminal name='sign'/>
+         </option>
+         <nonterminal name='digits'/>
+      </alt>
+   </rule>
+   <rule name='point'>
+      <alt>
+         <literal tmark='-' string='.'/>
+      </alt>
+   </rule>
+   <rule name='float'>
+      <alt>
+         <option>
+            <nonterminal name='sign'/>
+         </option>
+         <nonterminal name='digits'/>
+         <nonterminal name='point'/>
+         <nonterminal name='digits'/>
+      </alt>
+   </rule>
+   <rule name='E'>
+      <alt>
+         <literal tmark='-' string='E'/>
+      </alt>
+   </rule>
+   <rule name='scientific'>
+      <alt>
+         <nonterminal name='integer'/>
+         <nonterminal name='E'/>
+         <option>
+            <nonterminal name='sign'/>
+         </option>
+         <nonterminal name='digits'/>
+      </alt>
+      <alt>
+         <nonterminal name='float'/>
+         <nonterminal name='E'/>
+         <option>
+            <nonterminal name='sign'/>
+         </option>
+         <nonterminal name='digits'/>
+      </alt>
+   </rule>
+</ixml>

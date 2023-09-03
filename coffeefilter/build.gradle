@@ -67,9 +67,13 @@ configurations {
 
 dependencies {
   implementation project(':coffeegrinder')
+  implementation (
+    [group: 'org.relaxng', name: 'jing', version: '20220510']
+  )
 
   testImplementation (
     [group: 'com.saxonica', name: 'Saxon-EE', version: saxonVersion],
+    [group: 'org.relaxng', name: 'jing', version: '20220510'],
     files(saxonLicenseDir)
   )
   testsuite (
@@ -322,6 +326,42 @@ tasks.withType(JavaCompile) {
 
 // ============================================================
 
+def pomXml() {
+  // Make the jing dependency optional
+
+  return {
+    Node pom = asNode()
+    NodeList pomNodes = pom.value()
+    Node dependencies = null
+    pomNodes.forEach { pomit ->
+      if (pomit.name().getNamespaceURI() == 'http://maven.apache.org/POM/4.0.0'
+          && pomit.name().getLocalPart() == 'dependencies') {
+        dependencies = pomit;
+      }
+    }
+
+    Iterator iterator = dependencies.iterator()
+    while (iterator.hasNext()) {
+      Node dep = iterator.next()
+      NodeList str = dep.get("artifactId")
+      if ("jing".equals(str.get(0).value().get(0))) {
+        def optional = dep.optional[0]
+        if (!optional) {
+          optional = dep.appendNode("optional")
+        }
+        optional.value = 'true'
+      }
+    }
+/*
+    def dependencyNode = dependencies.appendNode('dependency')
+    dependencyNode.appendNode('groupId', 'net.sf.saxon')
+    dependencyNode.appendNode('artifactId', 'Saxon-HE')
+    dependencyNode.appendNode('version', saxonPomVersionList)
+    dependencyNode.appendNode('scope', 'runtime')
+*/
+  }
+}
+
 signing {
   sign publishing.publications
 }
@@ -355,6 +395,8 @@ publishing {
             name = 'Norman Walsh'
           }
         }
+
+        withXml pomXml()
       }
 
       groupId = "org.nineml"

@@ -35,6 +35,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
     private boolean strictAmbiguity = false;
     private String startSymbol = null;
     private final HashSet<String> disabledPragmas;
+    private boolean validateVxml = true;
 
     // FIXME: this list should somehow be connected to the pragmas defined in InvisibleXml
     private static final HashSet<String> knownPragmas = new HashSet<>(Arrays.asList("discard-empty", "ns", "priority", "regex", "rename"));
@@ -87,6 +88,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
         ignoreBOM = copy.ignoreBOM;
         disabledPragmas = new HashSet<>(copy.disabledPragmas);
         startSymbol = copy.startSymbol;
+        validateVxml = copy.validateVxml;
     }
 
     /**
@@ -492,4 +494,19 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
         startSymbol = name;
     }
 
+    /**
+     * Should validate VXML grammars?
+     * @return true if the grammar should be validated
+     */
+    public boolean getValidateVxml() {
+        return validateVxml;
+    }
+
+    /**
+     * Set the {@link #getValidateVxml()} property.
+     * @param validate true if VXML grammars should be validated
+     */
+    public void setValidateVxml(boolean validate) {
+        validateVxml = validate;
+    }
 }

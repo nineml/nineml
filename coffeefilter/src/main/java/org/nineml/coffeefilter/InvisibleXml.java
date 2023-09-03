@@ -7,7 +7,6 @@ import org.nineml.coffeefilter.model.IxmlContentHandler;
 import org.nineml.coffeefilter.util.GrammarSniffer;
 import org.nineml.coffeefilter.util.IxmlInputBuilder;
 import org.nineml.coffeegrinder.exceptions.CoffeeGrinderException;
-import org.nineml.coffeegrinder.parser.HygieneReport;
 import org.nineml.coffeegrinder.tokens.Token;
 import org.xml.sax.SAXException;
 
@@ -15,6 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -106,7 +107,7 @@ public class InvisibleXml {
             // Kinda hacky. The start symbol doesn't apply here.
             String startSymbol = options.getStartSymbol();
             options.setStartSymbol("ixml");
-            ixmlForIxml = getParserFromVxml(stream, resource.toString());
+            ixmlForIxml = getParserFromVxml(stream, resource.toString(), true);
             options.setStartSymbol(startSymbol);
         } catch (IOException ex) {
             throw IxmlException.failedToLoadIxmlGrammar(ex);
@@ -292,6 +293,40 @@ public class InvisibleXml {
      * @throws IxmlException if the input is not an ixml grammar
      */
     public InvisibleXmlParser getParserFromVxml(InputStream stream, String systemId) throws IOException {
+        return getParserFromVxml(stream, systemId, false);
+    }
+
+    private InvisibleXmlParser getParserFromVxml(InputStream stream, String systemId, boolean skipValidation) throws IOException {
+        if (options.getValidateVxml() && !skipValidation) {
+            URL schema = getClass().getResource("/org/nineml/coffeefilter/ixml.rnc");
+            if (schema == null) {
+                options.getLogger().debug(logcategory, "No RELAX NG schema for VXML is available");
+            } else {
+                String error = null;
+
+                try {
+                    // Load this dynamically so that we can run without the Jing classes on the class path
+                    Class<?> klass = Class.forName("org.nineml.coffeefilter.util.VxmlValidator");
+                    Object validator = klass.getDeclaredConstructor().newInstance();
+                    Method method = klass.getMethod("validateVxml", InputStream.class, URL.class, ParserOptions.class);
+                    stream = (InputStream) method.invoke(validator, stream, schema, options);
+                    method = klass.getMethod("valid");
+                    boolean valid = (boolean) method.invoke(validator);
+                    if (!valid) {
+                        method = klass.getMethod("getError");
+                        error = (String) method.invoke(validator);
+                    }
+                } catch (ClassNotFoundException | NoClassDefFoundError | NoSuchMethodException
+                         | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                    options.getLogger().debug(logcategory, "Failed to load VXML validator: %s", ex.getMessage());
+                }
+
+                if (error != null) {
+                    throw IxmlException.invalidVxmlGrammar(systemId, error);
+                }
+            }
+        }
+
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
         factory.setValidating(false);

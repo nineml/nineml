@@ -98,6 +98,7 @@ public class IxmlException extends RuntimeException {
     public static IxmlException renameUnavailable(String name, String rename) { return getException("E015", new String[] {name, rename}); }
     public static IxmlException repeatedPragma(String name, String data1, String data2) { return getException("E016", new String[] {name, data1, data2}); }
     public static IxmlException noSuchSymbol(String name) { return getException("E017", name); }
+    public static IxmlException invalidVxmlGrammar(String schema, String message) { return getException("E018", new String[] {schema, message}); }
 
     private static String symbolList(Set<NonterminalSymbol> symbols) {
         StringBuilder sb = new StringBuilder();
