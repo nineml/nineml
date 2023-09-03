@@ -1,6 +1,6 @@
 <ixml>
    <prolog>
-      <version string='1.0'/>
+      <version string='1.1-nineml'/>
       <comment> Based on the 2022-06-07 grammar </comment>
    </prolog>
    <rule name='ixml'>
@@ -87,7 +87,7 @@
                <alt>
                   <alts>
                      <alt>
-                        <nonterminal name='comment'/>
+                        <nonterminal name='comment-or-pragma'/>
                      </alt>
                      <alt>
                         <exclusion>
@@ -101,13 +101,29 @@
                            <nonterminal name='cchar'/>
                         </alt>
                         <alt>
-                           <nonterminal name='comment'/>
+                           <nonterminal name='comment-or-pragma'/>
                         </alt>
                      </alts>
                   </repeat0>
                </alt>
             </alts>
          </option>
+         <literal tmark='-' string='}'/>
+      </alt>
+   </rule>
+   <rule name='comment-or-pragma' rename='comment'>
+      <alt>
+         <literal tmark='-' string='{'/>
+         <repeat0>
+            <alts>
+               <alt>
+                  <nonterminal name='cchar'/>
+               </alt>
+               <alt>
+                  <nonterminal name='comment-or-pragma'/>
+               </alt>
+            </alts>
+         </repeat0>
          <literal tmark='-' string='}'/>
       </alt>
    </rule>
@@ -122,15 +138,19 @@
       <alt>
          <alts>
             <alt>
+               <nonterminal name='version'/>
+            </alt>
+            <alt>
                <alts>
                   <alt>
                      <nonterminal name='version'/>
-                     <repeat0>
+                     <nonterminal name='s'/>
+                     <repeat1>
                         <nonterminal name='ppragma'/>
                         <sep>
                            <nonterminal name='s'/>
                         </sep>
-                     </repeat0>
+                     </repeat1>
                   </alt>
                </alts>
             </alt>

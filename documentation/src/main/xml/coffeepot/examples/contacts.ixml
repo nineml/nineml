@@ -1,4 +1,4 @@
-{[nineml csv-columns email,name]} .
+{[+nineml csv-columns email,name]}
 
 contacts: (contact, NL*)+ .
 contact: name, NL, (email, NL)?, (phone, NL)? .

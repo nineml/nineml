@@ -10,9 +10,10 @@ DT02: Duplicate names forbidden: %2.
 E006: Invalid tmark: %1.
 E012: Unreachable symbol(s): ‘%1’.
 E013: Unproductive symbol(s): ‘%1’.
-E015: Symbol renaming is not supported in 1.0 grammars %1 > %2.
+E015: Symbol renaming is not supported in 1.0 grammars: %1 > %2.
 E016: Pragma cannot be repeated: %1 (%2, %3).
 E017: The start symbol specified does not appear in the grammar: %1.
+E018: Invalid schema: %1 (%2).
 I001: Internal error: failed to load ixml specification grammar: %1.
 I002: Internal error: failed to load ixml specification grammar: %1.
 I003: Internal error: %1.

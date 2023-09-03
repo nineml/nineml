@@ -1,4 +1,4 @@
-ixml version "1.0".
+ixml version "1.1-nineml".
 { Based on the 2022-06-07 grammar }
 
          ixml: s, prolog?, rule++RS, s. 
@@ -9,10 +9,12 @@ ixml version "1.0".
          -tab: -#9.
           -lf: -#a.
           -cr: -#d.
-      comment: -"{", ((comment; ~["[]{}"]), (cchar; comment)*)?, -"}".
+      comment: -"{", ((comment-or-pragma; ~["[]{}"]), (cchar; comment-or-pragma)*)?, -"}".
+comment-or-pragma>comment: -"{", (cchar; comment-or-pragma)*, -"}".
+
        -cchar: ~["{}"].
 
-       prolog: ((version, ppragma**s) | ppragma++s), s. 
+       prolog: (version | (version, s, ppragma++s) | ppragma++s), s.
       version: -"ixml", RS, -"version", RS, string, s, -'.' .
 
          rule: annotation, naming, -["=:"], s, -alts, (pragma, sp)?, -".". 

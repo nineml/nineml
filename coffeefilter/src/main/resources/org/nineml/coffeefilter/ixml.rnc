@@ -1,0 +1,195 @@
+namespace ixml = "http://invisiblexml.org/NS"
+
+start = ixml
+
+# On the one hand, it's tempting to make patterns for these values
+# that enforce their constraints. On the other hand, doing so causes
+# at least one test suite test to fail because the schema validation
+# fails before the test is even run. This produces a different, and
+# non-standard, error code. To avoid that, no patterns are used. The
+# processor will check them and raise appropriate errors anyway.
+
+hex       = text
+rangechar = text
+rangehex  = text
+charclass = text
+name      = text
+
+s = comment*
+sp = (comment|pragma)*
+
+comment =
+    element comment {
+        (text|comment)*
+    }
+
+ixml =
+    element ixml {
+        attribute ixml:state { text }?,
+        s,
+        prolog?,
+        (rule|s)+
+    }
+
+prolog =
+    element prolog {
+        version?,
+        s,
+        ppragma*,
+        s
+    }
+
+version =
+    element version {
+        attribute \string { text },
+        empty
+    }
+
+rule =
+    element rule {
+        attribute mark { "^" | "@" | "-" }?,
+        attribute name { name },
+        attribute rename { name }?,
+        sp,
+        alt+,
+        sp
+    }
+
+alts =
+    element alts {
+        alt+,
+        s
+    }
+
+alt =
+    element alt {
+        (literal | inclusion | exclusion
+         | nonterminal
+         | insertion
+         | option
+         | repeat0
+         | repeat1
+         | alts
+         | s)*
+    }
+
+literal =
+    element literal {
+        attribute tmark { "^" | "-" }?,
+        (
+            attribute hex { hex }
+          | attribute \string { text }
+        ),
+        sp
+    }
+
+inclusion =
+    element inclusion {
+        attribute tmark { "^" | "-" }?,
+        s,
+        member*,
+        s
+    }
+
+exclusion =
+    element exclusion {
+        attribute tmark { "^" | "-" }?,
+        s,
+        member*,
+        s
+    }
+
+member =
+    element member {
+        (
+            attribute \string { text }
+          | attribute hex { hex }
+          | attribute code { charclass }
+          | (attribute from { rangechar | rangehex }
+             & attribute to { rangechar | rangehex })
+        ),
+        s
+    }
+
+nonterminal =
+    element nonterminal {
+        attribute mark { "^" | "@" | "-" }?,
+        attribute name { name },
+        attribute rename { name }?,
+        sp
+    }
+
+insertion =
+    element insertion {
+        (
+            attribute \string { text }
+          | attribute hex { hex }
+        ),
+        s
+    }
+
+option =
+    element option {
+        (literal | inclusion | exclusion
+         | nonterminal
+         | insertion
+         | option
+         | repeat0
+         | repeat1
+         | alts),
+        s
+    }
+
+repeat0 =
+    element repeat0 {
+        (literal | inclusion | exclusion
+         | nonterminal
+         | insertion
+         | option
+         | repeat0
+         | repeat1
+         | alts),
+        s,
+        sep?
+    }
+
+repeat1 =
+    element repeat1 {
+        (literal | inclusion | exclusion
+         | nonterminal
+         | insertion
+         | option
+         | repeat0
+         | repeat1
+         | alts),
+        s,
+        sep?
+    }
+
+sep =
+    element sep {
+        (literal | inclusion | exclusion
+         | nonterminal
+         | insertion
+         | option
+         | repeat0
+         | repeat1
+         | alts)
+    }        
+        
+ppragma =
+    element ppragma {
+        attribute pname { name },
+        pragma-data?
+    }
+
+pragma =
+    element pragma {
+        attribute pname { name },
+        pragma-data?
+}
+
+pragma-data =
+    element pragma-data {
+        text 
+    }
