@@ -49,6 +49,7 @@ public class InvisibleXml {
     public static final String INSERTION_ATTRIBUTE = "https://coffeefilter.nineml.org/attr/insertion";
     /** The internal name for the discard parser attribute. */
     public static final String DISCARD_ATTRIBUTE = "https://coffeefilter.nineml.org/attr/discard";
+    public static final String CSV_HEADING_ATTRIBUTE = "https://coffeefilter.nineml.org/attr/csv-heading";
 
     /** The namespace prefix for the Invisilble XML namespace. */
     public static final String ixml_prefix = "ixml";
