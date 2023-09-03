@@ -98,9 +98,13 @@ pragmas that it is ignoring.</para>
 <para>Usage:</para>
 <synopsis linenumbering="unnumbered">{[+nineml csv-columns <replaceable>list,of,names</replaceable>]}</synopsis>
 
-<para>Ordinarily, CSV formatted output includes all the columns in (roughly)
-the order they occur in the XML. This pragma allows you to list the
-columns you want output and the order in which you want them output.</para>
+<para>Ordinarily, CSV formatted output includes all the columns in
+(roughly) the order they occur in the XML. This pragma allows you to
+list the columns you want output and the order in which you want them
+output.</para>
+
+<para>If the grammar renames nonterminals, the new “renamed” name
+must be used in the list of column names.</para>
 
 <para>If a column requested does not exist in the document, it is
 ignored. An empty column is not produced.</para>
@@ -223,20 +227,23 @@ that is defined but cannot be reached from the start rule.</para>
 <section xml:id="pragmas-rules">
 <title>Rule pragmas</title>
 
-<para>There following pragmas apply to a rules.</para>
+<para>The following pragmas apply to rules.</para>
 
-<!--
 <section xml:id="pragma-csv-heading">
 <title>csv-heading</title>
 
-<para>Specify the heading title to use in CSV output if the nonterminal defined
-by this is used as the value of a column.</para>
+<para>Specify the heading title to use in CSV output if the
+nonterminal defined by this rule is used as the value of a
+column. (If no heading is specified, the name of the nonterminal
+is used as the heading.)</para>
 
 <para>Usage:</para>
-<synopsis linenumbering="unnumbered">{[nineml xmlns "Heading Title"]}</synopsis>
+<synopsis linenumbering="unnumbered">{[nineml csv-heading "Heading Title"]}</synopsis>
+
+<para>Heading titles may be quoted with either single
+(<code>'</code>) or double (<code>"</code>) quotes.</para>
 
 </section>
--->
 
 <section xml:id="pragma-discard-empty">
 <title>discard-empty</title>
@@ -285,10 +292,6 @@ At first glance, this grammar may seem equivalent:</para>
 entire string “aaba” is consumed by the regular expression, leaving no “a” for the last
 terminal in S to match.
 </para></listitem>
-<listitem><para>The GLL parser doesn’t support multiple regular expressions that start at the
-same place. This is an implementation deficiency. It means that some ambiguous grammars cannot
-be parsed using the GLL parser and regular expressions.
-</para></listitem>
 </orderedlist>
 </section>
 
@@ -310,7 +313,8 @@ only to nonterminals.</para>
 
 <para>An alternative approach is to use the nonterminal renaming
 <link xlink:href="https://lists.w3.org/Archives/Public/public-ixml/2023Jun/0030.html">proposal</link>.
-This is an experimental feature. To use it, you must specify that the
+This is an experimental feature while the renaming proposal is
+under development. To use it, you must specify that the
 grammar version is “<literal>1.1-nineml</literal>”.</para>
 </section>
 
