@@ -27,7 +27,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -239,13 +239,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>java.util.List&lt;org.nineml.coffeefilter.model.IPragma&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPragmas()">getPragmas</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Get the pragmas associated with this parser.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.File)">parse</a></span>&#8203;(java.io.File&nbsp;source)</code></th>
 <td class="colLast">
 <div class="block">Get a document from a file.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.File,java.lang.String)">parse</a></span>&#8203;(java.io.File&nbsp;source,
      java.lang.String&nbsp;encoding)</code></th>
@@ -253,7 +260,7 @@ extends java.lang.Object</pre>
 <div class="block">Get a document from a file with an explicit encoding.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.io.InputStream,java.lang.String)">parse</a></span>&#8203;(java.io.InputStream&nbsp;stream,
      java.lang.String&nbsp;encoding)</code></th>
@@ -261,21 +268,21 @@ extends java.lang.Object</pre>
 <div class="block">Get a document from a stream.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Get a document from a string.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.net.URI)">parse</a></span>&#8203;(java.net.URI&nbsp;source)</code></th>
 <td class="colLast">
 <div class="block">Get a document from a URI.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.net.URI,java.lang.String)">parse</a></span>&#8203;(java.net.URI&nbsp;source,
      java.lang.String&nbsp;encoding)</code></th>
@@ -283,14 +290,14 @@ extends java.lang.Object</pre>
 <div class="block">Get a document from a URI with an explicit encoding.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="InvisibleXmlDocument.html" title="class in org.nineml.coffeefilter">InvisibleXmlDocument</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(org.nineml.coffeegrinder.tokens.Token%5B%5D)">parse</a></span>&#8203;(org.nineml.coffeegrinder.tokens.Token[]&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Get a document from an array of tokens.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readInputStream(java.io.InputStream,java.lang.String)">readInputStream</a></span>&#8203;(java.io.InputStream&nbsp;stream,
                java.lang.String&nbsp;charset)</code></th>
@@ -380,6 +387,20 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the metadata</dd>
+</dl>
+</li>
+</ul>
+<a id="getPragmas()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPragmas</h4>
+<pre class="methodSignature">public&nbsp;java.util.List&lt;org.nineml.coffeefilter.model.IPragma&gt;&nbsp;getPragmas()</pre>
+<div class="block">Get the pragmas associated with this parser.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the list of pragmas.</dd>
 </dl>
 </li>
 </ul>

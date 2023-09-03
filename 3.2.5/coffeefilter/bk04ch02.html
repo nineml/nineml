@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Pragmas</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-09-03T17:10:26Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04ch01.html"/><link rel="next" href="bk04ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. General use" href="bk04ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. Limitations" href="bk04ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_pragmas" db-chunk="bk04ch02.html" db-id="d490e4952" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Pragmas</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Pragmas</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-09-03T17:44:23Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04ch01.html"/><link rel="next" href="bk04ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. General use" href="bk04ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. Limitations" href="bk04ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_pragmas" db-chunk="bk04ch02.html" db-id="d490e4952" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Pragmas</h2></header>
 
 
 <p>It’s possible to influence the behavior of the processor by placing
@@ -94,9 +94,13 @@ pragmas that it is ignoring.</p>
 <p>Usage:</p>
 <div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+nineml csv-columns <em class="replaceable">list,of,names</em>]}</code></pre></div>
 
-<p>Ordinarily, CSV formatted output includes all the columns in (roughly)
-the order they occur in the XML. This pragma allows you to list the
-columns you want output and the order in which you want them output.</p>
+<p>Ordinarily, CSV formatted output includes all the columns in
+(roughly) the order they occur in the XML. This pragma allows you to
+list the columns you want output and the order in which you want them
+output.</p>
+
+<p>If the grammar renames nonterminals, the new “renamed” name
+must be used in the list of column names.</p>
 
 <p>If a column requested does not exist in the document, it is
 ignored. An empty column is not produced.</p>
@@ -204,11 +208,25 @@ that is defined but cannot be reached from the start rule.</p>
 <section id="pragmas-rules" class="section"><header><h2><span class="label">2<span class="sep">.</span>2</span><span class="sep">. </span>Rule pragmas</h2></header>
 
 
-<p>There following pragmas apply to a rules.</p>
+<p>The following pragmas apply to rules.</p>
+
+<section id="pragma-csv-heading" class="section"><header><h3><span class="label">2<span class="sep">.</span>2<span class="sep">.</span>1</span><span class="sep">. </span>csv-heading</h3></header>
 
 
+<p>Specify the heading title to use in CSV output if the
+nonterminal defined by this rule is used as the value of a
+column. (If no heading is specified, the name of the nonterminal
+is used as the heading.)</p>
 
-<section id="pragma-discard-empty" class="section"><header><h3><span class="label">2<span class="sep">.</span>2<span class="sep">.</span>1</span><span class="sep">. </span>discard-empty</h3></header>
+<p>Usage:</p>
+<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[nineml csv-heading "Heading Title"]}</code></pre></div>
+
+<p>Heading titles may be quoted with either single
+(<code>'</code>) or double (<code>"</code>) quotes.</p>
+
+</section>
+
+<section id="pragma-discard-empty" class="section"><header><h3><span class="label">2<span class="sep">.</span>2<span class="sep">.</span>2</span><span class="sep">. </span>discard-empty</h3></header>
 
 
 <p>If the nonterminal defined by this rule is empty, it will be discarded (not
@@ -219,7 +237,7 @@ serialized at all).</p>
 
 </section>
 
-<section id="pragma-regex" class="section"><header><h3><span class="label">2<span class="sep">.</span>2<span class="sep">.</span>2</span><span class="sep">. </span>regex</h3></header>
+<section id="pragma-regex" class="section"><header><h3><span class="label">2<span class="sep">.</span>2<span class="sep">.</span>3</span><span class="sep">. </span>regex</h3></header>
 
 
 <p>This pragma replaces the “right hand side” of a nonterminal with a regular expression.
@@ -269,10 +287,6 @@ At first glance, this grammar may seem equivalent:</p>
 entire string “aaba” is consumed by the regular expression, leaving no “a” for the last
 terminal in S to match.
 </p></li>
-<li><p>The GLL parser doesn’t support multiple regular expressions that start at the
-same place. This is an implementation deficiency. It means that some ambiguous grammars cannot
-be parsed using the GLL parser and regular expressions.
-</p></li>
 </ol>
 </section>
 
@@ -294,7 +308,8 @@ only to nonterminals.</p>
 
 <p>An alternative approach is to use the nonterminal renaming
 <a href="https://lists.w3.org/Archives/Public/public-ixml/2023Jun/0030.html" class="link">proposal</a>.
-This is an experimental feature. To use it, you must specify that the
+This is an experimental feature while the renaming proposal is
+under development. To use it, you must specify that the
 grammar version is “<code class="literal">1.1-nineml</code>”.</p>
 </section>
 
