@@ -399,6 +399,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/trees/CsvColumn.html#getDatatype()">getDatatype()</a></span> - Method in class org.nineml.coffeefilter.trees.<a href="org/nineml/coffeefilter/trees/CsvColumn.html" title="class in org.nineml.coffeefilter.trees">CsvColumn</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/util/VxmlValidator.html#getError()">getError()</a></span> - Method in class org.nineml.coffeefilter.util.<a href="org/nineml/coffeefilter/util/VxmlValidator.html" title="class in org.nineml.coffeefilter.util">VxmlValidator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/InvisibleXmlParser.html#getException()">getException()</a></span> - Method in class org.nineml.coffeefilter.<a href="org/nineml/coffeefilter/InvisibleXmlParser.html" title="class in org.nineml.coffeefilter">InvisibleXmlParser</a></dt>
 <dd>
 <div class="block">Return the exception that caused an attempt to build a parser to fail.</div>
@@ -637,6 +639,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/util/AttributeBuilder.html#getURI(int)">getURI(int)</a></span> - Method in class org.nineml.coffeefilter.util.<a href="org/nineml/coffeefilter/util/AttributeBuilder.html" title="class in org.nineml.coffeefilter.util">AttributeBuilder</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/ParserOptions.html#getValidateVxml()">getValidateVxml()</a></span> - Method in class org.nineml.coffeefilter.<a href="org/nineml/coffeefilter/ParserOptions.html" title="class in org.nineml.coffeefilter">ParserOptions</a></dt>
+<dd>
+<div class="block">Should validate VXML grammars?</div>
+</dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/trees/DataText.html#getValue()">getValue()</a></span> - Method in class org.nineml.coffeefilter.trees.<a href="org/nineml/coffeefilter/trees/DataText.html" title="class in org.nineml.coffeefilter.trees">DataText</a></dt>
 <dd>
 <div class="block">Get the value.</div>
@@ -706,6 +712,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/exceptions/IxmlTreeException.html#invalidText(java.lang.String)">invalidText(String)</a></span> - Static method in exception org.nineml.coffeefilter.exceptions.<a href="org/nineml/coffeefilter/exceptions/IxmlTreeException.html" title="class in org.nineml.coffeefilter.exceptions">IxmlTreeException</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/exceptions/IxmlException.html#invalidTMark(char)">invalidTMark(char)</a></span> - Static method in exception org.nineml.coffeefilter.exceptions.<a href="org/nineml/coffeefilter/exceptions/IxmlException.html" title="class in org.nineml.coffeefilter.exceptions">IxmlException</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/exceptions/IxmlException.html#invalidVxmlGrammar(java.lang.String,java.lang.String)">invalidVxmlGrammar(String, String)</a></span> - Static method in exception org.nineml.coffeefilter.exceptions.<a href="org/nineml/coffeefilter/exceptions/IxmlException.html" title="class in org.nineml.coffeefilter.exceptions">IxmlException</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/exceptions/IxmlException.html#invalidXmlCharacter(java.lang.String)">invalidXmlCharacter(String)</a></span> - Static method in exception org.nineml.coffeefilter.exceptions.<a href="org/nineml/coffeefilter/exceptions/IxmlException.html" title="class in org.nineml.coffeefilter.exceptions">IxmlException</a></dt>
 <dd>&nbsp;</dd>
@@ -1101,6 +1109,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Set the <a href="org/nineml/coffeefilter/ParserOptions.html#getTrailingNewlineOnOutput()"><code>ParserOptions.getTrailingNewlineOnOutput()</code></a> property.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/ParserOptions.html#setValidateVxml(boolean)">setValidateVxml(boolean)</a></span> - Method in class org.nineml.coffeefilter.<a href="org/nineml/coffeefilter/ParserOptions.html" title="class in org.nineml.coffeefilter">ParserOptions</a></dt>
+<dd>
+<div class="block">Set the <a href="org/nineml/coffeefilter/ParserOptions.html#getValidateVxml()"><code>ParserOptions.getValidateVxml()</code></a> property.</div>
+</dd>
 <dt><a href="org/nineml/coffeefilter/trees/SimpleText.html" title="class in org.nineml.coffeefilter.trees"><span class="typeNameLink">SimpleText</span></a> - Class in <a href="org/nineml/coffeefilter/trees/package-summary.html">org.nineml.coffeefilter.trees</a></dt>
 <dd>
 <div class="block">A node in a <a href="org/nineml/coffeefilter/trees/SimpleTree.html" title="class in org.nineml.coffeefilter.trees"><code>SimpleTree</code></a> that contains a single text value.</div>
@@ -1235,11 +1247,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h2 class="title">V</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/util/VxmlValidator.html#valid()">valid()</a></span> - Method in class org.nineml.coffeefilter.util.<a href="org/nineml/coffeefilter/util/VxmlValidator.html" title="class in org.nineml.coffeefilter.util">VxmlValidator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/util/VxmlValidator.html#validateVxml(java.io.InputStream,java.net.URL,org.nineml.coffeefilter.ParserOptions)">validateVxml(InputStream, URL, ParserOptions)</a></span> - Method in class org.nineml.coffeefilter.util.<a href="org/nineml/coffeefilter/util/VxmlValidator.html" title="class in org.nineml.coffeefilter.util">VxmlValidator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/InvisibleXml.html#VERSION_MISMATCH">VERSION_MISMATCH</a></span> - Static variable in class org.nineml.coffeefilter.<a href="org/nineml/coffeefilter/InvisibleXml.html" title="class in org.nineml.coffeefilter">InvisibleXml</a></dt>
 <dd>
 <div class="block">The iXML "version-mismatch" state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/util/GrammarSniffer.html#VXML_SOURCE">VXML_SOURCE</a></span> - Static variable in class org.nineml.coffeefilter.util.<a href="org/nineml/coffeefilter/util/GrammarSniffer.html" title="class in org.nineml.coffeefilter.util">GrammarSniffer</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/nineml/coffeefilter/util/VxmlValidator.html" title="class in org.nineml.coffeefilter.util"><span class="typeNameLink">VxmlValidator</span></a> - Class in <a href="org/nineml/coffeefilter/util/package-summary.html">org.nineml.coffeefilter.util</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="org/nineml/coffeefilter/util/VxmlValidator.html#%3Cinit%3E()">VxmlValidator()</a></span> - Constructor for class org.nineml.coffeefilter.util.<a href="org/nineml/coffeefilter/util/VxmlValidator.html" title="class in org.nineml.coffeefilter.util">VxmlValidator</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <a id="I:X">
