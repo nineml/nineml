@@ -131,7 +131,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
     }
 
     /**
-     * Set the {@link #getPedantic()} property.
+     * Set the {@link #getProvenance()} property.
      * @param outputProvenance true if a provenance comment should be generated.
      */
     public void setProvenance(boolean outputProvenance) {
@@ -200,6 +200,7 @@ public class ParserOptions extends org.nineml.coffeefilter.ParserOptions {
         show(stderr, logger, "Trailing newline on output: %s", getTrailingNewlineOnOutput());
         show(stderr, logger, "Priority style: %s", getPriorityStyle());
         show(stderr, logger, "Provenance: %s", getProvenance());
+        show(stderr, logger, "Validate VXML: %s", getValidateVxml());
 
         if (getGraphOptions().isEmpty()) {
             show(stderr, logger, "Graph options: null");

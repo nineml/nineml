@@ -50,6 +50,7 @@ public class ParserOptionsLoader {
         PROPERTY_NAMES.add("normalize-line-endings");
         PROPERTY_NAMES.add("mark-ambiguities");
         PROPERTY_NAMES.add("provenance");
+        PROPERTY_NAMES.add("validate-vxml");
     }
 
     private static final String propfn = "nineml.properties";
@@ -148,7 +149,7 @@ public class ParserOptionsLoader {
 
         options.setPrettyPrint(getBooleanProperty("pretty-print"));
         options.setIgnoreTrailingWhitespace(getBooleanProperty("ignore-trailing-whitespace"));
-        options.setIgnoreBOM(getBooleanProperty("ignore-bom"));
+        options.setIgnoreBOM(getBooleanProperty("ignore-bom", true));
         options.setTrailingNewlineOnOutput(getBooleanProperty("trailing-newline-on-output", true));
         options.setAsciiOnly(getBooleanProperty("ascii-only", false));
         options.setStrictAmbiguity(getBooleanProperty("strict-ambiguity", false));
@@ -159,10 +160,11 @@ public class ParserOptionsLoader {
         options.setNormalizeLineEndings(getBooleanProperty("normalize-line-endings"));
         options.setMarkAmbiguities(getBooleanProperty("mark-ambiguities"));
         options.setProvenance(getBooleanProperty("provenance"));
+        options.setValidateVxml(getBooleanProperty("validate-vxml", true));
 
         options.setAllowMultipleDefinitions(getBooleanProperty("allow-multiple-definitions"));
-        options.setAllowUnproductiveSymbols(getBooleanProperty("allow-unproductive-symbols"));
-        options.setAllowUnreachableSymbols(getBooleanProperty("allow-unreachable-symbols"));
+        options.setAllowUnproductiveSymbols(getBooleanProperty("allow-unproductive-symbols", true));
+        options.setAllowUnreachableSymbols(getBooleanProperty("allow-unreachable-symbols", true));
         options.setAllowUndefinedSymbols(getBooleanProperty("allow-undefined-symbols"));
 
         String value = getProperty("default-log-level", null);
@@ -190,7 +192,7 @@ public class ParserOptionsLoader {
         value = getProperty("suppress-states", null);
         if (value != null) {
             for (String state : value.split(",")) {
-                if (!"".equals(state.trim())) {
+                if (!state.trim().isEmpty()) {
                     options.suppressState(state.trim());
                 }
             }
@@ -199,7 +201,7 @@ public class ParserOptionsLoader {
         value = getProperty("disable-pragmas", null);
         if (value != null) {
             for (String pragma : value.split(",")) {
-                if (!"".equals(pragma.trim())) {
+                if (!pragma.trim().isEmpty()) {
                     options.disablePragma(pragma.trim());
                 }
             }
@@ -208,7 +210,7 @@ public class ParserOptionsLoader {
         value = getProperty("enable-pragmas", null);
         if (value != null) {
             for (String pragma : value.split(",")) {
-                if (!"".equals(pragma.trim())) {
+                if (!pragma.trim().isEmpty()) {
                     options.enablePragma(pragma.trim());
                 }
             }
