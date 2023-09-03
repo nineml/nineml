@@ -2,11 +2,18 @@ namespace ixml = "http://invisiblexml.org/NS"
 
 start = ixml
 
-hex       = xsd:string { pattern = "[0-9a-fA-F]+" }
-rangechar = xsd:string { pattern = "." }
-rangehex  = xsd:string { pattern = "#[0-9a-fA-F]+" }
-charclass = xsd:string { pattern = "[A-Z][A-Za-z]?" }
-name      = xsd:NCName
+# On the one hand, it's tempting to make patterns for these values
+# that enforce their constraints. On the other hand, doing so causes
+# at least one test suite test to fail because the schema validation
+# fails before the test is even run. This produces a different, and
+# non-standard, error code. To avoid that, no patterns are used. The
+# processor will check them and raise appropriate errors anyway.
+
+hex       = text
+rangechar = text
+rangehex  = text
+charclass = text
+name      = text
 
 s = comment*
 sp = (comment|pragma)*
