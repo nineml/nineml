@@ -107,6 +107,14 @@ public class InvisibleXmlParser {
     }
 
     /**
+     * Get the pragmas associated with this parser.
+     * @return the list of pragmas.
+     */
+    public List<IPragma> getPragmas() {
+        return ixml.getPragmas();
+    }
+
+    /**
      * Return the exception that caused an attempt to build a parser to fail.
      * <p>If the attempt was successful, or if failure did not raise an exception, <code>null</code>
      * will be returned.</p>

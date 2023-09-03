@@ -4,11 +4,11 @@ import net.sf.saxon.s9api.*;
 import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.InvisibleXmlDocument;
 import org.nineml.coffeefilter.InvisibleXmlParser;
+import org.nineml.coffeefilter.model.IPragma;
+import org.nineml.coffeefilter.model.IPragmaCsvColumns;
 import org.nineml.coffeefilter.trees.*;
 import org.nineml.coffeefilter.trees.StringTreeBuilder;
-import org.nineml.coffeegrinder.parser.Family;
-import org.nineml.coffeegrinder.parser.ForestNode;
-import org.nineml.coffeegrinder.parser.Symbol;
+import org.nineml.coffeegrinder.parser.*;
 import org.nineml.coffeegrinder.trees.*;
 import org.nineml.coffeepot.BuildConfig;
 import org.nineml.coffeepot.trees.VerboseAxe;
@@ -291,6 +291,7 @@ public class OutputManager {
                     walker.getTree(doc.getAdapter(dataBuilder));
                     dataTree = dataBuilder.getTree();
                     List<CsvColumn> columns = dataTree.prepareCsv();
+
                     if (columns == null) {
                         walker.reset();
                         StringTreeBuilder shandler = new StringTreeBuilder(opts, out);
@@ -303,6 +304,55 @@ public class OutputManager {
                         }
                         return;
                     }
+
+                    // Are the csv-columns defined in the grammar?
+                    List<String> colnames = null;
+                    for (IPragma pragma : parser.getPragmas()) {
+                        if (pragma instanceof IPragmaCsvColumns) {
+                            colnames = ((IPragmaCsvColumns) pragma).columns;
+                        }
+                    }
+
+                    if (colnames != null) {
+                        List<CsvColumn> updatedColumns = new ArrayList<>();
+                        for (String name : colnames) {
+                            boolean found = false;
+                            for (CsvColumn column : columns) {
+                                if (column.getName().equals(name)) {
+                                    updatedColumns.add(column);
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                config.stderr.printf("No column named %s in data%n", name);
+                            }
+                        }
+                        if (updatedColumns.isEmpty()) {
+                            config.stderr.println("No columns selected");
+                            returnCode = 1;
+                            return;
+                        }
+                        columns = updatedColumns;
+                    }
+
+                    // Are there headers defined for the columns being output?
+                    Grammar grammar = parser.getGrammar();
+                    for (CsvColumn column : columns) {
+                        for (Rule rule : grammar.getRules()) {
+                            String name = rule.symbol.getName();
+                            if (rule.getSymbol().hasAttribute(InvisibleXml.NAME_ATTRIBUTE)) {
+                                name = rule.getSymbol().getAttributeValue(InvisibleXml.NAME_ATTRIBUTE, name);
+                            }
+
+                            if (column.getName().equals(name)) {
+                                String heading = rule.getSymbol().getAttributeValue(InvisibleXml.CSV_HEADING_ATTRIBUTE, null);
+                                if (heading != null) {
+                                    column.setHeader(heading);
+                                }
+                            }
+                        }
+                    }
+
                     out.print(dataTree.asCSV(columns, config.omitCsvHeaders));
                 } else {
                     StringTreeBuilder sbuilder = new StringTreeBuilder(doc.getOptions());

@@ -376,9 +376,13 @@ public class Ixml extends XNonterminal {
                 for (IPragma pragma : rule.pragmas) {
                     if (pragma instanceof IPragmaRegex) {
                         regex = pragma.getPragmaData();
-                        //attributes.add(new ParserAttribute(ParserAttribute.REGEX_NAME, pragma.getPragmaData()));
                     } else if (pragma instanceof IPragmaPriority) {
                         attributes.add(new ParserAttribute(ForestNode.PRIORITY_ATTRIBUTE, pragma.getPragmaData()));
+                    } else if (pragma instanceof IPragmaCsvHeading) {
+                        String heading = ((IPragmaCsvHeading) pragma).heading;
+                        if (heading != null) {
+                            attributes.add(new ParserAttribute(InvisibleXml.CSV_HEADING_ATTRIBUTE, heading));
+                        }
                     } else {
                         options.getLogger().debug(logcategory, "Unknown pragma, or does not apply to rule: %s", pragma);
                     }

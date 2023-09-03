@@ -424,6 +424,10 @@ public abstract class XNode {
                 break;
             case "priority":
                 return new IPragmaPriority(pragma.parent, pragma.name, data);
+            case "csv-columns":
+                return new IPragmaCsvColumns(pragma.parent, pragma.name, data);
+            case "csv-heading":
+                return new IPragmaCsvHeading(pragma.parent, pragma.name, data);
             default:
                 break;
         }

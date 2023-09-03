@@ -1,3 +1,4 @@
+{[+pragma nineml "https://nineml.org/ns/pragma/"]}
 {[+nineml csv-columns email,name]}
 
 contacts: (contact, NL*)+ .
