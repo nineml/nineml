@@ -138,7 +138,7 @@ jobs:
             coffeepot/build/distributions/coffeepot-${{ env.CI_TAG }}.zip
 
       - name: Deploy documentation to gh-pages (current version)
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' }}
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: documentation/build/website
