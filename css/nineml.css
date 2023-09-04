@@ -19,6 +19,26 @@
 html {
     font-size: 1.5rem;
     line-height: 1.5;
+    background-image: url("../images/background.jpg");
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: 40%;
+    background-color: black;
+}
+
+body {
+    color: #fffff8;
+}
+
+h1 {
+    background-color: inherit;
+    color: #fffff8;
+}
+
+footer {
+    padding-left: 1em;
+    padding-right: 45%;
+    font-size: 80%;
 }
 
 .set,
@@ -149,7 +169,6 @@ main {
 }
 
 nav .title {
-    background-color: var(--theme-background);
     color: #ffffff;
 }
 
@@ -198,7 +217,6 @@ nav.top .logo {
 }
 
 nav.bottom {
-    background-color: var(--theme-background);
     border-top-style: solid;
     border-top-width: 1px;
     color: white;
