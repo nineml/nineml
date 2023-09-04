@@ -264,6 +264,15 @@ element.
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="prop_validate-vxml">
+<term><property>validate-vxml</property> (boolean)</term>
+<listitem>
+<para>If true (the default), a grammar provided in XML format will be
+validated before it is used. This is an optional feature and is only
+supported if the Jing validation APIs for RELAX NG are on the class
+path.</para>
+</listitem>
+</varlistentry>
 </variablelist>
 
 </chapter>
