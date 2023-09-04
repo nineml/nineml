@@ -1,0 +1,200 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 8. Output formats</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-09-04T17:14:15Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch07.html"/><link rel="next" href="bk02ch09.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeePot.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 7. Configuration" href="bk02ch07.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 9. Pragmas" href="bk02ch09.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="output-formats" db-chunk="bk02ch08.html" db-id="d490e2297" class="chapter component"><header><h2>Chapter <span class="label">8</span><span class="sep">. </span>Output formats</h2></header>
+
+
+<p><span class="application">CoffeePot</span> can produce XML or JSON output of any
+parse tree and CSV output of trees that are “simple enough”.
+</p>
+
+<p>Here’s a small grammar for a “contacts file”:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>contacts: (contact, NL*)+ .
+contact: name, NL, (email, NL)?, (phone, NL)? .
+
+name: letter, ~[#a; "@"]* .
+email: username, "@", domainname .
+phone: ["+0123456789()- "]+ .
+
+-username: (letter; ["+-."])+ .
+-domainname: (letter; ["+-."])+ .
+
+-letter: [L] .
+-NL: -#a ; -#d, -#a .</code></pre></div>
+
+<p>Contacts are names, email addresses, and phone numbers on separate
+lines. Contacts are separated by a blank line. For example:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>John Doe
+john@example.com
+555-0100
+
+Mary Smith
+m.smith@estaff.example.com
++1-222-555-0102
+
+Jane Doe
+(512) 555-0105
+
+Nancy Jones
+nancy@example.org</code></pre></div>
+
+<section id="output-xml" class="section"><header><h2><span class="label">8<span class="sep">.</span>1</span><span class="sep">. </span>XML</h2></header>
+
+
+<p>A conformant Invisible XML processor, parsing this data with the
+grammar above, produces XML:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>&lt;contacts&gt;
+   &lt;contact&gt;
+      &lt;name&gt;John Doe&lt;/name&gt;
+      &lt;email&gt;john@example.com&lt;/email&gt;
+      &lt;phone&gt;555-0100&lt;/phone&gt;
+   &lt;/contact&gt;
+   &lt;contact&gt;
+      &lt;name&gt;Mary Smith&lt;/name&gt;
+      &lt;email&gt;m.smith@estaff.example.com&lt;/email&gt;
+      &lt;phone&gt;+1-222-555-0102&lt;/phone&gt;
+   &lt;/contact&gt;
+   &lt;contact&gt;
+      &lt;name&gt;Jane Doe&lt;/name&gt;
+      &lt;phone&gt;(512) 555-0105&lt;/phone&gt;
+   &lt;/contact&gt;
+   &lt;contact&gt;
+      &lt;name&gt;Nancy Jones&lt;/name&gt;
+      &lt;email&gt;nancy@example.org&lt;/email&gt;
+   &lt;/contact&gt;
+&lt;/contacts&gt;</code></pre></div>
+</section>
+
+<section id="output-json" class="section"><header><h2><span class="label">8<span class="sep">.</span>2</span><span class="sep">. </span>JSON</h2></header>
+
+
+<p>Today, there are lots of services that prefer JSON to XML, so
+<span class="application">coffeepot</span> provides an option to produce JSON,
+<code>--format:json</code>:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>{
+  "contacts": {
+    "contact": [
+      {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "555-0100"
+      },
+      {
+        "name": "Mary Smith",
+        "email": "m.smith@estaff.example.com",
+        "phone": "+1-222-555-0102"
+      },
+      {
+        "name": "Jane Doe",
+        "phone": "(512) 555-0105"
+      },
+      {
+        "name": "Nancy Jones",
+        "email": "nancy@example.org"
+      }
+    ]
+  }
+}</code></pre></div>
+
+<p>There are, in fact, two different JSON output options,
+<code>json-data</code> and <code>json-tree</code>. In “data” mode,
+the names of nonterminals become the names of properties and siblings
+are wrapped in an array.</p>
+
+<p>The “tree” mode, JSON serialization produces a literal rendering
+of the tree structure:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>{
+  "content": {
+    "name": "contacts",
+    "content": [
+      {
+        "name": "contact",
+        "content": [
+          {
+            "name": "name",
+            "content": "John Doe"
+          },
+          {
+            "name": "email",
+            "content": "john@example.com"
+          },
+          {
+            "name": "phone",
+            "content": "555-0100"
+          }
+        ]
+      },
+      {
+        "name": "contact",
+        "content": [
+          {
+            "name": "name",
+            "content": "Mary Smith"
+          },
+          {
+            "name": "email",
+            "content": "m.smith@estaff.example.com"
+          },
+          {
+            "name": "phone",
+            "content": "+1-222-555-0102"
+          }
+        ]
+      },
+      {
+        "name": "contact",
+        "content": [
+          {
+            "name": "name",
+            "content": "Jane Doe"
+          },
+          {
+            "name": "phone",
+            "content": "(512) 555-0105"
+          }
+        ]
+      },
+      {
+        "name": "contact",
+        "content": [
+          {
+            "name": "name",
+            "content": "Nancy Jones"
+          },
+          {
+            "name": "email",
+            "content": "nancy@example.org"
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre></div>
+
+</section>
+<section id="output-csv" class="section"><header><h2><span class="label">8<span class="sep">.</span>3</span><span class="sep">. </span>CSV</h2></header>
+
+
+<p>If the tree structure that results from the parse has a very
+specific structure, it can be rendered into
+<a href="https://en.wikipedia.org/wiki/Comma-separated_values" class="link">CSV</a>.
+The document must contain no mixed content (ignoring whitespace-only text nodes)
+and exactly three levels of hierarchy: a root element,
+its children, and its grandchildren.</p>
+<p>The names of the root node’s children are irrelevant, each one becomes
+a row in the output. The names of the grandchildren elements become the names of columns.
+There will be one column for each such unique name, even if not every child
+contains the same grandchildren elements.</p>
+
+<p>The contacts output satisfies these constraints, so it can be rendered in CSV:</p>
+
+<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>"name","email","phone"
+"John Doe","john@example.com","555-0100"
+"Mary Smith","m.smith@estaff.example.com","+1-222-555-0102"
+"Jane Doe",,"(512) 555-0105"
+"Nancy Jones","nancy@example.org",</code></pre></div>
+
+</section>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Chapter 7. Configuration" href="bk02ch07.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Chapter 9. Pragmas" href="bk02ch09.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk02ch07.html">Chapter <span class="label">7</span><span class="sep">. </span>Configuration</a></div><div class="navmiddle"><a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk02ch09.html">Chapter <span class="label">9</span><span class="sep">. </span>Pragmas</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>
