@@ -16,6 +16,26 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v326">
+<revnumber>3.2.6</revnumber>
+<date>2023-09-04</date>
+<revdescription>
+<para>This release is partly a patch to get the current version aligned
+with the documentation. A build oversight meant that updates after 3.2.5
+were being published in the 3.2.5 documentation. That’s potentially confusing;
+releasing 3.2.6 brings the documentation and the release back into alignment.
+Apologies for any confusion.</para>
+<para audience="coffeegrinder"/>
+<para audience="coffeefilter">Restore support for the <code>csv-columns</code>
+and <code>csv-heading</code> pragmas. Added support for validating VXML grammars (i.e., 
+iXML grammars in XML format) before using them. Cleaned up a few small
+problems in the iXML grammar for iXML with pragmas.</para>
+<para audience="coffeesacks"/>
+<para audience="coffeepot">Restore support for the <code>csv-columns</code>
+and <code>csv-heading</code> pragmas. Added a <code>validate-vxml</code> configuration
+property.</para>
+</revdescription>
+</revision>
 <revision xml:id="v325">
 <revnumber>3.2.5</revnumber>
 <date>2023-09-02</date>
