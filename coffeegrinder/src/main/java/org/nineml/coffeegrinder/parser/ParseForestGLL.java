@@ -56,7 +56,9 @@ public class ParseForestGLL extends ParseForest {
                 for (int pos = leftExtent; pos < rightExtent; pos++) {
                     sb.append(inputTokens[pos].getValue());
                 }
-                symbol = new TerminalSymbol(TokenString.get(sb.toString()), attr);
+                if (symbol != TerminalSymbol.EPSILON) {
+                    symbol = new TerminalSymbol(TokenString.get(sb.toString()), attr);
+                }
             }
         }
 
