@@ -613,6 +613,25 @@
   </details>
 </xsl:template>
 
+<xsl:template match="t:dependencies[not(preceding-sibling::t:dependencies)]">
+  <xsl:variable name="dep" select="../t:dependencies"/>
+
+  <!-- The only dependency (currently!) is @Unicode-version -->
+  <details>
+    <summary>Dependencies</summary>
+    <p>
+      <xsl:text>Unicode version</xsl:text>
+      <xsl:if test="count($dep) gt 1">s</xsl:if>
+      <xsl:text>: </xsl:text>
+      <xsl:sequence select="string-join($dep/@Unicode-version, ', ')"/>
+      <xsl:text>.</xsl:text>
+    </p>
+  </details>
+</xsl:template>
+
+<xsl:template match="t:dependencies[preceding-sibling::t:dependencies]"
+              priority="10"/>
+
 <xsl:template match="t:ixml-grammar-ref">
   <details>
     <summary>Invisible XML Grammar</summary>

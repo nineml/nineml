@@ -15,7 +15,7 @@ jobs:
       tag: ${{ steps.check_step.outputs.tag }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -59,7 +59,7 @@ jobs:
       CI_PULL: ${{ github.event.number }}
     steps:
       - name: Checkout the pull request
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
