@@ -364,7 +364,7 @@
                <alt>
                   <literal tmark='-' string='&gt;'/>
                   <nonterminal name='s'/>
-                  <nonterminal name='rename'/>
+                  <nonterminal name='alias'/>
                   <nonterminal name='s'/>
                </alt>
             </alts>
@@ -379,7 +379,7 @@
          </repeat0>
       </alt>
    </rule>
-   <rule mark='@' name='rename'>
+   <rule mark='@' name='alias'>
       <alt>
          <nonterminal name='name'/>
       </alt>

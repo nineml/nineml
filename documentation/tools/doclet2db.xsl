@@ -28,9 +28,9 @@
 <xsl:template match="/" name="xsl:initial-template">
   <xsl:variable name="class"
                 select="/*/*/d:class[starts-with(@package, $package-prefix)
-                                     and @type=$className]
+                                     and @name=$className]
                         |/*/*/d:interface[starts-with(@package, $package-prefix)
-                                          and @type=$className]"/>
+                                          and @name=$className]"/>
   <xsl:choose>
     <xsl:when test="empty($class)">
       <xsl:message terminate="yes">Failed to find a class named {$className}</xsl:message>
@@ -48,7 +48,7 @@
   <section>
     <xsl:attribute name="xml:id" select="'c_' || @fullname"/>
     <title>
-      <xsl:sequence select="@type/string()"/>
+      <xsl:sequence select="@name/string()"/>
     </title>
 
     <para>
@@ -129,7 +129,7 @@
               <xsl:text> class.</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-              <interfacename>{@type/string()}</interfacename>
+              <interfacename>{@name/string()}</interfacename>
               <xsl:text> interface.</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
@@ -234,7 +234,7 @@
         </xsl:if>
         <xsl:choose>
           <xsl:when test="self::d:constructor">
-            <xsl:sequence select="../@type/string()"/>
+            <xsl:sequence select="../@name/string()"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:sequence select="@name/string()"/>

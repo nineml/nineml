@@ -16,6 +16,27 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v327">
+<revnumber>3.2.7</revnumber>
+<date>2024-10-29</date>
+<revdescription>
+<para>One of the new features in iXML (new since 1.0) is the ability to
+<link xlink:href="https://invisiblexml.org/current/#rules">rename
+elements</link> in the serialized output. Using a <code>&gt;</code> after a nonterminal
+will rename it. In a rule, <code>A&gt;B</code>, means match the nonterminal <code>A</code>,
+but serialize the result as <code>B</code>.</para>
+<para>Apparently, I implemented a very early draft of that idea because the specification
+calls the new name an <code>alias</code> where <emphasis>CoffeeFilter</emphasis> called
+it a <code>rename</code>.</para>
+<para audience="coffeegrinder"/>
+<para audience="coffeefilter">Rename “<code>rename</code>” to “<code>alias</code>” in the
+XML serialization of iXML grammars. This upgrade invalidates any XML serializations using
+the renaming feature that were generated with an earlier version of <emphasis>CoffeeFilter</emphasis>.
+</para>
+<para audience="coffeesacks"/>
+<para audience="coffeepot"/>
+</revdescription>
+</revision>
 <revision xml:id="v326">
 <revnumber>3.2.6</revnumber>
 <date>2023-09-04</date>

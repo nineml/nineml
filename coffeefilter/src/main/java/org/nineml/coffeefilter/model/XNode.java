@@ -172,7 +172,7 @@ public abstract class XNode {
             case "nonterminal":
                 mark = attributes.getValue("mark");
                 String nname = attributes.getValue("name");
-                String nrename = attributes.getValue("rename");
+                String nrename = attributes.getValue("alias");
                 if (mark == null) {
                     child = new INonterminal(this, nname, nrename);
                 } else {
@@ -194,7 +194,7 @@ public abstract class XNode {
             case "rule":
                 mark = attributes.getValue("mark");
                 String lhs_name = attributes.getValue("name");
-                String lhs_rename = attributes.getValue("rename");
+                String lhs_rename = attributes.getValue("alias");
                 if (mark == null) {
                     child = new IRule(this, lhs_name, lhs_rename,'^');
                 } else {

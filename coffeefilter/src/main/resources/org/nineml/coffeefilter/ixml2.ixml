@@ -33,10 +33,10 @@
           sep: factor.
   nonterminal: naming.
 
-      -naming: (mark, s)?, name, s, (-">", s, rename, s)?.
+      -naming: (mark, s)?, name, s, (-">", s, alias, s)?.
 
         @name: namestart, namefollower*.
-      @rename: name.
+       @alias: name.
 
    -namestart: ["_"; L].
 -namefollower: namestart; ["-.·‿⁀"; Nd; Mn].

@@ -37,10 +37,10 @@ comment-or-pragma>comment: -"{", (cchar; comment-or-pragma)*, -"}".
   -annotation: (pragma, sp)?, (mark, sp)?.
           -sp: (whitespace; comment; pragma)*.
 
-      -naming: name, s, (-">", s, rename, s)?.
+      -naming: name, s, (-">", s, alias, s)?.
 
         @name: namestart, namefollower*.
-      @rename: name.
+       @alias: name.
 
    -namestart: ["_"; L].
 -namefollower: namestart; ["-.·‿⁀"; Nd; Mn].

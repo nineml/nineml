@@ -12,7 +12,7 @@ jobs:
       tag: ${{ steps.check_step.outputs.tag }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
       CI_TAG: ${{ needs.check_branch.outputs.tag }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build and test
         run: |
@@ -74,7 +74,7 @@ jobs:
           ./gradlew -PparserType=earley -PsaxonGroup=com.saxonica -PsaxonEdition=Saxon-EE dist docset website
 
       - name: Publish coffeegrinder release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
         with:
           repository: nineml/coffeegrinder
@@ -99,7 +99,7 @@ jobs:
           rm -f `pwd`/secret.gpg
 
       - name: Publish coffeefilter release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
         with:
           repository: nineml/coffeefilter
@@ -112,7 +112,7 @@ jobs:
             coffeefilter/build/distributions/coffeefilter-${{ env.CI_TAG }}.zip
 
       - name: Publish coffeesacks release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
         with:
           repository: nineml/coffeesacks
@@ -125,7 +125,7 @@ jobs:
             coffeesacks/build/distributions/coffeesacks-${{ env.CI_TAG }}.zip
 
       - name: Publish coffeepot release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
         with:
           repository: nineml/coffeepot
