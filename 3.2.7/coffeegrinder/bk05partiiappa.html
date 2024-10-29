@@ -1,0 +1,99 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Earley Parser</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2024-10-29T11:00:17Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk05partii.html"/><link rel="next" href="bk05partiiappb.html"/><link rel="up" href="bk05partii.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeGrinder.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Part II. Reference" href="bk05partii.html"><i class="fas fa-arrow-left"></i></a> <a title="Part II. Reference" href="bk05partii.html"><i class="fas fa-arrow-up"></i></a> <a title="Appendix B. GLL Parser" href="bk05partiiappb.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="earley_parser" db-chunk="bk05partiiappa.html" db-id="d493e11896" class="appendix component"><header><h1>Appendix <span class="label">A</span><span class="sep">. </span>Earley Parser</h1></header>
+
+<p>This is the Earley parsing algorithm described in
+<cite class="citetitle">SPPF-Style Parsing from Earley Recognisers</cite>
+by <span class="first-last personname">Elizabeth Scott</span>. This algorithm forms the basis
+of the parser in <span class="application">CoffeeGrinder</span>.</p>
+
+<p>The input is a grammar Γ = (N, T, S, P) and a string a₁a₂…aₙ</p>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>EARLEYPARSER {
+  E₀,…,Eₙ, R, Q′, V=∅
+
+  for all (S ::= α) ∈ P {
+    if α ∈ Σ<sub>N</sub> add (S ::= ·α,0, null) to E₀
+    if α = a₁α′ add (S ::= ·α,0, null) to Q′
+  }
+
+  for 0 ≤ i ≤ n {
+    H=∅, R=Eᵢ, Q=Q′
+    Q′=∅
+
+    while R ≠ ∅ {
+      remove an element, Λ say, from R
+      if Λ = (B ::= α·Cβ, h, w) {
+        for all (C ::= δ) ∈ P {
+          if δ ∈ Σ<sub>N</sub> and (C ::= ·δ, i, null) ∉ Eᵢ {
+            add (C ::= ·δ, i, null) to Eᵢ and R
+          }
+          if δ = aᵢ₊₁δ′ {
+            add (C ::= ·δ, i, null) to Q
+          }
+        }
+        if ((C, v) ∈ H) {
+          let y = MAKE_NODE(B ::= αC·β, h, i, w, v, V)
+          if β ∈ Σ<sub>N</sub> and (B ::= αC·β, h, y) ∉ Eᵢ {
+            add (B ::= αC·β, h, y) to Eᵢ and R
+          }
+          if β = aᵢ₊₁β′ {
+            add (B ::= αC·β, h, y) to Q
+          }
+        }
+      }
+  
+      if Λ = (D ::= α·, h, w) {
+        if w = null {
+          if there is no node v ∈ V labelled (D, i, i) create one
+          set w=v
+          if w does not have family (ϵ) add one
+        }
+        if h = i {
+          add (D, w) to H
+        }
+        for all (A ::= τ·Dδ, k, z) in Eₕ {
+          let y = MAKE_NODE(A ::= τD·δ, k, i, z, w, V)
+          if δ ∈ Σ<sub>N</sub> and (A ::= τD·δ, k, y) ∉ Eᵢ {
+            add (A ::= τD·δ, k, y) to Eᵢ and R
+          }
+          if δ = aᵢ₊₁δ′ {
+            add (A ::= τD·δ, k, y) to Q
+          }
+        }
+      }
+    }
+  
+    V=∅
+    create an SPPF node v labelled (aᵢ₊₁, i, i+1)
+
+    while Q ≠ ∅ {
+      remove an element, Λ = (B ::= α·ai+1β, h, w) say, from Q
+      let y = MAKE_NODE(B ::= αai+1·β, h, i+1, w, v, V)
+      if β ∈ Σ<sub>N</sub> {
+        add (B ::= αaᵢ₊₁·β, h, y) to Eᵢ₊₁
+      }
+      if β = aᵢ₊₂β′ {
+        add (B ::= αaᵢ₊₁·β, h, y) to Q′
+      }
+    }
+  }
+  
+  if (S ::= τ·, 0, w) ∈ Eₙ return w
+  else return failure
+}
+
+MAKE_NODE(B ::= αx·β, j, i, w, v,V) {
+  if β=ϵ {
+    let s =B
+  } else {
+    let s = (B::=αx·β)
+  }
+
+  if α=ϵ and β≠ϵ {
+    let y=v
+  } else {
+    if there is no node y ∈ V labelled (s, j, i) create one and add it to V
+    if w=null and y does not have a family of children (v) add one
+    if w≠null and y does not have a family of children (w, v) add one
+  }
+  return y
+}</code></pre></div>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Part II. Reference" href="bk05partii.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Appendix B. GLL Parser" href="bk05partiiappb.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk05partii.html">Part <span class="label">II</span><span class="sep">. </span>Reference</a></div><div class="navmiddle"><a title="Part II. Reference" href="bk05partii.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk05partiiappb.html">Appendix <span class="label">B</span><span class="sep">. </span>GLL Parser</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>
