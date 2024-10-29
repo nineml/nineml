@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Pragmas</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-10-01T15:24:28Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04ch01.html"/><link rel="next" href="bk04ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. General use" href="bk04ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. Limitations" href="bk04ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_pragmas" db-chunk="bk04ch02.html" db-id="d490e4964" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Pragmas</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Pragmas</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2024-10-29T09:39:47Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04ch01.html"/><link rel="next" href="bk04ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. General use" href="bk04ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. Limitations" href="bk04ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_pragmas" db-chunk="bk04ch02.html" db-id="d493e4964" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Pragmas</h2></header><div class="db-bfs">
 
 
 <p>It’s possible to influence the behavior of the processor by placing
@@ -28,7 +28,7 @@ distributed extensibility.</p>
 declares the name “<code>nineml</code>” as the pragma identified by the
 URI “<code>https://nineml.org/ns/pragma/</code>”:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>{[+pragma nineml "https://nineml.org/ns/pragma/"]}</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>{[+pragma nineml "https://nineml.org/ns/pragma/"]}</code></pre></div>
 
 <p><span class="application">CoffeePot</span> ignores any pragmas it does
 not recognize. The rest of this document assumes that you have
@@ -42,20 +42,20 @@ a nonterminal symbol, or a terminal symbol:</p>
 <li>
 <p>A pragma placed before a symbol applies to the symbol that follows it:
 </p>
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>rule: {[pragma applies to “A”]} A,
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>rule: {[pragma applies to “A”]} A,
       {[pragma applies to “b”]} 'b'.</code></pre></div>
 </li>
 <li>
 <p>A pragma placed before a rule, applies to the rule that follows it:
 </p>
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>{[pragma applies to “rule”]}
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>{[pragma applies to “rule”]}
 rule: {[pragma applies to “A”]} A,
       {[pragma applies to “b”]} 'b'.</code></pre></div>
 </li>
 <li>
 <p>To apply a pragma to the entire grammar, it must be in the prolog.</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>{[+pragma applies to whole grammar]}
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>{[+pragma applies to whole grammar]}
 
 {[pragma applies to “rule”]}
 rule: {[pragma applies to “A”]} A,
@@ -65,7 +65,7 @@ rule: {[pragma applies to “A”]} A,
 
 <p>More than one pragma can appear at any of those locations:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>{[+pragma applies to whole grammar]}
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>{[+pragma applies to whole grammar]}
 {[+second pragma applies to whole grammar ]}
 
 {[pragma applies to “rule”]}
@@ -80,7 +80,7 @@ rule:
 <span class="application">CoffeePot</span> will generate debug-level log messages to alert you to
 pragmas that it is ignoring.</p>
 
-<section id="pragmas-grammar" class="section"><header><h2><span class="label">2<span class="sep">.</span>1</span><span class="sep">. </span>Grammar pragmas</h2></header>
+</div><section id="pragmas-grammar" class="section"><header><h2><span class="label">2<span class="sep">.</span>1</span><span class="sep">. </span>Grammar pragmas</h2></header>
 
 
 <p>There following pragmas apply to a grammar as a whole.</p>
@@ -92,7 +92,7 @@ pragmas that it is ignoring.</p>
 <a href="../coffeepot/bk02ch08.html#output-csv" class="link">CSV output</a> is selected.</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+nineml csv-columns <em class="replaceable">list,of,names</em>]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[+nineml csv-columns <em class="replaceable">list,of,names</em>]}</code></pre></div>
 
 <p>Ordinarily, CSV formatted output includes all the columns in
 (roughly) the order they occur in the XML. This pragma allows you to
@@ -113,7 +113,7 @@ ignored. An empty column is not produced.</p>
 <p>Allows one grammar to import another.</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+nineml import "grammar-uri"]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[+nineml import "grammar-uri"]}</code></pre></div>
 
 <p>In principle, this pragma allows you to combine grammars. This feature
 is experimental and no coherent semantics have yet been established.</p>
@@ -126,7 +126,7 @@ is experimental and no coherent semantics have yet been established.</p>
 <p>Declares the default namespace for the output XML.</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+nineml ns "namespace-uri"]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[+nineml ns "namespace-uri"]}</code></pre></div>
 
 </section>
 
@@ -139,7 +139,7 @@ other pragmas, this one has a different URI binding:
 </p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+pragma opt "https://nineml.org/ns/pragma/options/"]}
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[+pragma opt "https://nineml.org/ns/pragma/options/"]}
 {[+opt record-end "\n([^ ])"]}</code></pre></div>
 
 </section>
@@ -153,7 +153,7 @@ other pragmas, this one has a different URI binding:
 </p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+pragma opt "https://nineml.org/ns/pragma/options/"]}
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[+pragma opt "https://nineml.org/ns/pragma/options/"]}
 {[+opt record-start "([^\\])\n"]}</code></pre></div>
 
 </section>
@@ -167,7 +167,7 @@ Note that this option uses a different URI binding.
 </p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[+pragma strict "https://gyfre.org/ns/pragma/strict"]}
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[+pragma strict "https://gyfre.org/ns/pragma/strict"]}
 {[+strict <em class="replaceable">exceptions</em>]}
 </code></pre></div>
 
@@ -219,7 +219,7 @@ column. (If no heading is specified, the name of the nonterminal
 is used as the heading.)</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[nineml csv-heading "Heading Title"]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[nineml csv-heading "Heading Title"]}</code></pre></div>
 
 <p>Heading titles may be quoted with either single
 (<code>'</code>) or double (<code>"</code>) quotes.</p>
@@ -233,7 +233,7 @@ is used as the heading.)</p>
 serialized at all).</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[nineml discard empty]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[nineml discard empty]}</code></pre></div>
 
 </section>
 
@@ -244,11 +244,11 @@ serialized at all).</p>
 This is a “greedy match” and can greatly improve performance in some cases.</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[nineml regex "regular expression"]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[nineml regex "regular expression"]}</code></pre></div>
 
 <p>For example:</p>
 
-<div class="pre-wrap"><pre class="language-ixml programlisting verbatim"><code>{[+pragma n "https://nineml.org/ns/pragma/"]}
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code>{[+pragma n "https://nineml.org/ns/pragma/"]}
 
    number-list = (number, -#a)+, number? .
         number = hex | decimal .
@@ -273,12 +273,12 @@ that doesn’t support the regex pragma) matches the same input as the regular e
 <li><p>The regular expression match is greedy. It will consume all of the characters
 that match. If this consumes “too much” input, the parse will fail. Consider this grammar:
 </p>
-<div class="pre-wrap"><pre class="language-ixml programlisting verbatim"><code>S = 'a', B, 'a' .
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code>S = 'a', B, 'a' .
 B = ('a'|'b')+ . 
 </code></pre></div>
 <p>It will match “aaaba” to produce “<code>&lt;S&gt;a&lt;B&gt;aab&lt;/B&gt;a&lt;/S&gt;</code>”.
 At first glance, this grammar may seem equivalent:</p>
-<div class="pre-wrap"><pre class="language-ixml programlisting verbatim"><code>{[+pragma n "https://nineml.org/ns/pragma/"]}
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code>{[+pragma n "https://nineml.org/ns/pragma/"]}
 
                     S = 'a', B, 'a' .
 {[n regex "[ab]+"]} B = ('a'|'b')+ . 
@@ -304,7 +304,7 @@ terminal in S to match.
 only to nonterminals.</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[nineml rename newname]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[nineml rename newname]}</code></pre></div>
 
 <p>An alternative approach is to use the nonterminal renaming
 <a href="https://lists.w3.org/Archives/Public/public-ixml/2023Jun/0030.html" class="link">proposal</a>.
@@ -327,7 +327,7 @@ with the standard insertions feature.</p>
 <p>This pragma associates a priority with a nonterminal.</p>
 
 <p>Usage:</p>
-<div class="pre-wrap"><pre class="synopsis verbatim"><code>{[nineml priority 2]}</code></pre></div>
+<div class="pre-wrap synopsis-wrap"><pre class="synopsis verbatim"><code>{[nineml priority 2]}</code></pre></div>
 
 <p>When an ambiguous parse is being serialized, there will be places in the
 output where a choice must be made between two or more alternatives. A priority
@@ -338,7 +338,7 @@ all nonterminals is 0.</p>
 
 <p>Consider the following grammar:</p>
 
-<div class="pre-wrap"><pre class="language-ixml programlisting verbatim"><code> number: hex | decimal .
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code> number: hex | decimal .
  hex: hex-digit+ .
  decimal: decimal-digit+ .
 -hex-digit: ["0"-"9" | "a"-"f" | "A"-"F" ] .
@@ -347,7 +347,7 @@ all nonterminals is 0.</p>
 <p>It parses numbers in either hexadecimal or decimal. In the case of a number like “42”, the
 parse is ambiguous, it matches either hex or decimal:</p>
 
-<div class="pre-wrap"><pre class="screen verbatim"><code>$ coffeepot --pretty-print -g:hex.ixml 42
+<div class="pre-wrap screen-wrap"><pre class="screen verbatim"><code>$ coffeepot --pretty-print -g:hex.ixml 42
 Found 2 possible parses.
 &lt;number xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
    &lt;hex&gt;42&lt;hex&gt;
@@ -355,7 +355,7 @@ Found 2 possible parses.
 
 <p>You can give decimal a higher priority:</p>
 
-<div class="pre-wrap"><pre class="language-ixml programlisting verbatim"><code>{[+pragma nineml "https://nineml.org/ns/pragma/"]}
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code>{[+pragma nineml "https://nineml.org/ns/pragma/"]}
 
  number: hex | {[nineml priority 2]} decimal .
  hex: hex-digit+ .
@@ -365,7 +365,7 @@ Found 2 possible parses.
 
 <p>Now decimal will be selected:</p>
 
-<div class="pre-wrap"><pre class="screen verbatim"><code>$ coffeepot --pretty-print -g:hex.ixml 42
+<div class="pre-wrap screen-wrap"><pre class="screen verbatim"><code>$ coffeepot --pretty-print -g:hex.ixml 42
 Found 2 possible parses.
 &lt;number&gt;
    &lt;decimal&gt;42&lt;/decimal&gt;

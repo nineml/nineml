@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 7. Choosing among alternatives</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-10-01T15:24:28Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch06.html"/><link rel="next" href="../coffeefilter/index.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeSacks.png" rel="shortcut icon"/><link href="../css/coffeesacks.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="CoffeeFilter" href="../coffeefilter/index.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="choose-alternative_cs" db-chunk="bk03ch07.html" db-id="d490e4636" class="chapter component"><header><h2>Chapter <span class="label">7</span><span class="sep">. </span>Choosing among alternatives</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 7. Choosing among alternatives</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2024-10-29T09:39:47Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch06.html"/><link rel="next" href="../coffeefilter/index.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeSacks.png" rel="shortcut icon"/><link href="../css/coffeesacks.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="CoffeeFilter" href="../coffeefilter/index.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="choose-alternative_cs" db-chunk="bk03ch07.html" db-id="d493e4636" class="chapter component"><header><h2>Chapter <span class="label">7</span><span class="sep">. </span>Choosing among alternatives</h2></header><div class="db-bfs">
 
 
 <div class="admonition note"><div><div class="icon">ⓘ</div><div class="body"><header><div class="title">Note</div></header><div><p>This API has been completely rewritten for version 3.0.0.</p>
@@ -48,7 +48,7 @@ Only choose from that list if you have some other way to avoid looping infinitel
 
 <p>This function always selects the first alternative:</p>
 
-<div class="pre-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;xsl:function name="f:first" as="map(*)"&gt;
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;xsl:function name="f:first" as="map(*)"&gt;
   &lt;xsl:param name="context" as="element()"/&gt;
   &lt;xsl:param name="options" as="map(*)"/&gt;
 
@@ -57,7 +57,7 @@ Only choose from that list if you have some other way to avoid looping infinitel
 
 <p>You could pass it in parse options like this:</p>
 
-<div class="pre-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;xsl:variable name="parser"
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;xsl:variable name="parser"
               select="cs:make-parser($grammar,
                       map{'choose-alternative: f:first#2})"/&gt;</code></pre></div>
 
@@ -65,7 +65,7 @@ Only choose from that list if you have some other way to avoid looping infinitel
 interesting. To explore further, consider this simple, ambiguous
 grammar:</p>
 
-<div class="pre-wrap"><pre class="language-ixml programlisting verbatim"><code>   number-list = (number, -#a)+, number? .
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code>   number-list = (number, -#a)+, number? .
         number = hex | decimal .
            hex = hex-digit+ .
        decimal = decimal-digit+ .
@@ -74,14 +74,14 @@ grammar:</p>
 
 <p>If we parse the following input,</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>bad
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>bad
 cafe
 42
 </code></pre></div>
 
 <p>We might get this result:</p>
 
-<div class="pre-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
   &lt;hex&gt;bad&lt;/hex&gt;
   &lt;hex&gt;cafe&lt;/hex&gt;
   &lt;hex&gt;42&lt;/hex&gt;
@@ -89,7 +89,7 @@ cafe
 
 <p>Of course, we might equally get this result:</p>
 
-<div class="pre-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;
   &lt;hex&gt;bad&lt;/hex&gt;
   &lt;hex&gt;cafe&lt;/hex&gt;
   &lt;decimal&gt;42&lt;/decimal&gt;
@@ -99,7 +99,7 @@ cafe
 Here’s a function that will always select the decimal alternative:
 </p>
 
-<div class="pre-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;xsl:function name="f:choose" as="map(*)"&gt;
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;xsl:function name="f:choose" as="map(*)"&gt;
   &lt;xsl:param name="context" as="element()"/&gt;
   &lt;xsl:param name="options" as="map(*)"/&gt;
 
@@ -116,7 +116,7 @@ passed to the function. The function get’s a context element that is
 an XML description of the current state of the parse, and a map. For
 our example, the map would look something like this:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>map {
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>map {
   "input":"bad
 cafe
 42",
@@ -126,7 +126,7 @@ cafe
 
 <p>And the context element like this:</p>
 
-<div class="pre-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;symbol name="number" id="N3694" mark="^" start="10" length="2"&gt;
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim"><code>&lt;symbol name="number" id="N3694" mark="^" start="10" length="2"&gt;
    &lt;parent ref="N3695"&gt;$4_number-option&lt;/parent&gt;
    &lt;children id="C3464" priority="0"&gt;
       &lt;symbol name="hex" ref="N3692" start="10" length="2"/&gt;
@@ -148,7 +148,7 @@ corresponding nodes for those symbols.</p>
 <p>Which aspects of the context (if any) are relevant is going to
 depend on your grammar and the input.</p>
 
-<section id="grammar-details" class="section"><header><h2><span class="label">7<span class="sep">.</span>1</span><span class="sep">. </span>Grammar details</h2></header>
+</div><section id="grammar-details" class="section"><header><h2><span class="label">7<span class="sep">.</span>1</span><span class="sep">. </span>Grammar details</h2></header>
 
 
 <p>Invisible XML is an example of an
@@ -169,7 +169,7 @@ that the parser can describe.</p>
 <p>The oddly named nonterminals seen above come from the fact that
 our iXML grammar has been transformed into this BNF:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>                   $$ ::= number-list
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>                   $$ ::= number-list
           number-list ::= $1_number-plus, $4_number-optionⁿ
                number ::= hex
                number ::= decimal

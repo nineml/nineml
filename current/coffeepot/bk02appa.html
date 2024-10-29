@@ -1,15 +1,15 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Property files</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2023-10-01T15:24:28Z"/><meta name="generator" content="DocBook xslTNG version 2.1.9 / 4a661f6 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch10.html"/><link rel="next" href="bk02ch11.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeePot.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 10. Parsing records" href="bk02ch10.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 11. Diagrams" href="bk02ch11.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="property-files" db-chunk="bk02appa.html" db-id="d490e2431" class="appendix component"><header><h2>Appendix <span class="label">A</span><span class="sep">. </span>Property files</h2><h3>A worked example</h3></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Property files</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2024-10-29T09:39:47Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch10.html"/><link rel="next" href="bk02ch11.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeePot.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 10. Parsing records" href="bk02ch10.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 11. Diagrams" href="bk02ch11.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="property-files" db-chunk="bk02appa.html" db-id="d493e2431" class="appendix component"><header><h2>Appendix <span class="label">A</span><span class="sep">. </span>Property files</h2><h3>A worked example</h3></header><div class="db-bfs">
 
 
 
 <p>Introduction…</p>
 
-<section id="pf001" class="section"><header><h2><span class="label">A<span class="sep">.</span>1</span><span class="sep">. </span>A first attempt</h2></header>
+</div><section id="pf001" class="section"><header><h2><span class="label">A<span class="sep">.</span>1</span><span class="sep">. </span>A first attempt</h2></header>
 
 
 <p>Suppose that we wanted to read Java-style property files, like this one:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code># This is a comment.
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code># This is a comment.
 name1 : value1
 name2 = value2
 </code></pre></div>
@@ -36,7 +36,7 @@ it is a comment.</p>
 non-terminals keeps the output clean. If you run this through
 <span class="application">coffeepot</span>, you’ll get:</p>
 
-<div class="pre-wrap"><pre class="screen verbatim"><code><code class="computeroutput">$ coffeepot -v -g:examples/prop1.ixml -i:examples/example1.properties -pp
+<div class="pre-wrap screen-wrap"><pre class="screen verbatim"><code><code class="computeroutput">$ coffeepot -v -g:examples/prop1.ixml -i:examples/example1.properties -pp
 Loading ixml grammar: examples/prop1.ixml
 Loading input from examples/example1.properties
 There are 2 possible parses.
@@ -50,7 +50,7 @@ There are 2 possible parses.
 wonder where the ambiguity arises. Let’s find out with the <code class="option">--describe-ambiguity</code>
 option:</p>
 
-<div class="pre-wrap"><pre class="screen verbatim"><code><code class="computeroutput">$ coffeepot -v -g:examples/prop1.ixml -i:examples/example1.properties --describe-ambiguity -pp
+<div class="pre-wrap screen-wrap"><pre class="screen verbatim"><code><code class="computeroutput">$ coffeepot -v -g:examples/prop1.ixml -i:examples/example1.properties --describe-ambiguity -pp
 Loading ixml grammar: examples/prop1.ixml
 Loading input from examples/example1.properties
 There are 2 possible parses.
@@ -83,7 +83,7 @@ characters 0-51 has two different derivations. Sometimes it’s useful to look a
 a <code>comment</code> or a <code>name-value</code>. Does that seem strange?
 Well, look back at our proto-grammar:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>comment: s, -["#!"], char*, NL .
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>comment: s, -["#!"], char*, NL .
 name-value: char*, NL .</code></pre></div>
 
 <p>It says that a comment has to begin with a “#” or “!”, so line 1
@@ -99,7 +99,7 @@ it doesn’t include newlines. So it could also match the first line!
 <p>It’s reasonably straight-forward to improve on <code>name-value</code>
 in <a href="examples/prop2.ixml" class="link">prop2.ixml</a>:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>name-value: s, name, s, -[":="], s, value, NL.
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>name-value: s, name, s, -[":="], s, value, NL.
 name: namestart, namefollower* .
 value: ~[Zs; #9; #d], char* .
 
@@ -114,7 +114,7 @@ that isn’t whitespace followed by any characters.</p>
 
 <p>This does a good job on our sample file:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop2.ixml -i:examples/example1.properties -pp
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop2.ixml -i:examples/example1.properties -pp
 Loading ixml grammar: examples/prop2.ixml
 Loading input from examples/example1.properties
 &lt;property-file&gt;
@@ -138,7 +138,7 @@ Loading input from examples/example1.properties
 They allow blank lines, continuation lines, and several flavors of escaped
 characters:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code># This is a comment.
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code># This is a comment.
 name1 : value1
 name2 = value2
 name3 = apple,\
@@ -173,7 +173,7 @@ in <a href="examples/prop3.ixml" class="link">prop3.ixml</a>:</p>
 
 <p>Now we get:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop3.ixml -i:examples/example.properties --describe-ambiguity -pp
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop3.ixml -i:examples/example.properties --describe-ambiguity -pp
 Loading ixml grammar: examples/prop3.ixml
 Loading input from examples/example.properties
 &lt;property-file&gt;
@@ -227,7 +227,7 @@ solution.</p>
 <p>The solution
 in <a href="examples/prop4.ixml" class="link">prop4.ixml</a> is:</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>-char: ~["\";#a] ; tab; cr ; nl ; bs ; uref .
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>-char: ~["\";#a] ; tab; cr ; nl ; bs ; uref .
 
 tab: -"\t" .
 cr: -"\r" .
@@ -249,7 +249,7 @@ example, to replace “\t” with a literal tab character. Instead,
 we leave <code>&lt;tab/&gt;</code>, etc. in the output where they can be
 cleaned up later.</p>
 
-<div class="pre-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop4.ixml -i:examples/example.properties --describe-ambiguity -pp
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -v -g:examples/prop4.ixml -i:examples/example.properties --describe-ambiguity -pp
 Loading ixml grammar: examples/prop4.ixml
 Loading input from examples/example.properties
 &lt;property-file&gt;
