@@ -22,10 +22,7 @@ import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
-import org.nineml.coffeefilter.InvisibleXml;
-import org.nineml.coffeefilter.InvisibleXmlDocument;
-import org.nineml.coffeefilter.InvisibleXmlParser;
-import org.nineml.coffeefilter.ParserOptions;
+import org.nineml.coffeefilter.*;
 import org.nineml.coffeefilter.trees.DataTree;
 import org.nineml.coffeefilter.trees.DataTreeBuilder;
 import org.nineml.coffeefilter.trees.SimpleTree;
@@ -41,6 +38,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -110,7 +108,12 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                     throw new CoffeeSacksException(CoffeeSacksException.ERR_HTTP_LOOP, "Redirect limit exceeded", sourceLoc, new AnyURIValue(grammarURI.toString()));
                 }
                 seenLocations.add(location);
-                URL loc = new URL(location);
+                final URL loc;
+                try {
+                    loc = new URI(location).toURL();
+                } catch (URISyntaxException ex) {
+                    throw new CoffeeSacksException(CoffeeSacksException.ERR_INVALID_URI, ex.getMessage());
+                }
                 conn = loc.openConnection();
                 location = conn.getHeaderField("location");
             }
@@ -484,6 +487,12 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                 Processor processor = (Processor) context.getConfiguration().getProcessor();
                 InvisibleXmlDocument document = parser.parse(input);
 
+                if (document instanceof InvisibleXmlFailureDocument) {
+                    InvisibleXmlFailureDocument failure = (InvisibleXmlFailureDocument) document;
+                    String message = failure.getTree();
+                    throw new XPathException(message);
+                }
+
                 final XmlForest forest;
                 try {
                     forest = new XmlForest(processor, document);
@@ -519,6 +528,8 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                 }
 
                 return jsonToXDM(processor, json);
+            } catch (XPathException ex) {
+                throw ex;
             } catch (Exception ex) {
                 throw new XPathException(ex);
             }

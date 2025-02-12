@@ -1,6 +1,7 @@
 package org.nineml.coffeesacks;
 
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.XPathException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nineml.coffeefilter.InvisibleXml;
@@ -19,6 +20,18 @@ public class StylesheetTests extends TestConfiguration {
         XdmNode result = transform(stylesheet, stylesheet);
         Assertions.assertEquals("<doc><date><day>15</day><month>February</month><year>2022</year></date></doc>", serialize(result));
     }
+
+    @Test
+    public void stringInputError() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/date-input-error.xsl");
+        try {
+            transform(stylesheet, stylesheet);
+            fail();
+        } catch (RuntimeException ex) {
+            Assertions.assertTrue(ex.getMessage() != null && ex.getMessage().contains("<failed"));
+        }
+    }
+
 
     @Test
     public void uriInputXmlOutput() {
