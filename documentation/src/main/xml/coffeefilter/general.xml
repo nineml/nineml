@@ -106,7 +106,7 @@ send events to a SAX content handler to construct the tree.</para>
   parse="text"
 /></programlisting>
 
-<para>Beware that in an infinitely ambigous forest, the number returned is wildely inaccurate
+<para>Beware that in an infinitely ambiguous forest, the number returned is wildely inaccurate
 (in as much as it is <emphasis>infinitely</emphasis> less than ∞!). It tells you something about
 how the forest divides into ambiguous branches, but doesn’t attempt to account for loops.</para>
 </section>

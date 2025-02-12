@@ -221,7 +221,7 @@ public class HygieneReport {
     }
 
     /**
-     * Did the dk.brics.grammar.ambiguity analyzer report the grammar unambigous?
+     * Did the dk.brics.grammar.ambiguity analyzer report the grammar unambiguous?
      * @return true, if the grammar is unambiguous
      */
     public boolean provablyUnambiguous() {

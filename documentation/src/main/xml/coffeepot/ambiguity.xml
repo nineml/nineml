@@ -82,7 +82,7 @@ can be useful.</para>
 </mediaobject>
 </figure>
 
-<para>It is possible for grammars to be infinitely ambigous. Consider
+<para>It is possible for grammars to be infinitely ambiguous. Consider
 this trivial grammar:</para>
 
 <example xml:id="ambig02">
