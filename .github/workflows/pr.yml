@@ -70,6 +70,6 @@ jobs:
           git submodule update
           ./gradlew test
           ./gradlew -PsaxonVersion=11.6 :coffeepot:test
-          ./gradlew -PsaxonVersion=12.3 :coffeepot:test
+          ./gradlew -PsaxonVersion=12.5 :coffeepot:test
           ./gradlew -PparserType=gll :coffeefilter:testSuite
           ./gradlew -PparserType=earley -PsaxonGroup=com.saxonica -PsaxonEdition=Saxon-EE dist docset website
