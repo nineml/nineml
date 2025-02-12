@@ -41,7 +41,7 @@ cafe
   <decimal>42</decimal>
 </number-list>]]></programlisting>
 
-<para>The ambiguity here is between “decimal” and “hexidecimal”. You
+<para>The ambiguity here is between “decimal” and “hexadecimal”. You
 may wish to control which one is selected. CoffeePot provides two ways
 to examine the alternatives and select one: you can provide a function
 library that defines
@@ -81,7 +81,7 @@ decimal alternative:</para>
 </number-list>]]></computeroutput>
 </screen>
 
-<para>An alternative function library that always selects hexidecimal
+<para>An alternative function library that always selects hexadecimal
 could be written in XQuery this way:</para>
 
 <programlisting language="xquery"
@@ -101,8 +101,8 @@ could be written in XQuery this way:</para>
 
 <para>For a more complete discussion of how such functions can be written and what is available
 in <code>$alternatives</code>, see 
-<link xlink:href="https://coffeesacks.nineml.org/ch07.html">Chapter 7. Choosing among alternatives</link>
-in the <link xlink:href="https://coffeesacks.nineml.org/">CoffeeSacks</link> documentation.</para>
+<link xlink:href="https://docs.nineml.org/current/coffeesacks/bk03ch07.html">Chapter 7. Choosing among alternatives</link>
+in the <link xlink:href="https://docs.nineml.org/current/coffeesacks/">CoffeeSacks</link> documentation.</para>
 
 </section>
 

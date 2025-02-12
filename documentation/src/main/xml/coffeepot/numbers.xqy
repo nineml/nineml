@@ -5,6 +5,6 @@ declare function f:choose-alternative(
   $options as map(*)
 ) as map(*) {
   map {
-    'selection': $context/children[symbol[@name='decimal']]/@id
+    'selection': $context/children[symbol[@name='hex']]/@id
   }
 };
