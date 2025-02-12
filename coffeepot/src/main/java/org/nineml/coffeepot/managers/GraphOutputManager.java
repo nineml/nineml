@@ -120,7 +120,8 @@ public class GraphOutputManager {
                 // Store the dot file somewhere
                 File temp = File.createTempFile("jixp", ".dot");
                 PrintWriter dot = new PrintWriter(Files.newOutputStream(temp.toPath()));
-                dot.println(destination.getXdmNode().getStringValue());
+                XdmNode dotXml = destination.getXdmNode();
+                dot.println(dotXml.getStringValue());
                 dot.close();
 
                 String[] args = new String[] {

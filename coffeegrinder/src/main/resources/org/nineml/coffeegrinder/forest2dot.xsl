@@ -217,9 +217,9 @@
         <xsl:sequence select="'ε'"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence select="replace(replace(@label, '\\', '\\\\'), '&quot;', '\\&quot;') || $prio"/>
+        <xsl:sequence select="f:escapeHtml(@label) || $prio"/>
         <xsl:if test="@type = 'nonterminal' and $show-states != 'false'">
-          <xsl:sequence select="replace(replace(@state, '\\', '\\\\'), '&quot;', '\\&quot;')"/>
+          <xsl:sequence select="f:escapeHtml(@state)"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -402,5 +402,13 @@
   <xsl:text>node{../@id/string()} -&gt; epsilon{generate-id(.)} </xsl:text>
   <xsl:text>[color={$edge-color} penwidth={$edge-pen-width}];&#10;</xsl:text>
 </xsl:template>
+
+<xsl:function name="f:escapeHtml" as="xs:string">
+  <xsl:param name="text" as="xs:string"/>
+  <xsl:sequence select="replace($text, '\\', '\\\\')
+                        => replace('&quot;', '\\&quot;')
+                        => replace('&amp;', '&amp;amp;')
+                        => replace('&lt;', '&amp;lt;')"/>
+</xsl:function>
 
 </xsl:stylesheet>
