@@ -17,17 +17,6 @@ notes for each component.</para>
 the individual component <filename>changelogs.xml</filename> files.</para>
 
 <revhistory>
-<revision xml:id="v328">
-<revnumber>3.2.8</revnumber>
-<date>2025-02-20</date>
-<revdescription>
-<para>WAT? Where are 3.2.2 to 3.2.7?</para>
-<para audience="coffeegrinder"/>
-<para audience="coffeefilter"/>
-<para audience="coffeesacks"/>
-<para audience="coffeepot"/>
-</revdescription>
-</revision>
 <revision xml:id="v321">
 <revnumber>3.2.1</revnumber>
 <date>2023-08-06</date>
