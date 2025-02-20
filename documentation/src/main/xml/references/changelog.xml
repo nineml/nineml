@@ -16,6 +16,13 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v328">
+<revnumber>3.2.8</revnumber>
+<date>2024-02-20</date>
+<revdescription>
+<para>Dummy entry to satisfy the build process.</para>
+</revdescription>
+</revision>
 <revision xml:id="v327">
 <revnumber>3.2.7</revnumber>
 <date>2024-10-29</date>
