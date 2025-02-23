@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 1. General use</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-02-23T08:59:33Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04pf01.html"/><link rel="next" href="bk04ch02.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Introduction" href="bk04pf01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 2. Pragmas" href="bk04ch02.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_general-use" db-chunk="bk04ch01.html" db-id="d493e4861" class="chapter component"><header><h2>Chapter <span class="label">1</span><span class="sep">. </span>General use</h2></header><div class="db-bfs">
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 1. General use</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-02-23T09:35:03Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04pf01.html"/><link rel="next" href="bk04ch02.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Introduction" href="bk04pf01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 2. Pragmas" href="bk04ch02.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_general-use" db-chunk="bk04ch01.html" db-id="d487e4861" class="chapter component"><header><h2>Chapter <span class="label">1</span><span class="sep">. </span>General use</h2></header><div class="db-bfs">
 
 
 <p>CoffeeFilter is an API for parsing with Invisible XML. You can
@@ -20,25 +20,23 @@ depend on that framework.</p>
 to the grammar used for the <a href="../coffeegrinder/bk05ch01.html" class="link">CoffeeGrinder example</a>
 except that it’s been expressed in somewhat more idiomatic iXML.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim"><code>    number = integer | float | scientific .
-      sign = '+' | '-' .
-    -digit = ['0'-'9'] .
-    digits = digit+ .
-   integer = sign?, digits .
-     point = -'.' .
-     float = sign?, digits, point, digits .
-         E = -'E' .
-scientific = integer, E, sign?, digits
-           | float, E, sign?, digits .
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim verblines"><span class="line"><span class="ld"><code>    number = integer | float | scientific .</code></span></span>
+<span class="line"><span class="ld"><code>      sign = '+' | '-' .</code></span></span>
+<span class="line"><span class="ld"><code>    -digit = ['0'-'9'] .</code></span></span>
+<span class="line"><span class="ld"><code>    digits = digit+ .</code></span></span>
+<span class="line"><span class="ld"><code>   integer = sign?, digits .</code></span></span>
+<span class="line"><span class="ld"><code>     point = -'.' .</code></span></span>
+<span class="line"><span class="ld"><code>     float = sign?, digits, point, digits .</code></span></span>
+<span class="line"><span class="ld"><code>         E = -'E' .</code></span></span>
+<span class="line"><span class="ld"><code>scientific = integer, E, sign?, digits</code></span></span>
+<span class="line"><span class="ld"><code>           | float, E, sign?, digits .</code></span></span></pre></div>
 
 <p>Begin by making
 an <a href="bk04partich02.html#c_org.nineml.coffeefilter.InvisibleXml" class="link">InvisibleXml</a>
 object.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>ParserOptions options = new ParserOptions();
-InvisibleXml invisibleXml = new InvisibleXml(options);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>ParserOptions options = new ParserOptions();</code></span></span>
+<span class="line"><span class="ld"><code>InvisibleXml invisibleXml = new InvisibleXml(options);</code></span></span></pre></div>
 
 <p>There are a number of
 <a href="bk04partich01.html#c_org.nineml.coffeefilter.ParserOptions" class="link">options</a>
@@ -56,21 +54,19 @@ a particular grammar and parse input with it to obtain
 <a href="bk04partich02.html#c_org.nineml.coffeefilter.InvisibleXmlDocument" class="link">a document</a>:
 </p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>File grammar = new File("src/test/resources/numbers.ixml");
-InvisibleXmlParser parser = invisibleXml.getParser(grammar);
-InvisibleXmlDocument document = parser.parse(number);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>File grammar = new File("src/test/resources/numbers.ixml");</code></span></span>
+<span class="line"><span class="ld"><code>InvisibleXmlParser parser = invisibleXml.getParser(grammar);</code></span></span>
+<span class="line"><span class="ld"><code>InvisibleXmlDocument document = parser.parse(number);</code></span></span></pre></div>
 
 <p>Methods on the document can be used to check if the parse succeeded. If it did,
 we can construct a result tree.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>if (document.succeeded()) {
-    String tree = document.getTree();
-    return String.format("%s is a number: %s", number, tree);
-} else {
-    return String.format("%s is not a number", number);
-}
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>if (document.succeeded()) {</code></span></span>
+<span class="line"><span class="ld"><code>    String tree = document.getTree();</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is a number: %s", number, tree);</code></span></span>
+<span class="line"><span class="ld"><code>} else {</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is not a number", number);</code></span></span>
+<span class="line"><span class="ld"><code>}</code></span></span></pre></div>
 
 </section>
 <section id="cf_general-use_s3" class="section"><header><h2><span class="label">1<span class="sep">.</span>3</span><span class="sep">. </span>Processing the results</h2></header>
@@ -81,16 +77,15 @@ method returns a string. There are other methods for accessing the
 forest that can use builders to construct trees:
 </p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>if (document.succeeded()) {
-    StringTreeBuilder builder = new StringTreeBuilder();
-    ParseForest forest = document.getResult().getForest();
-    Arborist.getArborist(forest).getTree(builder);
-    String tree = builder.getTree();
-    return String.format("%s is a number: %s", number, tree);
-} else {
-    return String.format("%s is not a number", number);
-}
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>if (document.succeeded()) {</code></span></span>
+<span class="line"><span class="ld"><code>    StringTreeBuilder builder = new StringTreeBuilder();</code></span></span>
+<span class="line"><span class="ld"><code>    ParseForest forest = document.getResult().getForest();</code></span></span>
+<span class="line"><span class="ld"><code>    Arborist.getArborist(forest).getTree(builder);</code></span></span>
+<span class="line"><span class="ld"><code>    String tree = builder.getTree();</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is a number: %s", number, tree);</code></span></span>
+<span class="line"><span class="ld"><code>} else {</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is not a number", number);</code></span></span>
+<span class="line"><span class="ld"><code>}</code></span></span></pre></div>
 
 <p>Builders can be used to construct a generic tree of “plain old Java objects” or
 send events to a SAX content handler to construct the tree.</p>
@@ -101,14 +96,13 @@ send events to a SAX content handler to construct the tree.</p>
 
 <p>In the case of ambiguous results, you can ask how many trees there are:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>long parseCount = document.getNumberOfParses();
-if (parseCount &gt; 1) {
-    if (document.isInfinitelyAmbiguous()) {
-        return String.format("%s is a date (in infinite ways): %s", date, tree);
-    }
-    return String.format("%s is a date (%d ways): %s", date, parseCount, tree);
-}
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>long parseCount = document.getNumberOfParses();</code></span></span>
+<span class="line"><span class="ld"><code>if (parseCount &gt; 1) {</code></span></span>
+<span class="line"><span class="ld"><code>    if (document.isInfinitelyAmbiguous()) {</code></span></span>
+<span class="line"><span class="ld"><code>        return String.format("%s is a date (in infinite ways): %s", date, tree);</code></span></span>
+<span class="line"><span class="ld"><code>    }</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is a date (%d ways): %s", date, parseCount, tree);</code></span></span>
+<span class="line"><span class="ld"><code>}</code></span></span></pre></div>
 
 <p>Beware that in an infinitely ambiguous forest, the number returned is wildely inaccurate
 (in as much as it is <em>infinitely</em> less than ∞!). It tells you something about

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 1. General use</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-02-23T08:59:33Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk05pf01.html"/><link rel="next" href="bk05parti.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeGrinder.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Introduction" href="bk05pf01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeGrinder" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Part I. API Documentation" href="bk05parti.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cg_general-use" db-chunk="bk05ch01.html" db-id="d493e7248" class="chapter component"><header><h2>Chapter <span class="label">1</span><span class="sep">. </span>General use</h2></header><div class="db-bfs">
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 1. General use</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-02-23T09:35:03Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk05pf01.html"/><link rel="next" href="bk05parti.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeGrinder.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Introduction" href="bk05pf01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeGrinder" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Part I. API Documentation" href="bk05parti.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cg_general-use" db-chunk="bk05ch01.html" db-id="d487e7248" class="chapter component"><header><h2>Chapter <span class="label">1</span><span class="sep">. </span>General use</h2></header><div class="db-bfs">
 
 
 <p>CoffeeGrinder is the lowest-level parser API. You can use it to
@@ -23,9 +23,8 @@ numbers in “scientific notation” (1.0E6, -2.3E-7). The first thing you
 need to do to build a parser is construct a source grammar:
 </p>
 
- <div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>ParserOptions options = new ParserOptions();
-SourceGrammar grammar = new SourceGrammar(options);
-</code></pre></div>
+ <div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>ParserOptions options = new ParserOptions();</code></span></span>
+<span class="line"><span class="ld"><code>SourceGrammar grammar = new SourceGrammar(options);</code></span></span></pre></div>
 
 <p>There are a number of
 <a href="bk05partich01.html#c_org.nineml.coffeegrinder.parser.ParserOptions" class="link">options</a>
@@ -40,21 +39,19 @@ of other nonterminals and terminal symbols. The example grammar for parsing numb
 begins by defining four nonterminals: one for numbers in general and then one for each
 of the three kinds of numbers.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>NonterminalSymbol number = grammar.getNonterminal("number");
-NonterminalSymbol integer = grammar.getNonterminal("integer");
-NonterminalSymbol floatpt = grammar.getNonterminal("float");
-NonterminalSymbol scientific = grammar.getNonterminal("scientific");
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>NonterminalSymbol number = grammar.getNonterminal("number");</code></span></span>
+<span class="line"><span class="ld"><code>NonterminalSymbol integer = grammar.getNonterminal("integer");</code></span></span>
+<span class="line"><span class="ld"><code>NonterminalSymbol floatpt = grammar.getNonterminal("float");</code></span></span>
+<span class="line"><span class="ld"><code>NonterminalSymbol scientific = grammar.getNonterminal("scientific");</code></span></span></pre></div>
 
 <p>(All nonterminals created with the same grammar and the same
 name are “the same”, even if they’re created in different places.)</p>
 
 <p>Once created, you define nonterminals with rules:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>grammar.addRule(number, integer);
-grammar.addRule(number, floatpt);
-grammar.addRule(number, scientific);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>grammar.addRule(number, integer);</code></span></span>
+<span class="line"><span class="ld"><code>grammar.addRule(number, floatpt);</code></span></span>
+<span class="line"><span class="ld"><code>grammar.addRule(number, scientific);</code></span></span></pre></div>
 
 <p>These rules say that a number is either an <code>integer</code>, a <code>floatpt</code>,
 or a <code>scientific</code>. The nonterminal <code>sign</code> is defined in terms of
@@ -62,13 +59,12 @@ terminal symbols <code>+</code> and <code>-</code>.
 Note that the last rule defines <code>sign</code> with “nothing on the right hand side”.
 That allows <code>sign</code> to match the empty sequence (often called ε in the literature).</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>TerminalSymbol plus = TerminalSymbol.ch('+');
-TerminalSymbol minus = TerminalSymbol.ch('-');
-NonterminalSymbol sign = grammar.getNonterminal("sign");
-grammar.addRule(sign, plus);
-grammar.addRule(sign, minus);
-grammar.addRule(sign);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>TerminalSymbol plus = TerminalSymbol.ch('+');</code></span></span>
+<span class="line"><span class="ld"><code>TerminalSymbol minus = TerminalSymbol.ch('-');</code></span></span>
+<span class="line"><span class="ld"><code>NonterminalSymbol sign = grammar.getNonterminal("sign");</code></span></span>
+<span class="line"><span class="ld"><code>grammar.addRule(sign, plus);</code></span></span>
+<span class="line"><span class="ld"><code>grammar.addRule(sign, minus);</code></span></span>
+<span class="line"><span class="ld"><code>grammar.addRule(sign);</code></span></span></pre></div>
 
 <p>Additional rules define digits and the rest of the decimal forms.</p>
 
@@ -80,9 +76,8 @@ grammar.addRule(sign);
 <a href="bk05partich02.html#c_org.nineml.coffeegrinder.parser.ParserGrammar" class="link">parser grammar</a>
 in order to construct a parser:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>NonterminalSymbol startSymbol = grammar.getNonterminal("number");
-ParserGrammar pgrammar = grammar.getCompiledGrammar(startSymbol);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>NonterminalSymbol startSymbol = grammar.getNonterminal("number");</code></span></span>
+<span class="line"><span class="ld"><code>ParserGrammar pgrammar = grammar.getCompiledGrammar(startSymbol);</code></span></span></pre></div>
 
 <p>The parser grammar must be constructed for a particular start
 symbol, the nonterminal that the parser will be attempting to match.
@@ -97,23 +92,21 @@ Unlike source grammars, parser grammars are immutable.</p>
 And from a parser, we can get
 <a href="bk05partich03.html#c_org.nineml.coffeegrinder.parser.GearleyResult" class="link">a result</a>:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>GearleyParser parser = pgrammar.getParser();
-GearleyResult result = parser.parse(number);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>GearleyParser parser = pgrammar.getParser();</code></span></span>
+<span class="line"><span class="ld"><code>GearleyResult result = parser.parse(number);</code></span></span></pre></div>
 
 <p>Methods on the result can be used to check if the parse succeeded. If it did,
 we can construct a result tree.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>if (result.succeeded()) {
-    StringTreeBuilder builder = new StringTreeBuilder();
-    ParseForest forest = result.getForest();
-    Arborist.getArborist(forest).getTree(builder);
-    String tree = builder.getTree();
-    return String.format("%s is a number: %s", number, tree);
-} else {
-    return String.format("%s is not a number", number);
-}
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>if (result.succeeded()) {</code></span></span>
+<span class="line"><span class="ld"><code>    StringTreeBuilder builder = new StringTreeBuilder();</code></span></span>
+<span class="line"><span class="ld"><code>    ParseForest forest = result.getForest();</code></span></span>
+<span class="line"><span class="ld"><code>    Arborist.getArborist(forest).getTree(builder);</code></span></span>
+<span class="line"><span class="ld"><code>    String tree = builder.getTree();</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is a number: %s", number, tree);</code></span></span>
+<span class="line"><span class="ld"><code>} else {</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is not a number", number);</code></span></span>
+<span class="line"><span class="ld"><code>}</code></span></span></pre></div>
 
 </section>
 <section id="cg_general-use_s4" class="section"><header><h2><span class="label">1<span class="sep">.</span>4</span><span class="sep">. </span>Processing the results</h2></header>
@@ -122,15 +115,13 @@ we can construct a result tree.</p>
 <p>The result of a successful parse is a
 <a href="bk05partich04.html#c_org.nineml.coffeegrinder.parser.ParseForest" class="link">parse forest</a>.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>ParseForest forest = result.getForest();
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>ParseForest forest = result.getForest();</code></span></span></pre></div>
 
 <p>The parse tree (or trees, in the case of an ambiguous parse) are
 obtained from the forest with <a href="bk05partich04.html#c_org.nineml.coffeegrinder.trees.Arborist" class="link">an
 arborist</a>.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>Arborist.getArborist(forest).getTree(builder);
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>Arborist.getArborist(forest).getTree(builder);</code></span></span></pre></div>
 
 <p>There are two kinds of
 <a href="bk05partich04.html#c_org.nineml.coffeegrinder.trees.Arborist" class="link">arborists</a>,
@@ -164,14 +155,13 @@ The print stream and string tree builders represent the trees using XML.
 
 <p>In the case of ambiguous results, you can ask how many trees there are:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim"><code>int parseCount = forest.getParseTreeCount();
-if (parseCount &gt; 1) {
-    if (forest.isInfinitelyAmbiguous()) {
-        return String.format("%s is a date (in infinite ways): %s", date, tree);
-    }
-    return String.format("%s is a date (%d ways): %s", date, parseCount, tree);
-}
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-java programlisting verbatim verblines"><span class="line"><span class="ld"><code>int parseCount = forest.getParseTreeCount();</code></span></span>
+<span class="line"><span class="ld"><code>if (parseCount &gt; 1) {</code></span></span>
+<span class="line"><span class="ld"><code>    if (forest.isInfinitelyAmbiguous()) {</code></span></span>
+<span class="line"><span class="ld"><code>        return String.format("%s is a date (in infinite ways): %s", date, tree);</code></span></span>
+<span class="line"><span class="ld"><code>    }</code></span></span>
+<span class="line"><span class="ld"><code>    return String.format("%s is a date (%d ways): %s", date, parseCount, tree);</code></span></span>
+<span class="line"><span class="ld"><code>}</code></span></span></pre></div>
 
 <p>Beware that in an infinitely ambiguous forest, the number returned is wildely inaccurate
 (in as much as it is <em>infinitely</em> less than ∞!). It tells you something about

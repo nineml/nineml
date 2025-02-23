@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 4. Finding errors</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-02-23T08:59:33Z"/><meta name="generator" content="DocBook xslTNG version 2.4.1 / 5e956019 / SAXON HE 12.3"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch03.html"/><link rel="next" href="bk02ch05.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeePot.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 3. How it works" href="bk02ch03.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 5. Ambiguity" href="bk02ch05.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="debugging" db-chunk="bk02ch04.html" db-id="d493e1365" class="chapter component"><header><h2>Chapter <span class="label">4</span><span class="sep">. </span>Finding errors</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 4. Finding errors</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-02-23T09:35:03Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk02ch03.html"/><link rel="next" href="bk02ch05.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeePot.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 3. How it works" href="bk02ch03.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeePot" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 5. Ambiguity" href="bk02ch05.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="debugging" db-chunk="bk02ch04.html" db-id="d487e1365" class="chapter component"><header><h2>Chapter <span class="label">4</span><span class="sep">. </span>Finding errors</h2></header>
 
 
 <p>On a good day, your grammars are all valid and your inputs all parse.
@@ -11,12 +11,10 @@ this grammar, <a href="examples/err01.ixml" class="link">err01.ixml</a>:
 
 <div id="err01" class="example formalobject"><header><div class="title">Example <span class="label">4<span class="sep">.</span>1</span><span class="sep">. </span>Sequences of short words (invalid)</div></header>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>list: word + -',' .
-word: c, v, c ; c, v, v
--c: ["bcdfghjklmnpqrstvwxyz"] .
--v: ["aeiouy" ].
-
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>list: word + -',' .</code></span></span>
+<span class="line"><span class="ld"><code>word: c, v, c ; c, v, v</code></span></span>
+<span class="line"><span class="ld"><code>-c: ["bcdfghjklmnpqrstvwxyz"] .</code></span></span>
+<span class="line"><span class="ld"><code>-v: ["aeiouy" ].</code></span></span></pre></div>
 </div>
 
 <p>In principle, this is a grammar matching comma-separated
@@ -24,8 +22,8 @@ sequences of short words matching the pattern
 “consonant-vowel-consonant” or “consonent-vowel-vowel”. In practice,
 it’s not:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -pp -g:examples/err01.ixml cat,sat,hat
-Failed to parse grammar: could not match '-' at line 3, column 1</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>$ coffeepot -pp -g:examples/err01.ixml cat,sat,hat</code></span></span>
+<span class="line"><span class="ld"><code>Failed to parse grammar: could not match '-' at line 3, column 1</code></span></span></pre></div>
 
 <p>In typical “error messages from computer programs” fashion, this doesn’t
 actually tell you what’s wrong. It tells you the first thing the parser
@@ -39,34 +37,32 @@ rule is missing the terminating “.”.</p>
 
 <div id="err02" class="example formalobject"><header><div class="title">Example <span class="label">4<span class="sep">.</span>2</span><span class="sep">. </span>Sequences of short words</div></header>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>list: word + -',' .
-word: c, v, c ; c, v, v .
--c: ["bcdfghjklmnpqrstvwxyz"] .
--v: ["aeiouy" ].
-
-</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>list: word + -',' .</code></span></span>
+<span class="line"><span class="ld"><code>word: c, v, c ; c, v, v .</code></span></span>
+<span class="line"><span class="ld"><code>-c: ["bcdfghjklmnpqrstvwxyz"] .</code></span></span>
+<span class="line"><span class="ld"><code>-v: ["aeiouy" ].</code></span></span></pre></div>
 </div>
 
 <p>Which does work:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -pp -g:examples/err02.ixml cat,sat,hat
-&lt;list&gt;
-   &lt;word&gt;cat&lt;/word&gt;
-   &lt;word&gt;sat&lt;/word&gt;
-   &lt;word&gt;hat&lt;/word&gt;
-&lt;/list&gt;</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>$ coffeepot -pp -g:examples/err02.ixml cat,sat,hat</code></span></span>
+<span class="line"><span class="ld"><code>&lt;list&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;word&gt;cat&lt;/word&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;word&gt;sat&lt;/word&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;word&gt;hat&lt;/word&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/list&gt;</code></span></span></pre></div>
 
 <p>Once your grammar works, you can start feeding inputs to it. Some of
 those won’t work.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -pp -g:examples/err02.ixml frog,sat,log
-&lt;fail xmlns:ixml="http://invisiblexml.org/NS" ixml:state="failed"&gt;
-   &lt;line&gt;1&lt;/line&gt;
-   &lt;column&gt;3&lt;/column&gt;
-   &lt;pos&gt;2&lt;/pos&gt;
-   &lt;unexpected&gt;r&lt;/unexpected&gt;
-   &lt;permitted&gt;["aeuiyo"]&lt;/permitted&gt;
-&lt;/fail&gt;</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>$ coffeepot -pp -g:examples/err02.ixml frog,sat,log</code></span></span>
+<span class="line"><span class="ld"><code>&lt;fail xmlns:ixml="http://invisiblexml.org/NS" ixml:state="failed"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;line&gt;1&lt;/line&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;column&gt;3&lt;/column&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;pos&gt;2&lt;/pos&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;unexpected&gt;r&lt;/unexpected&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;permitted&gt;["aeuiyo"]&lt;/permitted&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/fail&gt;</code></span></span></pre></div>
 
 <p>There is no universally correct answer to the question: is your
 grammar incorrect or is your input incorrect? In fact, if what you
@@ -110,24 +106,24 @@ details, but beware, you sometimes get <em>a lot</em> of detail!
 The <code class="option">--show-chart</code> option tells <span class="application">coffeepot</span> to
 print the state chart that was current at the moment of failure.</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -pp -g:examples/err02.ixml --show-chart frog,sat,log
-&lt;parse-failed xmlns:ixml="http://invisiblexml.org/NS" ixml:state="failed"&gt;
-   &lt;last-token line="1" column="3" token-count="2"&gt;'r'&lt;/last-token&gt;
-   &lt;chart&gt;
-      &lt;row n="0"&gt;
-         &lt;item&gt;$$ ⇒ • list / 0 / null&lt;/item&gt;
-         &lt;item&gt;list ⇒ • $1 / 0 / null&lt;/item&gt;
-         &lt;item&gt;$1 ⇒ • word $2ⁿ / 0 / null&lt;/item&gt;
-         &lt;item&gt;word ⇒ • c v c / 0 / null&lt;/item&gt;
-         &lt;item&gt;word ⇒ • c v v / 0 / null&lt;/item&gt;
-      &lt;/row&gt;
-      &lt;row n="1"&gt;
-         &lt;item&gt;c ⇒ ["bcdfghjklmnpqrstvwxyz"] • / 0 / c, 0, 1&lt;/item&gt;
-         &lt;item&gt;word ⇒ c • v c / 0 / c, 0, 1&lt;/item&gt;
-         &lt;item&gt;word ⇒ c • v v / 0 / c, 0, 1&lt;/item&gt;
-      &lt;/row&gt;
-   &lt;/chart&gt;
-&lt;/parse-failed&gt;</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>$ coffeepot -pp -g:examples/err02.ixml --show-chart frog,sat,log</code></span></span>
+<span class="line"><span class="ld"><code>&lt;parse-failed xmlns:ixml="http://invisiblexml.org/NS" ixml:state="failed"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;last-token line="1" column="3" token-count="2"&gt;'r'&lt;/last-token&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;chart&gt;</code></span></span>
+<span class="line"><span class="ld"><code>      &lt;row n="0"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;$$ ⇒ • list / 0 / null&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;list ⇒ • $1 / 0 / null&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;$1 ⇒ • word $2ⁿ / 0 / null&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;word ⇒ • c v c / 0 / null&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;word ⇒ • c v v / 0 / null&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>      &lt;/row&gt;</code></span></span>
+<span class="line"><span class="ld"><code>      &lt;row n="1"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;c ⇒ ["bcdfghjklmnpqrstvwxyz"] • / 0 / c, 0, 1&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;word ⇒ c • v c / 0 / c, 0, 1&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>         &lt;item&gt;word ⇒ c • v v / 0 / c, 0, 1&lt;/item&gt;</code></span></span>
+<span class="line"><span class="ld"><code>      &lt;/row&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;/chart&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/parse-failed&gt;</code></span></span></pre></div>
 
 <p>To understand the state chart, it will be useful to know something about how
 an <a href="https://en.wikipedia.org/wiki/Earley_parser" class="link">Earley parser</a>
@@ -154,14 +150,14 @@ the next match, a vowel in both cases. Not surprising since “r” isn’t a vo
 
 <p>Let’s look at another unsuccessful attempt:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim"><code>$ coffeepot -pp -g:examples/err02.ixml  cat,ate,rat
-&lt;fail xmlns:ixml="http://invisiblexml.org/NS" ixml:state="failed"&gt;
-   &lt;line&gt;1&lt;/line&gt;
-   &lt;column&gt;6&lt;/column&gt;
-   &lt;pos&gt;5&lt;/pos&gt;
-   &lt;unexpected&gt;a&lt;/unexpected&gt;
-   &lt;permitted&gt;["bcdfghjklmnpqrstvwxyz"]&lt;/permitted&gt;
-&lt;/fail&gt;</code></pre></div>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>$ coffeepot -pp -g:examples/err02.ixml  cat,ate,rat</code></span></span>
+<span class="line"><span class="ld"><code>&lt;fail xmlns:ixml="http://invisiblexml.org/NS" ixml:state="failed"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;line&gt;1&lt;/line&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;column&gt;6&lt;/column&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;pos&gt;5&lt;/pos&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;unexpected&gt;a&lt;/unexpected&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;permitted&gt;["bcdfghjklmnpqrstvwxyz"]&lt;/permitted&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/fail&gt;</code></span></span></pre></div>
 
 <p>The state chart isn’t the only tool we have to understand what went wrong.
 We can also look at what was in the parse forest with the <code class="option">--graph-svg</code>
