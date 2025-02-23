@@ -16,6 +16,40 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v328">
+<revnumber>3.2.8</revnumber>
+<date>2024-02-23</date>
+<revdescription>
+<itemizedlist>
+<listitem><para>Fixed issues
+<link xlink:href="https://github.com/nineml/nineml/issues/44">#44</link>
+and 
+<link xlink:href="https://github.com/nineml/nineml/issues/50">#50</link>,
+a couple of documentation bugs.
+</para></listitem>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/53">#53</link>.
+Escape HTML markup used in the generation of SVG graphs more carefully.
+</para></listitem>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/51">#51</link>,
+typos in the documentation.
+</para></listitem>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/54">#54</link>.
+The CoffeeSacks function was not correctly detecting parse errors and
+reporting them.</para></listitem>
+<listitem><para>Updated the ixml repository submodule to the latest.
+</para></listitem>
+<listitem><para>Fixed some JavaDoc problems.
+</para></listitem>
+<listitem><para>Fussed with some build issues in GitHub actions.
+They work now, I think, but not because I actually understood and resolved the issue.
+(The issue is, I think, more than one version of Xerces on the class path.)
+</para></listitem>
+</itemizedlist>
+</revdescription>
+</revision>
 <revision xml:id="v327">
 <revnumber>3.2.7</revnumber>
 <date>2024-10-29</date>
