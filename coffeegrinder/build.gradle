@@ -10,6 +10,7 @@ buildscript {
       force 'xml-apis:xml-apis:1.4.01'
       force "${saxonGroup}:${saxonEdition}:${saxonVersion}"
       force "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+      force "xerces:xercesImpl:${xercesVersion}"
     }
   }
 
@@ -47,6 +48,7 @@ configurations.all {
     force 'xml-apis:xml-apis:1.4.01'
     force "${saxonGroup}:${saxonEdition}:${saxonVersion}"
     force "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+    force "xerces:xercesImpl:${xercesVersion}"
   }
 }
 
