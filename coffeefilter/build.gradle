@@ -10,6 +10,7 @@ buildscript {
       force 'xml-apis:xml-apis:1.4.01'
       force "${saxonGroup}:${saxonEdition}:${saxonVersion}"
       force "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+      force "xerces:xercesImpl:${xercesVersion}"
     }
   }
 
@@ -57,6 +58,7 @@ configurations.all {
     force 'xml-apis:xml-apis:1.4.01'
     force "${saxonGroup}:${saxonEdition}:${saxonVersion}"
     force "org.xmlresolver:xmlresolver:${xmlresolverVersion}"
+    force "xerces:xercesImpl:${xercesVersion}"
   }
 }
 
@@ -68,12 +70,12 @@ configurations {
 dependencies {
   implementation project(':coffeegrinder')
   implementation (
-    [group: 'org.relaxng', name: 'jing', version: '20220510']
+    [group: 'org.relaxng', name: 'jing', version: jingVersion]
   )
 
   testImplementation (
     [group: 'com.saxonica', name: 'Saxon-EE', version: saxonVersion],
-    [group: 'org.relaxng', name: 'jing', version: '20220510'],
+    [group: 'org.relaxng', name: 'jing', version: jingVersion],
     files(saxonLicenseDir)
   )
   testsuite (
@@ -185,16 +187,17 @@ task testSuite(type: JavaExec,
   args javaArgs
 }
 
-task testSuiteReport(type: SaxonXsltTask, dependsOn: ["testSuite"]) {
+task testSuiteReport(type: JavaExec, dependsOn: ["testSuite"]) {
   inputs.files fileTree(dir: "${projectDir}/ixml/tests")
   inputs.files files(testSuite)
 
-  input "${projectDir}/ixml/tests/test-catalog.xml"
-  stylesheet "${projectDir}/tools/test-report/test-report.xsl"
-  output "${buildDir}/test-report/index.html"
-  parameters (
-    'test-report.xml': "${buildDir}/test-report-${parserType}.xml"
-  )
+  classpath = configurations.testsuite
+
+  mainClass = "net.sf.saxon.Transform"
+  args = ["-s:${projectDir}/ixml/tests/test-catalog.xml",
+          "-o:${buildDir}/test-report/index.html",
+          "-xsl:${projectDir}/tools/test-report/test-report.xsl",
+          "test-report.xml=${buildDir}/test-report-${parserType}.xml"]
 
   doLast {
     copy {
