@@ -43,7 +43,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -80,21 +80,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="EarleyPath.PathSegment.html" class="type-name-link" title="class in org.nineml.coffeegrinder.parser">EarleyPath.PathSegment</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -103,7 +88,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">EarleyPath</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.nineml.coffeegrinder.tokens.Token%5B%5D)" class="member-name-link">EarleyPath</a><wbr>(<a href="../tokens/Token.html" title="class in org.nineml.coffeegrinder.tokens">Token</a>[]&nbsp;input)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -120,23 +105,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRule(int,int,java.lang.String,org.nineml.coffeegrinder.parser.NonterminalSymbol)" class="member-name-link">addRule</a><wbr>(int&nbsp;start,
- int&nbsp;end,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
- <a href="NonterminalSymbol.html" title="class in org.nineml.coffeegrinder.parser">NonterminalSymbol</a>&nbsp;symbol)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addCompleted(org.nineml.coffeegrinder.parser.EarleyItem)" class="member-name-link">addCompleted</a><wbr>(<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&nbsp;item)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSegment(int,int,java.lang.String,java.util.List)" class="member-name-link">addSegment</a><wbr>(int&nbsp;start,
- int&nbsp;end,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="NonterminalSymbol.html" title="class in org.nineml.coffeegrinder.parser">NonterminalSymbol</a>&gt;&nbsp;symbols)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addOpen(org.nineml.coffeegrinder.parser.EarleyItem)" class="member-name-link">addOpen</a><wbr>(<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&nbsp;item)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyPath.PathSegment.html" title="class in org.nineml.coffeegrinder.parser">EarleyPath.PathSegment</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRules()" class="member-name-link">getRules</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCompleted()" class="member-name-link">getCompleted</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyPath.PathSegment.html" title="class in org.nineml.coffeegrinder.parser">EarleyPath.PathSegment</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSegments()" class="member-name-link">getSegments</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInputString(org.nineml.coffeegrinder.parser.EarleyItem)" class="member-name-link">getInputString</a><wbr>(<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&nbsp;item)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOpen()" class="member-name-link">getOpen</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -155,9 +137,9 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(org.nineml.coffeegrinder.tokens.Token[])">
 <h3>EarleyPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EarleyPath</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EarleyPath</span><wbr><span class="parameters">(<a href="../tokens/Token.html" title="class in org.nineml.coffeegrinder.tokens">Token</a>[]&nbsp;input)</span></div>
 </section>
 </li>
 </ul>
@@ -169,33 +151,33 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getSegments()">
-<h3>getSegments</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyPath.PathSegment.html" title="class in org.nineml.coffeegrinder.parser">EarleyPath.PathSegment</a>&gt;</span>&nbsp;<span class="element-name">getSegments</span>()</div>
+<section class="detail" id="getCompleted()">
+<h3>getCompleted</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&gt;</span>&nbsp;<span class="element-name">getCompleted</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="getRules()">
-<h3>getRules</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyPath.PathSegment.html" title="class in org.nineml.coffeegrinder.parser">EarleyPath.PathSegment</a>&gt;</span>&nbsp;<span class="element-name">getRules</span>()</div>
+<section class="detail" id="getOpen()">
+<h3>getOpen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&gt;</span>&nbsp;<span class="element-name">getOpen</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="addSegment(int,int,java.lang.String,java.util.List)">
-<h3>addSegment</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addSegment</span><wbr><span class="parameters">(int&nbsp;start,
- int&nbsp;end,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="NonterminalSymbol.html" title="class in org.nineml.coffeegrinder.parser">NonterminalSymbol</a>&gt;&nbsp;symbols)</span></div>
+<section class="detail" id="addCompleted(org.nineml.coffeegrinder.parser.EarleyItem)">
+<h3>addCompleted</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addCompleted</span><wbr><span class="parameters">(<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&nbsp;item)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="addRule(int,int,java.lang.String,org.nineml.coffeegrinder.parser.NonterminalSymbol)">
-<h3>addRule</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addRule</span><wbr><span class="parameters">(int&nbsp;start,
- int&nbsp;end,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
- <a href="NonterminalSymbol.html" title="class in org.nineml.coffeegrinder.parser">NonterminalSymbol</a>&nbsp;symbol)</span></div>
+<section class="detail" id="addOpen(org.nineml.coffeegrinder.parser.EarleyItem)">
+<h3>addOpen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addOpen</span><wbr><span class="parameters">(<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&nbsp;item)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getInputString(org.nineml.coffeegrinder.parser.EarleyItem)">
+<h3>getInputString</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getInputString</span><wbr><span class="parameters">(<a href="EarleyItem.html" title="class in org.nineml.coffeegrinder.parser">EarleyItem</a>&nbsp;item)</span></div>
 </section>
 </li>
 </ul>
