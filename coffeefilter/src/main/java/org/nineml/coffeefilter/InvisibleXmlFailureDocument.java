@@ -110,15 +110,17 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                 }
             }
 
-            boolean predictedSome = false;
-            List<Token> oknext = couldBeNext(result.getPredictedTerminals());
-            if (!oknext.isEmpty()) {
-                predictedSome = true;
-                tokenList(handler, oknext, "permitted");
-            }
-
             if (result instanceof EarleyResult) {
                 EarleyResult eresult = (EarleyResult) result;
+                NextTokenDetail detail = couldBeNextDetail(eresult.getChart(), result.getParser().getGrammar());
+
+                boolean predictedSome = false;
+                List<Token> oknext = couldBeNext(result.getPredictedTerminals());
+                if (!oknext.isEmpty()) {
+                    predictedSome = true;
+                    tokenList(handler, oknext, "permitted");
+                }
+
                 oknext = couldBeNext(eresult.getChart(), result.getParser().getGrammar());
                 if (!oknext.isEmpty()) {
                     String elemName = "permitted";
@@ -126,6 +128,78 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                         elemName = "also-predicted";
                     }
                     tokenList(handler, oknext, elemName);
+                }
+
+                EarleyPath path = eresult.getPath();
+                if (!path.getSegments().isEmpty()) {
+                    writeNewline(handler);
+                    handler.startElement("", "completions", "completions", AttributeBuilder.EMPTY_ATTRIBUTES);
+                    for (EarleyPath.PathSegment segment : path.getSegments()) {
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("start", ""+segment.start);
+                        attrs.addAttribute("end", ""+segment.end);
+                        attrs.addAttribute("input", segment.input);
+                        writeIndent(handler);
+                        handler.startElement("", "completed", "completed", attrs);
+                        StringBuilder sb = new StringBuilder();
+                        boolean first = true;
+                        for (NonterminalSymbol symbol : segment.symbols) {
+                            if (!first) {
+                                sb.append(" ");
+                            }
+                            sb.append(symbol.getName());
+                            first = false;
+                        }
+                        writeString(handler, sb.toString());
+                        handler.endElement("", "completed", "completed");
+                    }
+                    writeNewline(handler);
+                    handler.endElement("", "completions", "completions");
+                }
+
+                if (!detail.getNextTokens().isEmpty()) {
+                    writeNewline(handler);
+                    handler.startElement("", "could-be-next", "could-be-next", AttributeBuilder.EMPTY_ATTRIBUTES);
+                    for (NonterminalSymbol symbol : detail.getNextTokens().keySet()) {
+                        List<Token> tokens = detail.getNextTokens().get(symbol);
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("rule", symbol.getName());
+                        attrs.addAttribute("tokens", tokenList(tokens));
+                        writeIndent(handler);
+                        handler.startElement("", "in", "in", attrs);
+                        handler.endElement("", "in", "in");
+                    }
+
+                    writeNewline(handler);
+                    handler.endElement("", "could-be-next", "could-be-next");
+                }
+
+                if (!path.getRules().isEmpty()) {
+                    writeNewline(handler);
+                    handler.startElement("", "unfinished", "unfinished", AttributeBuilder.EMPTY_ATTRIBUTES);
+                    for (EarleyPath.PathSegment segment : path.getRules()) {
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("start", ""+segment.start);
+                        attrs.addAttribute("end", ""+segment.end);
+                        attrs.addAttribute("consumed", segment.input);
+
+                        StringBuilder sb = new StringBuilder();
+                        boolean first = true;
+                        for (NonterminalSymbol symbol : segment.symbols) {
+                            if (!first) {
+                                sb.append(", ");
+                            }
+                            sb.append(symbol.getName());
+                            first = false;
+                        }
+                        attrs.addAttribute("rules", sb.toString());
+
+                        writeIndent(handler);
+                        handler.startElement("", "open", "open", attrs);
+                        handler.endElement("", "open", "open");
+                    }
+                    writeNewline(handler);
+                    handler.endElement("", "unfinished", "unfinished");
                 }
 
                 if (options.getShowChart()) {
@@ -219,10 +293,58 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
         return nextChars;
     }
 
+    private NextTokenDetail couldBeNextDetail(EarleyChart chart, Grammar grammar) {
+        NextTokenDetail detail = new NextTokenDetail();
+
+        int lastrow = chart.size() - 1;
+        while (lastrow >= 0 && chart.get(lastrow).isEmpty()) {
+            lastrow--;
+        }
+
+        if (lastrow < 0 || chart.get(lastrow).isEmpty()) {
+            return detail;
+        }
+
+        HashSet<Symbol> nextSymbols = new HashSet<>();
+        for (EarleyItem item : chart.get(lastrow)) {
+            State state = item.state;
+            if (state != null && !state.completed()) {
+                if (state.nextSymbol() instanceof TerminalSymbol) {
+                    TerminalSymbol symbol = (TerminalSymbol) state.nextSymbol();
+                    if (symbol.getToken() != null) {
+                        detail.add(symbol.getToken(), state.symbol);
+                    }
+                } else {
+                    nextSymbols.add(state.nextSymbol());
+                }
+            }
+        }
+
+        for (Symbol s: nextSymbols) {
+            for (Rule rule : grammar.getRules()) {
+                if (!rule.symbol.symbolName.startsWith("$") && rule.getSymbol().equals(s) && !rule.getRhs().isEmpty()) {
+                    Symbol symbol = rule.getRhs().get(0);
+                    if (symbol instanceof TerminalSymbol && ((TerminalSymbol) symbol).getToken() != null) {
+                        detail.add(((TerminalSymbol) symbol).getToken(), rule.symbol);
+                    }
+                }
+            }
+        }
+
+        return detail;
+    }
+
+    private void writeNewline(ContentHandler handler) throws SAXException {
+        writeString(handler, "\n");
+    }
+
+    private void writeIndent(ContentHandler handler) throws SAXException {
+        writeString(handler, "\n  ");
+    }
+
     private void writeString(ContentHandler handler, String str) throws SAXException {
         handler.characters(str.toCharArray(), 0, str.length());
     }
-
 
     private void atomicValue(ContentHandler handler, String name, String value) throws SAXException {
         handler.startElement("", name, name, AttributeBuilder.EMPTY_ATTRIBUTES);
@@ -230,7 +352,7 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
         handler.endElement("", name, name);
     }
 
-    private void tokenList(ContentHandler handler, List<Token> oknext, String elemName) throws SAXException {
+    private String tokenList(List<Token> oknext) throws SAXException {
         // I don't actually care about the order,
         // but let's not just make it HashMap random for testing if nothing else.
         ArrayList<String> chars = new ArrayList<>();
@@ -246,7 +368,37 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
             }
             sb.append(chars.get(pos));
         }
-        atomicValue(handler, elemName, sb.toString());
+
+        return sb.toString();
+    }
+
+    private void tokenList(ContentHandler handler, List<Token> oknext, String elemName) throws SAXException {
+        atomicValue(handler, elemName, tokenList(oknext));
+    }
+
+    private static class NextTokenDetail {
+        private final Set<Token> tokenSet = new HashSet<>();
+        private final HashMap<NonterminalSymbol,List<Token>> nextTokens = new HashMap<>();
+
+        public Map<NonterminalSymbol,List<Token>> getNextTokens() {
+            return nextTokens;
+        }
+
+        public Set<Token> getTokenSet() {
+            return tokenSet;
+        }
+
+        public void add(Token token, NonterminalSymbol rule) {
+            tokenSet.add(token);
+
+            if (!nextTokens.containsKey(rule)) {
+                nextTokens.put(rule, new ArrayList<>());
+            }
+            ArrayList<Token> list = (ArrayList<Token>) nextTokens.get(rule);
+            if (!list.contains(token)) {
+                list.add(token);
+            }
+        }
     }
 
     private static class StringContentHandler implements ContentHandler {
