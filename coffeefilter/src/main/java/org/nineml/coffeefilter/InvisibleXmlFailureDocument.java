@@ -131,26 +131,19 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                 }
 
                 EarleyPath path = eresult.getPath();
-                if (!path.getSegments().isEmpty()) {
+                if (!path.getCompleted().isEmpty()) {
                     handler.startElement("", "completions", "completions", AttributeBuilder.EMPTY_ATTRIBUTES);
-                    for (EarleyPath.PathSegment segment : path.getSegments()) {
-                        attrs = new AttributeBuilder(options);
-                        attrs.addAttribute("start", String.valueOf(segment.start));
-                        attrs.addAttribute("end", String.valueOf(segment.end));
+                    for (EarleyItem item : path.getCompleted()) {
+                        assert item.state.symbol != null;
+                        assert item.w != null;
 
-                        StringBuilder sb = new StringBuilder();
-                        boolean first = true;
-                        for (NonterminalSymbol symbol : segment.symbols) {
-                            if (!first) {
-                                sb.append(", ");
-                            }
-                            sb.append(symbol.getName());
-                            first = false;
-                        }
-                        attrs.addAttribute("rules", sb.toString());
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("rule", item.state.symbol.getName());
+                        attrs.addAttribute("start", String.valueOf(item.w.leftExtent+1));
+                        attrs.addAttribute("end", String.valueOf(item.w.rightExtent));
 
                         handler.startElement("", "completed", "completed", attrs);
-                        atomicValue(handler, "input", segment.input);
+                        atomicValue(handler, "input", path.getInputString(item));
                         handler.endElement("", "completed", "completed");
                     }
                     handler.endElement("", "completions", "completions");
@@ -169,26 +162,19 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                     handler.endElement("", "could-be-next", "could-be-next");
                 }
 
-                if (!path.getRules().isEmpty()) {
+                if (!path.getOpen().isEmpty()) {
                     handler.startElement("", "unfinished", "unfinished", AttributeBuilder.EMPTY_ATTRIBUTES);
-                    for (EarleyPath.PathSegment segment : path.getRules()) {
-                        attrs = new AttributeBuilder(options);
-                        attrs.addAttribute("start", String.valueOf(segment.start));
-                        attrs.addAttribute("end", String.valueOf(segment.end));
+                    for (EarleyItem item : path.getOpen()) {
+                        assert item.state.symbol != null;
+                        assert item.w != null;
 
-                        StringBuilder sb = new StringBuilder();
-                        boolean first = true;
-                        for (NonterminalSymbol symbol : segment.symbols) {
-                            if (!first) {
-                                sb.append(" ");
-                            }
-                            sb.append(symbol.getName());
-                            first = false;
-                        }
-                        attrs.addAttribute("rules", sb.toString());
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("rule", item.state.symbol.getName());
+                        attrs.addAttribute("start", String.valueOf(item.w.leftExtent+1));
+                        attrs.addAttribute("end", String.valueOf(item.w.rightExtent));
 
                         handler.startElement("", "open", "open", attrs);
-                        atomicValue(handler, "input", segment.input);
+                        atomicValue(handler, "input", path.getInputString(item));
                         handler.endElement("", "open", "open");
                     }
                     handler.endElement("", "unfinished", "unfinished");

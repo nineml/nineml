@@ -1,42 +1,65 @@
 package org.nineml.coffeegrinder.parser;
 
+import org.nineml.coffeegrinder.tokens.Token;
+import org.nineml.coffeegrinder.util.ParserAttribute;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class EarleyPath {
-    private final ArrayList<PathSegment> segments = new ArrayList<>();
-    private final ArrayList<PathSegment> rules = new ArrayList<>();
+    private final Token[] input;
+    private final ArrayList<EarleyItem> completed = new ArrayList<>();
+    private final ArrayList<EarleyItem> open = new ArrayList<>();
 
-    public List<PathSegment> getSegments() {
-        return segments;
+    public EarleyPath(Token[] input) {
+        this.input = input;
     }
 
-    public List<PathSegment> getRules() {
-        return rules;
+    public List<EarleyItem> getCompleted() {
+        return completed;
     }
 
-    public void addSegment(int start, int end, String input, List<NonterminalSymbol> symbols) {
-        PathSegment segment = new PathSegment(start, end, input, symbols);
-        segments.add(0, segment);
+    public List<EarleyItem> getOpen() {
+        return open;
     }
 
-    public void addRule(int start, int end, String input, NonterminalSymbol symbol) {
-        PathSegment segment = new PathSegment(start, end, input, Collections.singletonList(symbol));
-        rules.add(0, segment);
+    public void addCompleted(EarleyItem item) {
+        completed.add(item);
     }
 
-    public static class PathSegment {
-        public final int start;
-        public final int end;
-        public final String input;
-        public final List<NonterminalSymbol> symbols;
+    public void addOpen(EarleyItem item) {
+        open.add(item);
+    }
 
-        public PathSegment(int start, int end, String input, List<NonterminalSymbol> symbols) {
-            this.start = start;
-            this.end = end;
-            this.input = input;
-            this.symbols = symbols;
+    public String getInputString(EarleyItem item) {
+        int leftExtent = item.w.leftExtent;
+        int rightExtent = item.w.rightExtent;
+
+        StringBuilder sb = new StringBuilder();
+        for (int index = leftExtent; index < rightExtent; index++) {
+            String value = input[index].getValue();
+            if (value.length() == 1) {
+                char ch = value.charAt(0);
+                if (ch < ' ') {
+                    int[] codepoints = new int[1];
+                    codepoints[0] = 0x2400 + ch;
+                    sb.append(new String(codepoints, 0, 1));
+                } else {
+                    sb.append(ch);
+                }
+            } else {
+                sb.append(value);
+            }
+
+            if (input[index].getAttributeValue(ParserAttribute.OFFSET_NAME, null) != null) {
+                sb.append("…");
+            }
+
         }
+        String text = sb.toString();
+        if (text.length() > 32) {
+            text = text.substring(0, 15) + " ... " + text.substring(text.length() - 15);
+        }
+        return text;
     }
 }

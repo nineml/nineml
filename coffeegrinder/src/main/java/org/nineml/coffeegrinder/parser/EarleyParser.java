@@ -288,7 +288,7 @@ public class EarleyParser implements GearleyParser {
                                 String greedyMatch = ((TokenRegex) ts.token).matches(stringInput.substring(i));
                                 if (greedyMatch != null) {
                                     ArrayList<Symbol> newRHS = new ArrayList<>();
-                                    if ("".equals(greedyMatch)) {
+                                    if (greedyMatch.isEmpty()) {
                                         regexItem = new EarleyItem(new State(C, 0, newRHS), i);
                                         chart.add(i, regexItem);
                                         R.add(regexItem);
@@ -626,73 +626,43 @@ public class EarleyParser implements GearleyParser {
     }
 
     private EarleyPath findPath() {
-        EarleyPath path = new EarleyPath();
+        EarleyPath path = new EarleyPath(input);
         int matchCount = 0;
 
-        HashMap<Integer, ArrayList<ForestNode>> nodeMap = new HashMap<>();
-        int last = 0;
-        for (ForestNode node : graph.getNodes()) {
-            if (node.symbol instanceof NonterminalSymbol && !node.families.isEmpty()) {
-                if (!nodeMap.containsKey(node.rightExtent)) {
-                    nodeMap.put(node.rightExtent, new ArrayList<>());
-                }
-                nodeMap.get(node.rightExtent).add(node);
-                if (node.rightExtent > last) {
-                    last = node.rightExtent;
-                }
+        NonterminalSymbol userRoot = grammar.getSeed();
+        // HACK!
+        if (userRoot.getName().equals("$$")) {
+            Rule rootRule = grammar.getRulesForSymbol(grammar.getSeed()).get(0);
+            if (rootRule.rhs.length == 1 && rootRule.rhs.get(0) instanceof NonterminalSymbol) {
+                userRoot = (NonterminalSymbol) rootRule.rhs.get(0);
             }
         }
 
-        int pos = last;
-        while (pos > 0) {
-            int left = pos;
-            int nonZeroLeft = pos;
-            if (nodeMap.get(pos) != null) {
-                for (ForestNode node : nodeMap.get(pos)) {
-                    String symbolName = "$";
-                    if (node.symbol instanceof NonterminalSymbol) {
-                        symbolName = ((NonterminalSymbol) node.symbol).getName();
-                    }
-                    if (node.leftExtent < left && !symbolName.startsWith("$")) {
-                        left = node.leftExtent;
-                        if (node.leftExtent > 0) {
-                            nonZeroLeft = node.leftExtent;
-                        }
-                    }
-                }
-            }
-
-            if (left == 0 && nonZeroLeft < pos) {
-                left = nonZeroLeft;
-            }
-
-            if (left == pos) {
-                // We got stuck
-                break;
-            }
-
-            String text = getInputString(left, pos);
-
-            ArrayList<NonterminalSymbol> matches = new ArrayList<>();
-            for (ForestNode node : nodeMap.get(pos)) {
-                if (node.leftExtent == left) {
-                    NonterminalSymbol symbol = (NonterminalSymbol) node.symbol;
-                    if (!symbol.symbolName.startsWith("$")) {
-                        matches.add((NonterminalSymbol) node.symbol);
+        int rangeStart = Integer.MAX_VALUE;
+        int rangeEnd = -1;
+        ArrayList<EarleyItem> completed = new ArrayList<>();
+        for (int row = chart.size() - 1; row >= 0; row--) {
+            for (EarleyItem item : chart.get(row)) {
+                if (item.state.completed() && !item.state.symbol.getName().startsWith("$")
+                        && item.w != null && item.w.leftExtent+1 < item.w.rightExtent) {
+                    completed.add(item);
+                    if (matchCount < 8 && !userRoot.equals(item.state.symbol)
+                            && (item.w.rightExtent <= rangeStart || item.w.rightExtent >= rangeEnd)) {
+                        path.addCompleted(item);
+                        matchCount++;
+                        rangeStart = item.w.leftExtent;
+                        rangeEnd = item.w.rightExtent;
                     }
                 }
             }
 
-            path.addSegment(left+1, pos, text, matches);
-            matchCount++;
-            if (matchCount >= 16) {
+            if (completed.size() > 8192) {
+                // that's far enough...
                 break;
             }
-
-            pos = left;
         }
 
-        pos = chart.size();
+        int pos = chart.size();
         matchCount = 0;
         HashSet<NonterminalSymbol> seen = new HashSet<>();
         while (pos > 0) {
@@ -713,10 +683,20 @@ public class EarleyParser implements GearleyParser {
                             && item.w != null
                             && item.w.rightExtent - item.w.leftExtent == longest) {
                         if (!seen.contains(item.state.symbol)) {
-                            String text = getInputString(item.w.leftExtent, item.w.rightExtent);
-                            path.addRule(item.w.leftExtent+1, item.w.rightExtent, text, item.state.symbol);
-                            matchCount++;
-                            seen.add(item.state.symbol);
+                            // What if we saw this one finish?
+                            boolean finished = false;
+                            for (EarleyItem citem : completed) {
+                                if (citem.w.leftExtent == item.w.leftExtent && citem.state.symbol.equals(item.state.symbol)) {
+                                    finished = true;
+                                    break;
+                                }
+                            }
+
+                            if (!finished) {
+                                path.addOpen(item);
+                                matchCount++;
+                                seen.add(item.state.symbol);
+                            }
                         }
                     }
                 }
@@ -728,35 +708,6 @@ public class EarleyParser implements GearleyParser {
         }
 
         return path;
-    }
-
-    private String getInputString(int leftExtent, int rightExtent) {
-        StringBuilder sb = new StringBuilder();
-        for (int index = leftExtent; index < rightExtent; index++) {
-            String value = input[index].getValue();
-            if (value.length() == 1) {
-                char ch = value.charAt(0);
-                if (ch < ' ') {
-                    int[] codepoints = new int[1];
-                    codepoints[0] = 0x2400 + ch;
-                    sb.append(new String(codepoints, 0, 1));
-                } else {
-                    sb.append(ch);
-                }
-            } else {
-                sb.append(value);
-            }
-
-            if (input[index].getAttributeValue(ParserAttribute.OFFSET_NAME, null) != null) {
-                sb.append("…");
-            }
-
-        }
-        String text = sb.toString();
-        if (text.length() > 32) {
-            text = text.substring(0, 15) + " ... " + text.substring(text.length() - 15);
-        }
-        return text;
     }
 
     private static final class Hitem {
