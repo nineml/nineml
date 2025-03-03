@@ -107,10 +107,16 @@ public class SimpleTree {
         if (name != null) {
             sb.append("<").append(name);
 
+            boolean ixmlNS = false;
             for (String attname : attributes.keySet()) {
+                ixmlNS = ixmlNS || attname.startsWith("ixml:");
                 sb.append(" ").append(attname).append("=\"");
                 sb.append(TreeUtils.xmlEscapeAttribute(attributes.get(attname)));
                 sb.append("\"");
+            }
+
+            if (ixmlNS) {
+                sb.append(" xmlns:ixml=\"http://invisiblexml.org/NS\"");
             }
 
             if (children.isEmpty()) {
