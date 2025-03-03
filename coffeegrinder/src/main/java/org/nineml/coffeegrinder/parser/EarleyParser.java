@@ -4,7 +4,6 @@ import org.nineml.coffeegrinder.exceptions.ParseException;
 import org.nineml.coffeegrinder.tokens.Token;
 import org.nineml.coffeegrinder.tokens.TokenCharacter;
 import org.nineml.coffeegrinder.tokens.TokenRegex;
-import org.nineml.coffeegrinder.tokens.TokenUndefined;
 import org.nineml.coffeegrinder.util.ParserAttribute;
 import org.nineml.coffeegrinder.util.StopWatch;
 
@@ -508,6 +507,9 @@ public class EarleyParser implements GearleyParser {
                 result = new EarleyResult(this, graph, success, tokenCount, lastInputToken);
             }
         } else {
+            // The parse failed, so we're looking at the character we couldn't match
+            inputPos--;
+
             if (timer.duration() == 0) {
                 options.getLogger().info(logcategory, "Parse failed after %,d tokens", tokenCount);
             } else {
@@ -519,6 +521,8 @@ public class EarleyParser implements GearleyParser {
                 graph.prune();
             }
             result = new EarleyResult(this, chart, graph, success, tokenCount, lastInputToken);
+            result.setPath(findPath());
+
             result.addPredicted(V.openPredictions());
         }
 
@@ -619,6 +623,140 @@ public class EarleyParser implements GearleyParser {
         }
 
         return y;
+    }
+
+    private EarleyPath findPath() {
+        EarleyPath path = new EarleyPath();
+        int matchCount = 0;
+
+        HashMap<Integer, ArrayList<ForestNode>> nodeMap = new HashMap<>();
+        int last = 0;
+        for (ForestNode node : graph.getNodes()) {
+            if (node.symbol instanceof NonterminalSymbol && !node.families.isEmpty()) {
+                if (!nodeMap.containsKey(node.rightExtent)) {
+                    nodeMap.put(node.rightExtent, new ArrayList<>());
+                }
+                nodeMap.get(node.rightExtent).add(node);
+                if (node.rightExtent > last) {
+                    last = node.rightExtent;
+                }
+            }
+        }
+
+        int pos = last;
+        while (pos > 0) {
+            int left = pos;
+            int nonZeroLeft = pos;
+            if (nodeMap.get(pos) != null) {
+                for (ForestNode node : nodeMap.get(pos)) {
+                    String symbolName = "$";
+                    if (node.symbol instanceof NonterminalSymbol) {
+                        symbolName = ((NonterminalSymbol) node.symbol).getName();
+                    }
+                    if (node.leftExtent < left && !symbolName.startsWith("$")) {
+                        left = node.leftExtent;
+                        if (node.leftExtent > 0) {
+                            nonZeroLeft = node.leftExtent;
+                        }
+                    }
+                }
+            }
+
+            if (left == 0 && nonZeroLeft < pos) {
+                left = nonZeroLeft;
+            }
+
+            if (left == pos) {
+                // We got stuck
+                break;
+            }
+
+            String text = getInputString(left, pos);
+
+            ArrayList<NonterminalSymbol> matches = new ArrayList<>();
+            for (ForestNode node : nodeMap.get(pos)) {
+                if (node.leftExtent == left) {
+                    NonterminalSymbol symbol = (NonterminalSymbol) node.symbol;
+                    if (!symbol.symbolName.startsWith("$")) {
+                        matches.add((NonterminalSymbol) node.symbol);
+                    }
+                }
+            }
+
+            path.addSegment(left+1, pos, text, matches);
+            matchCount++;
+            if (matchCount >= 16) {
+                break;
+            }
+
+            pos = left;
+        }
+
+        pos = chart.size();
+        matchCount = 0;
+        HashSet<NonterminalSymbol> seen = new HashSet<>();
+        while (pos > 0) {
+            int longest = 0;
+            for (EarleyItem item : chart.get(pos)) {
+                if (!item.state.symbol.symbolName.startsWith("$")
+                        && !item.state.completed()
+                        && item.w != null) {
+                    if (item.w.rightExtent - item.w.leftExtent > longest) {
+                        longest = item.w.rightExtent - item.w.leftExtent;
+                    }
+                }
+            }
+            if (longest > 0) {
+                for (EarleyItem item : chart.get(pos)) {
+                    if (!item.state.symbol.symbolName.startsWith("$")
+                            && !item.state.completed()
+                            && item.w != null
+                            && item.w.rightExtent - item.w.leftExtent == longest) {
+                        if (!seen.contains(item.state.symbol)) {
+                            String text = getInputString(item.w.leftExtent, item.w.rightExtent);
+                            path.addRule(item.w.leftExtent+1, item.w.rightExtent, text, item.state.symbol);
+                            matchCount++;
+                            seen.add(item.state.symbol);
+                        }
+                    }
+                }
+            }
+            if (matchCount >= 8) {
+                break;
+            }
+            pos--;
+        }
+
+        return path;
+    }
+
+    private String getInputString(int leftExtent, int rightExtent) {
+        StringBuilder sb = new StringBuilder();
+        for (int index = leftExtent; index < rightExtent; index++) {
+            String value = input[index].getValue();
+            if (value.length() == 1) {
+                char ch = value.charAt(0);
+                if (ch < ' ') {
+                    int[] codepoints = new int[1];
+                    codepoints[0] = 0x2400 + ch;
+                    sb.append(new String(codepoints, 0, 1));
+                } else {
+                    sb.append(ch);
+                }
+            } else {
+                sb.append(value);
+            }
+
+            if (input[index].getAttributeValue(ParserAttribute.OFFSET_NAME, null) != null) {
+                sb.append("…");
+            }
+
+        }
+        String text = sb.toString();
+        if (text.length() > 32) {
+            text = text.substring(0, 15) + " ... " + text.substring(text.length() - 15);
+        }
+        return text;
     }
 
     private static final class Hitem {

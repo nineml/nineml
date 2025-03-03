@@ -22,8 +22,8 @@ public class EarleyResult implements GearleyResult {
     private final int columnNumber;
     private final ParserOptions options;
     private final HashSet<TerminalSymbol> predicted = new HashSet<>();
-    private Arborist walker = null;
     private long parseTime = -1;
+    private EarleyPath path = null;
 
     protected EarleyResult(EarleyParser parser, EarleyChart chart, ParseForest graph, boolean success, int tokenCount, Token lastToken) {
         this.parser = parser;
@@ -133,9 +133,14 @@ public class EarleyResult implements GearleyResult {
         }
 
         if (chart != null && chart.size() > 1) {
-            for (EarleyItem item : chart.get(chart.size()-2)) {
-                if (item.state.completed() && item.state.getSymbol().equals(parser.getSeed()) && item.j == 0) {
-                    return true;
+            for (int index = chart.size()-1; index >= 0; index--) {
+                if (!chart.get(index).isEmpty()) {
+                    for (EarleyItem item : chart.get(index)) {
+                        if (item.state.completed() && item.state.getSymbol().equals(parser.getSeed()) && item.j == 0) {
+                            return true;
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -224,6 +229,19 @@ public class EarleyResult implements GearleyResult {
 
     public Set<TerminalSymbol> getPredictedTerminals() {
         return predicted;
+    }
+
+    /**
+     * Get last few matches from a failed parse.
+     * <p>The path will be null for a successful parse.</p>
+     * @return the path
+     */
+    public EarleyPath getPath() {
+        return path;
+    }
+
+    protected void setPath(EarleyPath path) {
+        this.path = path;
     }
 
     private static final class PrefixIterator<Token> implements Iterator<Token> {

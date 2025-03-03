@@ -15,8 +15,8 @@ public class InvalidInputTest extends CoffeePotTest {
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/abc.ixml", "abx" });
             Assertions.assertEquals(1, manager.stringRecords.size());
-            Assertions.assertEquals("<fail xmlns:ixml='http://invisiblexml.org/NS' ixml:state='failed'><line>1</line><column>3</column><pos>2</pos><unexpected>b</unexpected><permitted>'c'</permitted><also-predicted>'a'</also-predicted></fail>",
-                    manager.stringRecords.get(0));
+            String failed = manager.stringRecords.get(0);
+            Assertions.assertTrue(failed.startsWith("<fail xmlns:ixml='http://invisiblexml.org/NS' ixml:state='failed'><line>1</line><column>2</column><pos>2</pos><unexpected>b</unexpected><permitted>'c'</permitted><also-predicted>'a'</also-predicted>"));
         } catch (Exception ex) {
             fail();
         }
@@ -30,8 +30,8 @@ public class InvalidInputTest extends CoffeePotTest {
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/abc.ixml", "--format:json-data", "abx" });
             Assertions.assertEquals(1, manager.stringRecords.size());
-            Assertions.assertEquals("{\"fail\":{\"ixml:state\":\"failed\",\"line\":1,\"column\":3,\"pos\":2,\"unexpected\":\"b\",\"permitted\":\"'c'\",\"also-predicted\":\"'a'\"}}",
-                    manager.stringRecords.get(0));
+            String failed = manager.stringRecords.get(0);
+            Assertions.assertTrue(failed.startsWith("{\"fail\":{\"ixml:state\":\"failed\",\"line\":1,\"column\":2,\"pos\":2,\"unexpected\":\"b\",\"permitted\":\"'c'\",\"also-predicted\":\"'a'\""));
         } catch (Exception ex) {
             fail();
         }
@@ -45,8 +45,8 @@ public class InvalidInputTest extends CoffeePotTest {
         try {
             OutputManager manager = main.commandLine(new String[] {"-g:src/test/resources/abc.ixml", "--format:json-tree", "abx" });
             Assertions.assertEquals(1, manager.stringRecords.size());
-            Assertions.assertEquals("{\"content\":{\"name\":\"fail\",\"attributes\":{\"ixml:state\":\"failed\"},\"content\":[{\"name\":\"line\",\"content\":1},{\"name\":\"column\",\"content\":3},{\"name\":\"pos\",\"content\":2},{\"name\":\"unexpected\",\"content\":\"b\"},{\"name\":\"permitted\",\"content\":\"'c'\"},{\"name\":\"also-predicted\",\"content\":\"'a'\"}]}}",
-                    manager.stringRecords.get(0));
+            String failed = manager.stringRecords.get(0);
+            Assertions.assertTrue(failed.startsWith("{\"content\":{\"name\":\"fail\",\"attributes\":{\"ixml:state\":\"failed\"},\"content\":[{\"name\":\"line\",\"content\":1},{\"name\":\"column\",\"content\":2},{\"name\":\"pos\",\"content\":2},{\"name\":\"unexpected\",\"content\":\"b\"},{\"name\":\"permitted\",\"content\":\"'c'\"},{\"name\":\"also-predicted\",\"content\":\"'a'\""));
         } catch (Exception ex) {
             fail();
         }

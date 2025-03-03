@@ -35,7 +35,7 @@ public class ParserFailTest {
             String str = node.toString();
             if (doc.getParserType() == ParserType.Earley) {
                 Assertions.assertTrue(str.contains("<line>1</line>"));
-                Assertions.assertTrue(str.contains("<column>5</column>"));
+                Assertions.assertTrue(str.contains("<column>4</column>"));
                 Assertions.assertTrue(str.contains("<pos>4</pos>"));
                 Assertions.assertTrue(str.contains("<permitted>' ', 'A', 'D', 'F', 'J', 'M', 'N', 'O', 'S'</permitted>"));
             }
