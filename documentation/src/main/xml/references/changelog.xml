@@ -16,10 +16,58 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v329">
+<revnumber>3.2.9</revnumber>
+<date>2025-03-03</date>
+<revdescription>
+<itemizedlist audience="coffeegrinder">
+<listitem><para>Substantially improved the usefulness of the output in a failure
+document when parsing with the Earley parser. (Or at least I’ve tried
+to!)</para>
+</listitem>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/65">#65</link>.
+Make sure that the failure document includes a namespace declaration for the iXML namespace
+even when the “simple tree” output method is used.
+</para></listitem>
+</itemizedlist>
+<itemizedlist audience="coffeefilter">
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/70">#70</link>.
+Maybe I should say “fixed”. Allow the output to be a single text node unless in
+pedantic mode. This violates the constraint that the output must be well-formed
+XML.
+</para></listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem><para>Fixed a bug where the <option>--graph</option> was ignored when the parse failed.
+</para></listitem>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/66">#66</link>.
+Documented <code>-i:-</code> to read input from standard input.
+</para></listitem>
+</itemizedlist>
+<itemizedlist>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/64">#64</link>.
+Corrected typo in the README file.
+</para></listitem>
+<listitem><para>Various other documentation improvements. Updated the examples
+in the “Finding Errors” chapter.
+</para></listitem>
+</itemizedlist>
+</revdescription>
+</revision>
 <revision xml:id="v328">
 <revnumber>3.2.8</revnumber>
-<date>2024-02-23</date>
+<date>2025-02-23</date>
 <revdescription>
+<itemizedlist audience="coffeesacks">
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/54">#54</link>.
+The CoffeeSacks function was not correctly detecting parse errors and
+reporting them.</para></listitem>
+</itemizedlist>
 <itemizedlist>
 <listitem><para>Fixed issues
 <link xlink:href="https://github.com/nineml/nineml/issues/44">#44</link>
@@ -35,10 +83,6 @@ Escape HTML markup used in the generation of SVG graphs more carefully.
 <link xlink:href="https://github.com/nineml/nineml/issues/51">#51</link>,
 typos in the documentation.
 </para></listitem>
-<listitem><para>Fixed issue
-<link xlink:href="https://github.com/nineml/nineml/issues/54">#54</link>.
-The CoffeeSacks function was not correctly detecting parse errors and
-reporting them.</para></listitem>
 <listitem><para>Updated the ixml repository submodule to the latest.
 </para></listitem>
 <listitem><para>Fixed some JavaDoc problems.
