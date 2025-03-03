@@ -206,14 +206,14 @@ class Main {
 
             outputManager.addOutput(parser, doc, record);
 
+            graphOutputManager.publish(doc, outputManager.selectedNodes);
+
             if (!doc.succeeded()) {
                 break;
             }
 
             // Passing stderr here is an awful hack; need to rethink
             outputManager.describeAmbiguity(stderr);
-
-            graphOutputManager.publish(doc, outputManager.selectedNodes);
         }
 
         progress.finishedRecords();
