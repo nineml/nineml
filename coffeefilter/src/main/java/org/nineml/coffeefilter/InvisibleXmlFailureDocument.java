@@ -132,14 +132,12 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
 
                 EarleyPath path = eresult.getPath();
                 if (!path.getSegments().isEmpty()) {
-                    writeNewline(handler);
                     handler.startElement("", "completions", "completions", AttributeBuilder.EMPTY_ATTRIBUTES);
                     for (EarleyPath.PathSegment segment : path.getSegments()) {
                         attrs = new AttributeBuilder(options);
                         attrs.addAttribute("start", ""+segment.start);
                         attrs.addAttribute("end", ""+segment.end);
                         attrs.addAttribute("input", segment.input);
-                        writeIndent(handler);
                         handler.startElement("", "completed", "completed", attrs);
                         StringBuilder sb = new StringBuilder();
                         boolean first = true;
@@ -153,29 +151,24 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                         writeString(handler, sb.toString());
                         handler.endElement("", "completed", "completed");
                     }
-                    writeNewline(handler);
                     handler.endElement("", "completions", "completions");
                 }
 
                 if (!detail.getNextTokens().isEmpty()) {
-                    writeNewline(handler);
                     handler.startElement("", "could-be-next", "could-be-next", AttributeBuilder.EMPTY_ATTRIBUTES);
                     for (NonterminalSymbol symbol : detail.getNextTokens().keySet()) {
                         List<Token> tokens = detail.getNextTokens().get(symbol);
                         attrs = new AttributeBuilder(options);
                         attrs.addAttribute("rule", symbol.getName());
                         attrs.addAttribute("tokens", tokenList(tokens));
-                        writeIndent(handler);
                         handler.startElement("", "in", "in", attrs);
                         handler.endElement("", "in", "in");
                     }
 
-                    writeNewline(handler);
                     handler.endElement("", "could-be-next", "could-be-next");
                 }
 
                 if (!path.getRules().isEmpty()) {
-                    writeNewline(handler);
                     handler.startElement("", "unfinished", "unfinished", AttributeBuilder.EMPTY_ATTRIBUTES);
                     for (EarleyPath.PathSegment segment : path.getRules()) {
                         attrs = new AttributeBuilder(options);
@@ -194,11 +187,9 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                         }
                         attrs.addAttribute("rules", sb.toString());
 
-                        writeIndent(handler);
                         handler.startElement("", "open", "open", attrs);
                         handler.endElement("", "open", "open");
                     }
-                    writeNewline(handler);
                     handler.endElement("", "unfinished", "unfinished");
                 }
 
@@ -332,14 +323,6 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
         }
 
         return detail;
-    }
-
-    private void writeNewline(ContentHandler handler) throws SAXException {
-        writeString(handler, "\n");
-    }
-
-    private void writeIndent(ContentHandler handler) throws SAXException {
-        writeString(handler, "\n  ");
     }
 
     private void writeString(ContentHandler handler, String str) throws SAXException {
