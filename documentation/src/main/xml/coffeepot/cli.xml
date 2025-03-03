@@ -83,6 +83,9 @@ the text or XML formats.
 <para>Specifies the input file. If unspecified, the remaining command line arguments
 are taken as the input, separated by single spaces.
 </para>
+<para>If the input file is just a single hyphen, <code>-</code>,
+<application>CoffeePot</application> will read from standard input.
+</para>
 </listitem>
 </varlistentry>
 </variablelist>

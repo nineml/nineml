@@ -1,4 +1,4 @@
-list: word + -',' .
+list: word ++ -',' .
 word: c, v, c ; c, v, v .
 -c: ["bcdfghjklmnpqrstvwxyz"] .
 -v: ["aeiouy" ].
