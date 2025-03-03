@@ -135,46 +135,8 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                     handler.startElement("", "completions", "completions", AttributeBuilder.EMPTY_ATTRIBUTES);
                     for (EarleyPath.PathSegment segment : path.getSegments()) {
                         attrs = new AttributeBuilder(options);
-                        attrs.addAttribute("start", ""+segment.start);
-                        attrs.addAttribute("end", ""+segment.end);
-                        attrs.addAttribute("input", segment.input);
-                        handler.startElement("", "completed", "completed", attrs);
-                        StringBuilder sb = new StringBuilder();
-                        boolean first = true;
-                        for (NonterminalSymbol symbol : segment.symbols) {
-                            if (!first) {
-                                sb.append(" ");
-                            }
-                            sb.append(symbol.getName());
-                            first = false;
-                        }
-                        writeString(handler, sb.toString());
-                        handler.endElement("", "completed", "completed");
-                    }
-                    handler.endElement("", "completions", "completions");
-                }
-
-                if (!detail.getNextTokens().isEmpty()) {
-                    handler.startElement("", "could-be-next", "could-be-next", AttributeBuilder.EMPTY_ATTRIBUTES);
-                    for (NonterminalSymbol symbol : detail.getNextTokens().keySet()) {
-                        List<Token> tokens = detail.getNextTokens().get(symbol);
-                        attrs = new AttributeBuilder(options);
-                        attrs.addAttribute("rule", symbol.getName());
-                        attrs.addAttribute("tokens", tokenList(tokens));
-                        handler.startElement("", "in", "in", attrs);
-                        handler.endElement("", "in", "in");
-                    }
-
-                    handler.endElement("", "could-be-next", "could-be-next");
-                }
-
-                if (!path.getRules().isEmpty()) {
-                    handler.startElement("", "unfinished", "unfinished", AttributeBuilder.EMPTY_ATTRIBUTES);
-                    for (EarleyPath.PathSegment segment : path.getRules()) {
-                        attrs = new AttributeBuilder(options);
-                        attrs.addAttribute("start", ""+segment.start);
-                        attrs.addAttribute("end", ""+segment.end);
-                        attrs.addAttribute("consumed", segment.input);
+                        attrs.addAttribute("start", String.valueOf(segment.start));
+                        attrs.addAttribute("end", String.valueOf(segment.end));
 
                         StringBuilder sb = new StringBuilder();
                         boolean first = true;
@@ -187,7 +149,46 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                         }
                         attrs.addAttribute("rules", sb.toString());
 
+                        handler.startElement("", "completed", "completed", attrs);
+                        atomicValue(handler, "input", segment.input);
+                        handler.endElement("", "completed", "completed");
+                    }
+                    handler.endElement("", "completions", "completions");
+                }
+
+                if (!detail.getNextTokens().isEmpty()) {
+                    handler.startElement("", "could-be-next", "could-be-next", AttributeBuilder.EMPTY_ATTRIBUTES);
+                    for (NonterminalSymbol symbol : detail.getNextTokens().keySet()) {
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("rule", symbol.getName());
+                        handler.startElement("", "in", "in", attrs);
+                        List<Token> tokens = detail.getNextTokens().get(symbol);
+                        atomicValue(handler, "tokens", tokenList(tokens));
+                        handler.endElement("", "in", "in");
+                    }
+                    handler.endElement("", "could-be-next", "could-be-next");
+                }
+
+                if (!path.getRules().isEmpty()) {
+                    handler.startElement("", "unfinished", "unfinished", AttributeBuilder.EMPTY_ATTRIBUTES);
+                    for (EarleyPath.PathSegment segment : path.getRules()) {
+                        attrs = new AttributeBuilder(options);
+                        attrs.addAttribute("start", String.valueOf(segment.start));
+                        attrs.addAttribute("end", String.valueOf(segment.end));
+
+                        StringBuilder sb = new StringBuilder();
+                        boolean first = true;
+                        for (NonterminalSymbol symbol : segment.symbols) {
+                            if (!first) {
+                                sb.append(" ");
+                            }
+                            sb.append(symbol.getName());
+                            first = false;
+                        }
+                        attrs.addAttribute("rules", sb.toString());
+
                         handler.startElement("", "open", "open", attrs);
+                        atomicValue(handler, "input", segment.input);
                         handler.endElement("", "open", "open");
                     }
                     handler.endElement("", "unfinished", "unfinished");
