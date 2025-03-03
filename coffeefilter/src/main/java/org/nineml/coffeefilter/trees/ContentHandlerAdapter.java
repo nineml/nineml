@@ -65,7 +65,9 @@ public class ContentHandlerAdapter implements TreeBuilder {
         int rootElements = 0;
         for (Node child : doc.children) {
             if ((child instanceof TextNode) && !child.getStringValue().trim().isEmpty()) {
-                throw IxmlException.notSingleRooted(child.getStringValue());
+                if (getOptions().getPedantic()) {
+                    throw IxmlException.notSingleRooted(child.getStringValue());
+                }
             }
             if (root instanceof AttributeNode) {
                 throw IxmlException.attributeRoot(root.getName());
@@ -76,7 +78,9 @@ public class ContentHandlerAdapter implements TreeBuilder {
         }
 
         if (rootElements != 1) {
-            throw IxmlException.notSingleRooted("(document)");
+            if (getOptions().getPedantic() || rootElements > 1) {
+                throw IxmlException.notSingleRooted("(document)");
+            }
         }
 
         try {
