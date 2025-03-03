@@ -1,0 +1,91 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 2. Loading grammars</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-03-03T16:10:19Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch01.html"/><link rel="next" href="bk03ch03.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeSacks.png" rel="shortcut icon"/><link href="../css/coffeesacks.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 1. Invisible XML in Saxon" href="bk03ch01.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 3. Parsing inputs" href="bk03ch03.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="loading-grammars" db-chunk="bk03ch02.html" db-id="d487e3997" class="chapter component"><header><h2>Chapter <span class="label">2</span><span class="sep">. </span>Loading grammars</h2></header><div class="db-bfs">
+
+
+<p>Before it can be used, a parser must be constructed for the
+grammar. You can load Invisible XML grammars in either the text or XML
+syntax. You can also load grammars in the <a href="https://coffeegrinder.nineml.org/" class="link">CoffeeGrinder</a>
+compiled format.</p>
+
+<div class="admonition note"><div><div class="icon">ⓘ</div><div class="body"><header><div class="title">Note</div></header><div>
+<p>The API has been redesigned and greatly simplified in version
+2.x. Instead of having a few different functions that take a grammar
+as an argument, there are now just a couple of functions that return a
+parser for the grammar.</p>
+</div></div></div></div>
+
+<p>The parser creation functions return an XPath function that
+takes a single argument, the string to be parsed. If the grammar
+cannot be parsed, an error is raised. This error can be captured with
+<a href="https://www.w3.org/TR/xslt-30/#try-catch" class="link">try/catch</a>.</p>
+
+</div><section id="loading-grammars_s1" class="section"><header><h2><span class="label">2<span class="sep">.</span>1</span><span class="sep">. </span>cs:load-grammar</h2></header>
+
+
+<p>This function takes the URI of an Invisible XML grammar and
+constructs a parser for that grammar.</p>
+
+<div class="funcsynopsis">
+<div class="funcprototype"><div class="funcdef"><span class="function">cs:load-grammar</span><span class="op">(</span><span class="parameters"><span class="paramdef"><span class="parameter"><span class="dollar">$</span>uri</span></span></span><span class="cp">)</span><span class="rarr">→</span><span class="type">function($input as xs:string) as item()</span></div><table border="0"><tbody><tr><td><span class="parameter"><span class="dollar">$</span>uri</span></td><td><span class="type">xs:string</span></td><td>A URI that identifies an Invisible XML
+grammar</td></tr></tbody></table></div>
+</div>
+
+<div class="funcsynopsis">
+<div class="funcprototype"><div class="funcdef"><span class="function">cs:load-grammar</span><span class="op">(</span><span class="parameters"><span class="paramdef"><span class="parameter"><span class="dollar">$</span>uri</span></span><span class="comma">, </span><span class="paramdef"><span class="parameter"><span class="dollar">$</span>options</span></span></span><span class="cp">)</span><span class="rarr">→</span><span class="type">function($input as xs:string) as item()</span></div><table border="0"><tbody><tr><td><span class="parameter"><span class="dollar">$</span>uri</span></td><td><span class="type">xs:string</span></td><td>A URI that identifies an Invisible XML
+grammar</td></tr><tr><td><span class="parameter"><span class="dollar">$</span>options</span></td><td><span class="type">map(xs:string, item())</span></td><td>Grammar options</td></tr></tbody></table></div>
+</div>
+
+<p>See <a href="bk03ch05.html" class="xref xref-chapter">Chapter <span class="label">5</span>, Parser options</a> for a description
+of the available options.</p>
+
+<p>If the return <code class="literal">format</code> is XML, an XML node will be returned.
+For the JSON return types, an XDM map will be returned.</p>
+
+</section>
+
+<section id="loading-grammars_s2" class="section"><header><h2><span class="label">2<span class="sep">.</span>2</span><span class="sep">. </span>cs:make-parser</h2></header>
+
+
+<p>This function takes an Invisible XML grammar and constructs a parser for that grammar.</p>
+
+<div class="funcsynopsis">
+<div class="funcprototype"><div class="funcdef"><span class="function">cs:make-parser</span><span class="op">(</span><span class="parameters"><span class="paramdef"><span class="parameter"><span class="dollar">$</span>input</span></span></span><span class="cp">)</span><span class="rarr">→</span><span class="type">function($input as xs:string) as item()</span></div><table border="0"><tbody><tr><td><span class="parameter"><span class="dollar">$</span>input</span></td><td><span class="type">item()</span></td><td>An input grammar</td></tr></tbody></table></div>
+</div>
+
+<div class="funcsynopsis">
+<div class="funcprototype"><div class="funcdef"><span class="function">cs:make-parser</span><span class="op">(</span><span class="parameters"><span class="paramdef"><span class="parameter"><span class="dollar">$</span>input</span></span><span class="comma">, </span><span class="paramdef"><span class="parameter"><span class="dollar">$</span>options</span></span></span><span class="cp">)</span><span class="rarr">→</span><span class="type">function($input as xs:string) as item()</span></div><table border="0"><tbody><tr><td><span class="parameter"><span class="dollar">$</span>input</span></td><td><span class="type">item()</span></td><td>An input grammar</td></tr><tr><td><span class="parameter"><span class="dollar">$</span>options</span></td><td><span class="type">map(xs:string, item())</span></td><td>Grammar options</td></tr></tbody></table></div>
+</div>
+
+<p>Exactly what this function does depends on the type of
+<code>$input</code>.</p>
+
+<dl class="variablelist">
+<div class="varlistentry"><dt><span class="term">XML node</span></dt><dd>
+<p>The input is assumed to be an XML version of an invisible XML
+grammar (a “visible XML grammar”). The function will attempt to
+construct a parser for that grammar.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>xs:anyURI</code></span></dt><dd>
+<p>The input is assumed to be a URI that identifies the location of
+an invisible XML grammar. It will be loaded and parsed just as
+<code class="function">cs:load-grammar</code> would.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term"><code>xs:anyAtomicType</code></span></dt><dd>
+<p>The string value of the input is assumed to be an Invisible XML grammar.
+The function will attempt to construct a parser for that grammar.
+</p>
+</dd></div>
+<div class="varlistentry"><dt><span class="term">anything else</span></dt><dd>
+<p>Any other input will cause an error.</p>
+</dd></div>
+</dl>
+
+<p>See <a href="bk03ch05.html" class="xref xref-chapter">Chapter <span class="label">5</span>, Parser options</a> for a description
+of the available options.</p>
+
+<p>If the return <code class="literal">format</code> is XML, an XML node will be returned.
+For the JSON return types, an XDM map will be returned.</p>
+
+</section>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Chapter 1. Invisible XML in Saxon" href="bk03ch01.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Chapter 3. Parsing inputs" href="bk03ch03.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk03ch01.html">Chapter <span class="label">1</span><span class="sep">. </span>Invisible XML in Saxon</a></div><div class="navmiddle"><a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk03ch03.html">Chapter <span class="label">3</span><span class="sep">. </span>Parsing inputs</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>

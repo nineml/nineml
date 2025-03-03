@@ -1,0 +1,196 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 7. Choosing among alternatives</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-03-03T16:10:19Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch06.html"/><link rel="next" href="../coffeefilter/index.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeSacks.png" rel="shortcut icon"/><link href="../css/coffeesacks.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="CoffeeFilter" href="../coffeefilter/index.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="choose-alternative_cs" db-chunk="bk03ch07.html" db-id="d487e4640" class="chapter component"><header><h2>Chapter <span class="label">7</span><span class="sep">. </span>Choosing among alternatives</h2></header><div class="db-bfs">
+
+
+<div class="admonition note"><div><div class="icon">ⓘ</div><div class="body"><header><div class="title">Note</div></header><div><p>This API has been completely rewritten for version 3.0.0.</p>
+</div></div></div></div>
+
+<p>Where it’s practical to write a grammar that is unambiguous,
+that’s best. But it isn’t always practical. Sometimes it’s difficult,
+and sometimes it’s impossible. If the data is actually ambiguous, you
+may have to reflect that in your grammar.</p>
+
+<p>Invisible XML doesn’t consider ambiguity an error, but it also
+doesn’t provide any mechanism for controlling it. All parses are
+considered equal and the processor’s only obligation is to provide one
+of them.</p>
+
+<p>That may not suit your needs. CoffeeSacks provides a way to
+examine the alternatives and select one. You can supply a
+<code>choose-alternative</code> function in the parser options. This
+must take two arguments, an element and a map, and return a map.
+</p>
+
+<p>The function receives a context element that identifies its
+location in the parse forest and a map that describes the current
+state of the parse:</p>
+
+<div id="choose-alternative_cs_informaltable1" class="informalobject informaltable"><table><thead>
+<tr><th>Property</th><th>Value</th></tr>
+</thead><tbody>
+<tr><td><code>input</code></td><td>The input string</td></tr>
+<tr><td><code>available-choices</code></td><td>A list of available choices</td></tr>
+<tr><td><code>other-choices</code></td><td>A list of other choices</td></tr>
+<tr><td><em class="replaceable">user-defined</em></td><td>User defined properties</td></tr>
+</tbody></table></div>
+
+<p>The function must return a map that contains a <code>selection</code> property that
+identifies the choice made. It may also return an <code>ambiguous-choice</code> property to
+indicate that an abitrary, ambiguous choice was made.</p>
+
+<p>Any other properties returned in the map will be passed back on the next call.
+This allows the selection function to maintain state between invocations.</p>
+
+<p>The function must return one of the choices passed to it. There will always be
+at least one item in the <code>choices</code> list. The difference between the available
+choices and the “other” choices is only relevant when the grammar contains a loop. If the
+grammar loops, the previously selected choices will be in <code>other-choices</code>.
+Only choose from that list if you have some other way to avoid looping infinitely.</p>
+
+<p>This function always selects the first alternative:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;xsl:function name="f:first" as="map(*)"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:param name="context" as="element()"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:param name="options" as="map(*)"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code> </code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:sequence select="map { 'selection': $options?available-choices[1] }"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/xsl:function&gt;</code></span></span></pre></div>
+
+<p>You could pass it in parse options like this:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;xsl:variable name="parser"</code></span></span>
+<span class="line"><span class="ld"><code>              select="cs:make-parser($grammar,</code></span></span>
+<span class="line"><span class="ld"><code>                      map{'choose-alternative: f:first#2})"/&gt;</code></span></span></pre></div>
+
+<p>Of course, unconditionally choosing the first option isn’t very
+interesting. To explore further, consider this simple, ambiguous
+grammar:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-ixml programlisting verbatim verblines"><span class="line"><span class="ld"><code>   number-list = (number, -#a)+, number? .</code></span></span>
+<span class="line"><span class="ld"><code>        number = hex | decimal .</code></span></span>
+<span class="line"><span class="ld"><code>           hex = hex-digit+ .</code></span></span>
+<span class="line"><span class="ld"><code>       decimal = decimal-digit+ .</code></span></span>
+<span class="line"><span class="ld"><code>    -hex-digit = ["0"-"9" | "a"-"f" | "A"-"F" ] .</code></span></span>
+<span class="line"><span class="ld"><code>-decimal-digit = ["0"-"9" ] .</code></span></span></pre></div>
+
+<p>If we parse the following input,</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>bad</code></span></span>
+<span class="line"><span class="ld"><code>cafe</code></span></span>
+<span class="line"><span class="ld"><code>42</code></span></span></pre></div>
+
+<p>We might get this result:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;hex&gt;bad&lt;/hex&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;hex&gt;cafe&lt;/hex&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;hex&gt;42&lt;/hex&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/number-list&gt;</code></span></span></pre></div>
+
+<p>Of course, we might equally get this result:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;hex&gt;bad&lt;/hex&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;hex&gt;cafe&lt;/hex&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;decimal&gt;42&lt;/decimal&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/number-list&gt;</code></span></span></pre></div>
+
+<p>The ambiguity here is between “decimal” and “hexidecimal”.
+Here’s a function that will always select the decimal alternative:
+</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;xsl:function name="f:choose" as="map(*)"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:param name="context" as="element()"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:param name="options" as="map(*)"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code> </code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:variable name="choice"</code></span></span>
+<span class="line"><span class="ld"><code>                select="$context/children[symbol[@name='decimal']]/@id"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code> </code></span></span>
+<span class="line"><span class="ld"><code>  &lt;xsl:sequence select="map { 'selection': $choice }"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/xsl:function&gt;</code></span></span></pre></div>
+
+<p>In order to understand how this works, we need to look at what’s
+passed to the function. The function get’s a context element that is
+an XML description of the current state of the parse, and a map. For
+our example, the map would look something like this:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>map {</code></span></span>
+<span class="line"><span class="ld"><code>  "input":"bad</code></span></span>
+<span class="line"><span class="ld"><code>cafe</code></span></span>
+<span class="line"><span class="ld"><code>42",</code></span></span>
+<span class="line"><span class="ld"><code>  "available-choices": ("C3464","C3465"),</code></span></span>
+<span class="line"><span class="ld"><code>  "other-choices":()</code></span></span>
+<span class="line"><span class="ld"><code>}</code></span></span></pre></div>
+
+<p>And the context element like this:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;symbol name="number" id="N3694" mark="^" start="10" length="2"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;parent ref="N3695"&gt;$4_number-option&lt;/parent&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;children id="C3464" priority="0"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>      &lt;symbol name="hex" ref="N3692" start="10" length="2"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;/children&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;children id="C3465" priority="0"&gt;</code></span></span>
+<span class="line"><span class="ld"><code>      &lt;symbol name="decimal" ref="N3693" start="10" length="2"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code>   &lt;/children&gt;</code></span></span>
+<span class="line"><span class="ld"><code>&lt;/symbol&gt;</code></span></span></pre></div>
+
+<p>This is a choice being made for the symbol “number”. There are
+two choices, identified by “children”. In this example, each of the
+alternatives is a single symbol, but the context can be more complex.
+For each symbol, we also get the range of characters that it covers in
+the input. For each choice, it’s computed priority. The context is
+always the specific choice that’s being made, but the whole forest is
+available. Each of the “N” references can be used to find the
+corresponding nodes for those symbols.</p>
+
+<p>Which aspects of the context (if any) are relevant is going to
+depend on your grammar and the input.</p>
+
+</div><section id="grammar-details" class="section"><header><h2><span class="label">7<span class="sep">.</span>1</span><span class="sep">. </span>Grammar details</h2></header>
+
+
+<p>Invisible XML is an example of an
+<a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form" class="link">extended
+Backus-Naur form</a> (EBNF) grammar. The underlying parsing technlogies, either Earley or GLL, operate
+on simple <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form" class="link">Backus-Naur
+form</a> (BNF) grammars. What that means in practice is that the first thing
+<a href="https://coffeegrinder.nineml.org" class="link">CoffeeGrinder</a> does to your Invisible
+XML grammar is
+<a href="https://github.com/invisibleXML/ixml/blob/master/misc/ebnf-to-bnf.md" class="link">convert it</a>
+into a plain BNF. That process introduces new nonterminals.</p>
+
+<p>Mostly this is a behind-the-scenes transformation that isn’t
+relevant to the user, but it’s inescapable when describing ambiguity.
+Ultimately, the ambiguity is in the BNF and that’s the only grammar
+that the parser can describe.</p>
+
+<p>The oddly named nonterminals seen above come from the fact that
+our iXML grammar has been transformed into this BNF:</p>
+
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>                   $$ ::= number-list</code></span></span>
+<span class="line"><span class="ld"><code>          number-list ::= $1_number-plus, $4_number-optionⁿ</code></span></span>
+<span class="line"><span class="ld"><code>               number ::= hex</code></span></span>
+<span class="line"><span class="ld"><code>               number ::= decimal</code></span></span>
+<span class="line"><span class="ld"><code>                  hex ::= $2_hex-digit-plus</code></span></span>
+<span class="line"><span class="ld"><code>              decimal ::= $3_decimal-digit-plus</code></span></span>
+<span class="line"><span class="ld"><code>            hex-digit ::= ['0'-'9'; 'a'-'f'; 'A'-'F']</code></span></span>
+<span class="line"><span class="ld"><code>        decimal-digit ::= ['0'-'9']</code></span></span>
+<span class="line"><span class="ld"><code>       $1_number-plus ::= number, #A</code></span></span>
+<span class="line"><span class="ld"><code>       $1_number-plus ::= number, #A, $1_number-plus</code></span></span>
+<span class="line"><span class="ld"><code>    $2_hex-digit-plus ::= hex-digit</code></span></span>
+<span class="line"><span class="ld"><code>    $2_hex-digit-plus ::= hex-digit, $2_hex-digit-plus</code></span></span>
+<span class="line"><span class="ld"><code>$3_decimal-digit-plus ::= decimal-digit</code></span></span>
+<span class="line"><span class="ld"><code>$3_decimal-digit-plus ::= decimal-digit, $3_decimal-digit-plus</code></span></span>
+<span class="line"><span class="ld"><code>    $4_number-optionⁿ ::= ε</code></span></span>
+<span class="line"><span class="ld"><code>    $4_number-optionⁿ ::= number</code></span></span></pre></div>
+
+<p>This grammar is simpler in the sense that the rules for matching
+tokens in the input are simpler. There are no repetitions,
+alternatives, or other features on the “right hand side” of each production.</p>
+
+<p>It appears more complicated partly because there are more
+productions and there can be multiple productions for any given
+nonterminal. It also appears more complicated because it’s impossible
+to generate semantically meaningful names for the new nonterminals introduced.</p>
+
+</section>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="CoffeeFilter" href="../coffeefilter/index.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk03ch06.html">Chapter <span class="label">6</span><span class="sep">. </span>RegisterCoffeeSacks</a></div><div class="navmiddle"><a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="../coffeefilter/index.html">CoffeeFilter</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>
