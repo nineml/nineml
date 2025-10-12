@@ -10,6 +10,7 @@ import org.nineml.coffeegrinder.util.DefaultProgressMonitor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -199,7 +200,8 @@ public class IxmlParserTest {
     @Test
     public void versionDeclaration() {
         try {
-            InvisibleXmlParser parser = invisibleXml.getParserFromIxml(Files.newInputStream(Paths.get("src/test/resources/version-decl.ixml")), "UTF-8");
+            Path path = Paths.get("src/test/resources/version-decl.ixml");
+            InvisibleXmlParser parser = invisibleXml.getParserFromIxml(Files.newInputStream(path), path.toAbsolutePath().toString(), "UTF-8");
             Assertions.assertEquals("1.0", parser.getIxmlVersion());
             String input = "abc\uD83D\uDE3A";
             InvisibleXmlDocument doc = parser.parse(input);

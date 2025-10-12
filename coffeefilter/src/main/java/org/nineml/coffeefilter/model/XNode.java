@@ -1,6 +1,5 @@
 package org.nineml.coffeefilter.model;
 
-import org.nineml.coffeefilter.InvisibleXml;
 import org.xml.sax.Attributes;
 
 import java.io.PrintStream;
@@ -227,6 +226,23 @@ public abstract class XNode {
                 break;
             case "pragma-data":
                 child = new IPragmaData(this);
+                break;
+            case "ixml":
+                child = new IxmlGrammar(this);
+                break;
+            case "uses":
+                child = new IUses(this);
+                break;
+            case "from":
+                String href = attributes.getValue("source");
+                child = new IFrom(this, href);
+                break;
+            case "shares":
+                child = new IShares(this);
+                break;
+            case "share":
+                String symbolName = attributes.getValue("name");
+                child = new IShare(this, symbolName);
                 break;
             default:
                 throw new IllegalArgumentException("Unexpected token name: " + name);

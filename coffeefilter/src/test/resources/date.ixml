@@ -1,3 +1,5 @@
+ixml version "1.0" .
+
 date: s?, day, -s, month, (-s, year)? .
 -s: -" "+ .
 day: digit, digit? .

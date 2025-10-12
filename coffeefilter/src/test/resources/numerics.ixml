@@ -1,0 +1,7 @@
++uses digit, hexdigit from "digits.ixml" .
++shares decimal, hexadecimal .
+
+number = decimal | hexadecimal .
+
+decimal = digit+ .
+hexadecimal = hexdigit+ .

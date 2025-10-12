@@ -1,5 +1,6 @@
 package org.nineml.coffeefilter;
 
+import org.nineml.coffeefilter.exceptions.IxmlException;
 import org.nineml.coffeefilter.model.IPragma;
 import org.nineml.coffeefilter.model.IPragmaMetadata;
 import org.nineml.coffeefilter.model.Ixml;
@@ -282,6 +283,9 @@ public class InvisibleXmlParser {
     public InvisibleXmlDocument parse(Token[] input) {
         shownMessage = false;
         if (ixml == null) {
+            if (exception != null) {
+                throw IxmlException.parseFailed(exception);
+            }
             throw new NullPointerException("No grammar for this parser");
         }
 

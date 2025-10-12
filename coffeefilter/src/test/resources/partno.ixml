@@ -1,0 +1,6 @@
+ixml version "1.1-nineml" .
+
++uses decimal from "numerics.ixml" .
++shares partno .
+
+partno: -decimal .

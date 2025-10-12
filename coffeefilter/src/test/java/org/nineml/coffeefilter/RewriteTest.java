@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -258,7 +259,8 @@ public class RewriteTest {
     public void propertyFile() {
         try {
             InvisibleXml ixml = new InvisibleXml();
-            InvisibleXmlParser parser = ixml.getParserFromIxml(Files.newInputStream(Paths.get("src/test/resources/property-file.ixml")), "UTF-8");
+            Path path = Paths.get("src/test/resources/property-file.ixml").toAbsolutePath();
+            InvisibleXmlParser parser = ixml.getParserFromIxml(Files.newInputStream(path), path.toString(), "UTF-8");
             InvisibleXmlDocument doc = parser.parse(new File("src/test/resources/short-example.properties"));
 
             Assertions.assertTrue(doc.succeeded());
