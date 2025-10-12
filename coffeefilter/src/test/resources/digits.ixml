@@ -1,0 +1,5 @@
++shares digit, hexdigit .
+
+-digit = ["0"-"9"] .
+-hexdigit = digit | hexadecimal .
+-hexadecimal = ["A"-"F" | "a"-"f" ] .

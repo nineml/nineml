@@ -159,6 +159,7 @@ public class Configuration {
         options.setMarkAmbiguities(cmain.markAmbiguities || options.getMarkAmbiguities());
         options.setProvenance(cmain.provenance || options.getProvenance());
         options.setTrailingNewlineOnOutput(cmain.trailingNewline || options.getTrailingNewlineOnOutput());
+        options.setModularity(cmain.modular);
 
         if (cmain.startSymbol != null) {
             options.setStartSymbol(cmain.startSymbol);
@@ -665,6 +666,9 @@ public class Configuration {
 
         @Parameter(names = {"--trim"}, description = "Trim leading and trailing whitespace on input")
         public boolean trim = false;
+
+        @Parameter(names = {"--modular"}, description = "Parse a modular grammar")
+        public boolean modular = false;
 
         @Parameter(description = "The input")
         public List<String> inputText = new ArrayList<>();
