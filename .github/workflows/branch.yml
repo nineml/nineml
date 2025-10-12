@@ -67,10 +67,19 @@ jobs:
           echo Building $NINEMLVERSION on $CI_BRANCH tagged $CI_TAG
           git submodule init
           git submodule update
+          echo "Start test"
           ./gradlew test
+          ./gradlew clean
+          echo "Start test coffeepot/11.6"
           ./gradlew -PsaxonVersion=11.6 :coffeepot:test
+          ./gradlew clean
+          echo "Start test coffeepot/12.5"
           ./gradlew -PsaxonVersion=12.5 :coffeepot:test
+          ./gradlew clean
+          echo "Start test gll/coffeefilter"
           ./gradlew -PparserType=gll :coffeefilter:testSuite
+          ./gradlew clean
+          echo "Start build distribution"
           ./gradlew -PparserType=earley -PsaxonGroup=com.saxonica -PsaxonEdition=Saxon-EE dist docset website
 
       - name: Publish coffeegrinder release
