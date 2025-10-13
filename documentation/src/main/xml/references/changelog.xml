@@ -16,13 +16,13 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
-<revision xml:id="v331">
-<revnumber>3.3.1</revnumber>
+<revision xml:id="v332">
+<revnumber>3.3.2</revnumber>
 <date>2025-10-13</date>
 <revdescription>
 <itemizedlist>
 <listitem><para>There are no actual changes in this release, it’s
-just to fix a build and release issue that caused the 3.3.0 release to be only
+just to fix build and release issues that caused the 3.3.0 and 3.3.1 releases to be only
 partly deployed.</para>
 </listitem>
 </itemizedlist>

@@ -154,10 +154,10 @@ jobs:
       - name: Publish to Sonatype
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
         run: |
-          curl --header \"Authorization: Bearer ${{ secrets.BEARER }}\" --form bundle=@coffeegrinder/build/distributions/maven-coffeegrinder-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload"
-          curl --header \"Authorization: Bearer ${{ secrets.BEARER }}\" --form bundle=@coffeefilter/build/distributions/maven-coffeefilter-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload"
-          curl --header \"Authorization: Bearer ${{ secrets.BEARER }}\" --form bundle=@coffeesacks/build/distributions/maven-coffeesacks-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload"
-          curl --header \"Authorization: Bearer ${{ secrets.BEARER }}\" --form bundle=@coffeepot/build/distributions/maven-coffeepot-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload"
+          curl --header "Authorization: Bearer ${{ secrets.BEARER }}" --form bundle=@coffeegrinder/build/distributions/maven-coffeegrinder-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload
+          curl --header "Authorization: Bearer ${{ secrets.BEARER }}" --form bundle=@coffeefilter/build/distributions/maven-coffeefilter-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload
+          curl --header "Authorization: Bearer ${{ secrets.BEARER }}" --form bundle=@coffeesacks/build/distributions/maven-coffeesacks-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload
+          curl --header "Authorization: Bearer ${{ secrets.BEARER }}" --form bundle=@coffeepot/build/distributions/maven-coffeepot-${{ env.CI_TAG }}.zip https://central.sonatype.com/api/v1/publisher/upload
 
       - name: Deploy documentation to gh-pages (current version)
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
