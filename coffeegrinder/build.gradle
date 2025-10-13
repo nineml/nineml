@@ -2,7 +2,7 @@ buildscript {
   repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://dev.saxonica.com/maven" }
+    maven { url "https://maven.saxonica.com/maven" }
   }
 
   configurations.all {
@@ -40,7 +40,7 @@ import java.nio.file.Files
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url "https://dev.saxonica.com/maven" }
+  maven { url "https://maven.saxonica.com/maven" }
 }
 
 configurations.all {
