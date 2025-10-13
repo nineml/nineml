@@ -62,22 +62,34 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      - name: Build and test
+      - name: Initialize repository
         run: |
           echo Building $NINEMLVERSION on $CI_BRANCH tagged $CI_TAG
           git submodule init
           git submodule update
+
+      - name: Run test
+        run: |
           echo "Start test"
           ./gradlew test
-          ./gradlew clean
+
+      - name: Test CoffeePot with 11.6
+        run: |
           echo "Start test coffeepot/11.6"
-          ./gradlew -PsaxonVersion=11.6 :coffeepot:test
-          ./gradlew clean
+          ./gradlew -PsaxonVersion=11.6 clean :coffeepot:test
+
+      - name: Test CoffeePot with 12.5
+        run: |
           echo "Start test coffeepot/12.5"
-          ./gradlew -PsaxonVersion=12.5 :coffeepot:test
-          ./gradlew clean
+          ./gradlew -PsaxonVersion=12.5 clean :coffeepot:test
+
+      - name: Test CoffeeFilter with GLL
+        run: |
           echo "Start test gll/coffeefilter"
-          ./gradlew -PparserType=gll :coffeefilter:testSuite
+          ./gradlew -PparserType=gll clean :coffeefilter:testSuite
+
+      - name: Build distribution
+        run: |
           ./gradlew clean
           echo "Start build distribution"
           ./gradlew -PparserType=earley -PsaxonGroup=com.saxonica -PsaxonEdition=Saxon-EE dist docset website
@@ -94,18 +106,6 @@ jobs:
           body_path: documentation/build/coffeegrinder-changelog.txt
           files: |
             coffeegrinder/build/distributions/coffeegrinder-${{ env.CI_TAG }}.zip
-
-      - name: Publish to Sonatype
-        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
-        run: |
-          curl -s -o `pwd`/secret.gpg ${{ secrets.GPGKEYURI }}
-          ./gradlew -PsonatypeUsername=${{ secrets.SONATYPEUSER }} \
-                  -PsonatypePassword="${{ secrets.SONATYPEPASS }}" \
-                  -Psigning.keyId="${{ secrets.SIGNKEY }}" \
-                  -Psigning.password="${{ secrets.SIGNPSW }}" \
-                  -Psigning.secretKeyRingFile=`pwd`/secret.gpg \
-                  publish
-          rm -f `pwd`/secret.gpg
 
       - name: Publish coffeefilter release
         uses: softprops/action-gh-release@v2
@@ -145,6 +145,14 @@ jobs:
           body_path: documentation/build/coffeepot-changelog.txt
           files: |
             coffeepot/build/distributions/coffeepot-${{ env.CI_TAG }}.zip
+
+      - name: Publish to Sonatype
+        if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
+        run: |
+          curl --header \"Authorization: Bearer ${{ secrets.BEARER }\" --form bundle=@coffeegrinder/build/distributions/maven-coffeegrinder-${CI_COMMIT_TAG}.zip https://central.sonatype.com/api/v1/publisher/upload"
+          curl --header \"Authorization: Bearer ${{ secrets.BEARER }\" --form bundle=@coffeefilter/build/distributions/maven-coffeefilter-${CI_COMMIT_TAG}.zip https://central.sonatype.com/api/v1/publisher/upload"
+          curl --header \"Authorization: Bearer ${{ secrets.BEARER }\" --form bundle=@coffeesacks/build/distributions/maven-coffeesacks-${CI_COMMIT_TAG}.zip https://central.sonatype.com/api/v1/publisher/upload"
+          curl --header \"Authorization: Bearer ${{ secrets.BEARER }\" --form bundle=@coffeepot/build/distributions/maven-coffeepot-${CI_COMMIT_TAG}.zip https://central.sonatype.com/api/v1/publisher/upload"
 
       - name: Deploy documentation to gh-pages (current version)
         if: ${{ env.CAN_PUBLISH == 'true' && env.CI_BRANCH == 'main' && env.CI_TAG != '' }}
