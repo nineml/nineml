@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 7. Choosing among alternatives</title><link href="../css/prism.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-10-13T09:13:47Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><script src="../js/prism.js"></script><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch06.html"/><link rel="next" href="../coffeefilter/index.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeSacks.png" rel="shortcut icon"/><link href="../css/coffeesacks.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="CoffeeFilter" href="../coffeefilter/index.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="choose-alternative_cs" db-chunk="bk03ch07.html" db-id="d487e4668" class="chapter component"><header><h2>Chapter <span class="label">7</span><span class="sep">. </span>Choosing among alternatives</h2></header><div class="db-bfs">
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 7. Choosing among alternatives</title><link href="../css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-10-13T10:38:21Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk03ch06.html"/><link rel="next" href="../coffeefilter/index.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeSacks.png" rel="shortcut icon"/><link href="../css/coffeesacks.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 6. RegisterCoffeeSacks" href="bk03ch06.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeSacks" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="CoffeeFilter" href="../coffeefilter/index.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="choose-alternative_cs" db-chunk="bk03ch07.html" db-id="d491e4680" class="chapter component"><header><h2>Chapter <span class="label">7</span><span class="sep">. </span>Choosing among alternatives</h2></header><div class="db-bfs">
 
 
 <div class="admonition note"><div><div class="icon">ⓘ</div><div class="body"><header><div class="title">Note</div></header><div><p>This API has been completely rewritten for version 3.0.0.</p>
@@ -48,18 +48,18 @@ Only choose from that list if you have some other way to avoid looping infinitel
 
 <p>This function always selects the first alternative:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;xsl:function name="f:first" as="map(*)"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:param name="context" as="element()"/&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:param name="options" as="map(*)"/&gt;</code></span></span>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;xsl:function</span><span class="w"> </span><span class="na">name=</span><span class="s">"f:first"</span><span class="w"> </span><span class="na">as=</span><span class="s">"map(*)"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:param</span><span class="w"> </span><span class="na">name=</span><span class="s">"context"</span><span class="w"> </span><span class="na">as=</span><span class="s">"element()"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:param</span><span class="w"> </span><span class="na">name=</span><span class="s">"options"</span><span class="w"> </span><span class="na">as=</span><span class="s">"map(*)"</span><span class="nt">/&gt;</span></code></span></span>
 <span class="line"><span class="ld"><code> </code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:sequence select="map { 'selection': $options?available-choices[1] }"/&gt;</code></span></span>
-<span class="line"><span class="ld"><code>&lt;/xsl:function&gt;</code></span></span></pre></div>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:sequence</span><span class="w"> </span><span class="na">select=</span><span class="s">"map { 'selection': $options?available-choices[1] }"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="nt">&lt;/xsl:function&gt;</span></code></span></span></pre></div>
 
 <p>You could pass it in parse options like this:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;xsl:variable name="parser"</code></span></span>
-<span class="line"><span class="ld"><code>              select="cs:make-parser($grammar,</code></span></span>
-<span class="line"><span class="ld"><code>                      map{'choose-alternative: f:first#2})"/&gt;</code></span></span></pre></div>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">"parser"</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">              </span><span class="na">select=</span><span class="s">"cs:make-parser($grammar,</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="s">                      map{'choose-alternative: f:first#2})"</span><span class="nt">/&gt;</span></code></span></span></pre></div>
 
 <p>Of course, unconditionally choosing the first option isn’t very
 interesting. To explore further, consider this simple, ambiguous
@@ -80,33 +80,33 @@ grammar:</p>
 
 <p>We might get this result:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;hex&gt;bad&lt;/hex&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;hex&gt;cafe&lt;/hex&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;hex&gt;42&lt;/hex&gt;</code></span></span>
-<span class="line"><span class="ld"><code>&lt;/number-list&gt;</code></span></span></pre></div>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;number-list</span><span class="w"> </span><span class="na">xmlns:ixml=</span><span class="s">"http://invisiblexml.org/NS"</span><span class="w"> </span><span class="na">ixml:state=</span><span class="s">"ambiguous"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;hex&gt;</span>bad<span class="nt">&lt;/hex&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;hex&gt;</span>cafe<span class="nt">&lt;/hex&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;hex&gt;</span>42<span class="nt">&lt;/hex&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="nt">&lt;/number-list&gt;</span></code></span></span></pre></div>
 
 <p>Of course, we might equally get this result:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;number-list xmlns:ixml="http://invisiblexml.org/NS" ixml:state="ambiguous"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;hex&gt;bad&lt;/hex&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;hex&gt;cafe&lt;/hex&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;decimal&gt;42&lt;/decimal&gt;</code></span></span>
-<span class="line"><span class="ld"><code>&lt;/number-list&gt;</code></span></span></pre></div>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;number-list</span><span class="w"> </span><span class="na">xmlns:ixml=</span><span class="s">"http://invisiblexml.org/NS"</span><span class="w"> </span><span class="na">ixml:state=</span><span class="s">"ambiguous"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;hex&gt;</span>bad<span class="nt">&lt;/hex&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;hex&gt;</span>cafe<span class="nt">&lt;/hex&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;decimal&gt;</span>42<span class="nt">&lt;/decimal&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="nt">&lt;/number-list&gt;</span></code></span></span></pre></div>
 
 <p>The ambiguity here is between “decimal” and “hexidecimal”.
 Here’s a function that will always select the decimal alternative:
 </p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;xsl:function name="f:choose" as="map(*)"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:param name="context" as="element()"/&gt;</code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:param name="options" as="map(*)"/&gt;</code></span></span>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;xsl:function</span><span class="w"> </span><span class="na">name=</span><span class="s">"f:choose"</span><span class="w"> </span><span class="na">as=</span><span class="s">"map(*)"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:param</span><span class="w"> </span><span class="na">name=</span><span class="s">"context"</span><span class="w"> </span><span class="na">as=</span><span class="s">"element()"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:param</span><span class="w"> </span><span class="na">name=</span><span class="s">"options"</span><span class="w"> </span><span class="na">as=</span><span class="s">"map(*)"</span><span class="nt">/&gt;</span></code></span></span>
 <span class="line"><span class="ld"><code> </code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:variable name="choice"</code></span></span>
-<span class="line"><span class="ld"><code>                select="$context/children[symbol[@name='decimal']]/@id"/&gt;</code></span></span>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:variable</span><span class="w"> </span><span class="na">name=</span><span class="s">"choice"</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">                </span><span class="na">select=</span><span class="s">"$context/children[symbol[@name='decimal']]/@id"</span><span class="nt">/&gt;</span></code></span></span>
 <span class="line"><span class="ld"><code> </code></span></span>
-<span class="line"><span class="ld"><code>  &lt;xsl:sequence select="map { 'selection': $choice }"/&gt;</code></span></span>
-<span class="line"><span class="ld"><code>&lt;/xsl:function&gt;</code></span></span></pre></div>
+<span class="line"><span class="ld"><code><span class="w">  </span><span class="nt">&lt;xsl:sequence</span><span class="w"> </span><span class="na">select=</span><span class="s">"map { 'selection': $choice }"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="nt">&lt;/xsl:function&gt;</span></code></span></span></pre></div>
 
 <p>In order to understand how this works, we need to look at what’s
 passed to the function. The function get’s a context element that is
@@ -123,15 +123,15 @@ our example, the map would look something like this:</p>
 
 <p>And the context element like this:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code>&lt;symbol name="number" id="N3694" mark="^" start="10" length="2"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>   &lt;parent ref="N3695"&gt;$4_number-option&lt;/parent&gt;</code></span></span>
-<span class="line"><span class="ld"><code>   &lt;children id="C3464" priority="0"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>      &lt;symbol name="hex" ref="N3692" start="10" length="2"/&gt;</code></span></span>
-<span class="line"><span class="ld"><code>   &lt;/children&gt;</code></span></span>
-<span class="line"><span class="ld"><code>   &lt;children id="C3465" priority="0"&gt;</code></span></span>
-<span class="line"><span class="ld"><code>      &lt;symbol name="decimal" ref="N3693" start="10" length="2"/&gt;</code></span></span>
-<span class="line"><span class="ld"><code>   &lt;/children&gt;</code></span></span>
-<span class="line"><span class="ld"><code>&lt;/symbol&gt;</code></span></span></pre></div>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;symbol</span><span class="w"> </span><span class="na">name=</span><span class="s">"number"</span><span class="w"> </span><span class="na">id=</span><span class="s">"N3694"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"^"</span><span class="w"> </span><span class="na">start=</span><span class="s">"10"</span><span class="w"> </span><span class="na">length=</span><span class="s">"2"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;parent</span><span class="w"> </span><span class="na">ref=</span><span class="s">"N3695"</span><span class="nt">&gt;</span>$4_number-option<span class="nt">&lt;/parent&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;children</span><span class="w"> </span><span class="na">id=</span><span class="s">"C3464"</span><span class="w"> </span><span class="na">priority=</span><span class="s">"0"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;symbol</span><span class="w"> </span><span class="na">name=</span><span class="s">"hex"</span><span class="w"> </span><span class="na">ref=</span><span class="s">"N3692"</span><span class="w"> </span><span class="na">start=</span><span class="s">"10"</span><span class="w"> </span><span class="na">length=</span><span class="s">"2"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/children&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;children</span><span class="w"> </span><span class="na">id=</span><span class="s">"C3465"</span><span class="w"> </span><span class="na">priority=</span><span class="s">"0"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;symbol</span><span class="w"> </span><span class="na">name=</span><span class="s">"decimal"</span><span class="w"> </span><span class="na">ref=</span><span class="s">"N3693"</span><span class="w"> </span><span class="na">start=</span><span class="s">"10"</span><span class="w"> </span><span class="na">length=</span><span class="s">"2"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/children&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="nt">&lt;/symbol&gt;</span></code></span></span></pre></div>
 
 <p>This is a choice being made for the symbol “number”. There are
 two choices, identified by “children”. In this example, each of the
