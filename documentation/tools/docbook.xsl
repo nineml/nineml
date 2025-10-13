@@ -21,9 +21,11 @@
 
 <xsl:param name="verbatim-numbered-elements" select="''"/>
 
+<!--
 <xsl:param name="verbatim-syntax-highlighter" select="'prism'"/>
 <xsl:param name="verbatim-syntax-highlight-languages"
            select="'python perl html xml xslt xquery javascript json css java'"/>
+-->
 
 <xsl:param name="nineml-version" as="xs:string" required="yes"/>
 
