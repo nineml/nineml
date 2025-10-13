@@ -386,6 +386,14 @@ def pomXml() {
   }
 }
 
+task mavenReleaseArtifact(type: Zip) {
+  dependsOn("publish")
+
+  from(layout.buildDirectory.dir("maven"))
+  archiveFileName = "maven-coffeefilter-${ninemlVersion}.zip"
+}
+zipDist.finalizedBy mavenReleaseArtifact
+
 signing {
   sign publishing.publications
 }
@@ -434,11 +442,7 @@ publishing {
 
   repositories {
     maven {
-      url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-      credentials {
-        username = project.findProperty("sonatypeUsername") ?: "NOUSER"
-        password = project.findProperty("sonatypePassword") ?: "NOPASS"
-      }
+      url = uri("build/maven")
     }
   }
 }
