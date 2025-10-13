@@ -79,7 +79,7 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                 URLConnection conn = getUrlConnection(grammarURI);
                 if ("ixml".equals(grammarType)) {
                     String encoding = options.getOrDefault(_encoding, "UTF-8");
-                    parser = invisibleXml.getParserFromIxml(conn.getInputStream(), encoding);
+                    parser = invisibleXml.getParserFromIxml(conn.getInputStream(), grammarURI.toString(), encoding);
                 } else if ("xml".equals(grammarType) || "vxml".equals(grammarType)) {
                     parser = invisibleXml.getParserFromVxml(conn.getInputStream(), grammarURI.toString());
                 } else {

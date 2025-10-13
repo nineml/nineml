@@ -1,6 +1,7 @@
 package org.nineml.coffeefilter;
 
 import org.nineml.coffeefilter.exceptions.IxmlException;
+import org.nineml.coffeefilter.model.IModule;
 import org.nineml.coffeefilter.model.IPragma;
 import org.nineml.coffeefilter.model.Ixml;
 import org.nineml.coffeefilter.model.IxmlContentHandler;
@@ -67,6 +68,7 @@ public class InvisibleXml {
 
     private static final String ixml_ixml = "/org/nineml/coffeefilter/ixml2.xml";
     private static final String pragmas_ixml = "/org/nineml/coffeefilter/pragmas2.xml";
+    private static final String modular_ixml = "/org/nineml/coffeefilter/modular.xml";
     private static final String UTF_8 = "UTF-8";
 
     private final InvisibleXmlParser ixmlForIxml;
@@ -94,6 +96,9 @@ public class InvisibleXml {
         if (!options.getPedantic()) {
             ixml = pragmas_ixml;
         }
+        if (options.getModularity()) {
+            ixml = modular_ixml;
+        }
 
         this.options = options;
         try {
@@ -107,7 +112,13 @@ public class InvisibleXml {
 
             // Kinda hacky. The start symbol doesn't apply here.
             String startSymbol = options.getStartSymbol();
-            options.setStartSymbol("ixml");
+
+            if (options.getModularity()) {
+                options.setStartSymbol("module");
+            } else {
+                options.setStartSymbol("ixml");
+            }
+
             ixmlForIxml = getParserFromVxml(stream, resource.toString(), true);
             options.setStartSymbol(startSymbol);
         } catch (IOException ex) {
@@ -268,7 +279,7 @@ public class InvisibleXml {
         BufferedInputStream bufstream = new BufferedInputStream(stream, 8192);
         bufstream.mark(4096);
         byte[] buf = new byte[4095];
-        int len = bufstream.read(buf, 0, buf.length);
+        bufstream.read(buf, 0, buf.length);
         bufstream.reset();
 
         int sourceType = GrammarSniffer.identify(buf, 0, buf.length);
@@ -278,7 +289,7 @@ public class InvisibleXml {
                 return getParserFromVxml(bufstream, systemId);
             case GrammarSniffer.IXML_SOURCE:
                 options.getLogger().debug(logcategory, "Loading %s with %s encoding", systemId, encoding);
-                return getParserFromIxml(bufstream, encoding);
+                return getParserFromIxml(bufstream, systemId, encoding);
             default:
                 options.getLogger().info(logcategory, "Failed to detect grammar type for %s", systemId);
                 throw IxmlException.sniffingFailed(systemId);
@@ -331,12 +342,13 @@ public class InvisibleXml {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
         factory.setValidating(false);
-        IxmlContentHandler handler = new IxmlContentHandler(options);
+        IxmlContentHandler handler = new IxmlContentHandler(this, systemId);
         try {
             SAXParser parser = factory.newSAXParser();
             long startMillis = Calendar.getInstance().getTimeInMillis();
             parser.parse(stream, handler, systemId);
-            Ixml ixml = handler.getIxml();
+            IModule module = handler.getModule();
+            Ixml ixml = module.getIxml();
             long parseMillis = Calendar.getInstance().getTimeInMillis() - startMillis;
             return new InvisibleXmlParser(ixml, options, parseMillis);
         } catch (ParserConfigurationException | SAXException | CoffeeGrinderException ex) {
@@ -352,7 +364,7 @@ public class InvisibleXml {
      * @throws IOException If an error occurs reading the stream or if the character set is unsupported.
      * @throws IxmlException if the input is not an ixml grammar
      */
-    public InvisibleXmlParser getParserFromIxml(InputStream stream, String charset) throws IOException {
+    public InvisibleXmlParser getParserFromIxml(InputStream stream, String systemId, String charset) throws IOException {
         InvisibleXmlParser ixmlParser = getParser();
 
         Token[] input = IxmlInputBuilder.fromString(ixmlParser.readInputStream(stream, charset));
@@ -368,9 +380,10 @@ public class InvisibleXml {
         builderOptions.setAssertValidXmlCharacters(true);
 
         try {
-            IxmlContentHandler handler = new IxmlContentHandler(builderOptions);
+            IxmlContentHandler handler = new IxmlContentHandler(this, systemId);
             doc.getTree(handler, builderOptions);
-            Ixml ixml = handler.getIxml();
+            IModule module = handler.getModule();
+            Ixml ixml = module.getIxml();
 
             InvisibleXmlParser parser = new InvisibleXmlParser(ixml, options, doc.getResult().getParseTime());
 
@@ -396,7 +409,7 @@ public class InvisibleXml {
         ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
         final InvisibleXmlParser parser;
         try {
-            parser = getParserFromIxml(bais, UTF_8);
+            parser = getParserFromIxml(bais, null, UTF_8);
         } catch (IOException ex) {
             throw IxmlException.internalError("I/O error parsing a string in memory (!?)");
         }

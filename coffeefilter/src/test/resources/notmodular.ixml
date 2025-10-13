@@ -1,0 +1,4 @@
+partno: -decimal .
+decimal = digit+ .
+-digit = ["0"-"9"] .
+

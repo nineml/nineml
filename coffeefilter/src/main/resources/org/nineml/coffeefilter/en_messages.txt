@@ -20,7 +20,7 @@ I003: Internal error: %1.
 I004: Empty string used as alternative in %1.
 L001: Failed to identify grammar source from beginning of file: %1.
 P004: Failed to parse ‘%1’: %2.
-P005: Parse failed: %2.
+P005: Parse failed: %1.
 S02: Undefined symbol(s): ‘%1’.
 S03: Multiple rules for nonterminal symbol: %1.
 S05: Invalid mark: %1.

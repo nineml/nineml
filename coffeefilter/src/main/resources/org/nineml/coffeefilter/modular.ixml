@@ -4,7 +4,15 @@ ixml version "1.1-nineml".
 { Published in https://invisiblexml.org/current/ }
 { Commit hash ada52a90efdb }
 
-         ixml: s, (prolog, RS)?, rule++RS, s.
+       module: s, (prolog, RS)?, (( ((uses; shares), RS)+, ixml) | ixml) .
+         uses: -"+uses", RS, mfrom++(-";", s), s, -'.' .
+       shares: -"+shares", RS, entries, s, -'.' .
+   mfrom>from: entries, RS, -"from", RS, source.
+     -entries: share++(-",", s).
+        share: @name.
+      @source: string .
+
+         ixml: rule++RS, s.
 
            -s: (whitespace; comment)*. {Optional spacing}
           -RS: (whitespace; comment)+. {Required spacing}

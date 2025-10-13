@@ -35,7 +35,7 @@ public class Ixml extends XNonterminal {
     /**
      * Construct an Ixml.
      */
-    protected Ixml(ParserOptions options) {
+    public Ixml(ParserOptions options) {
         super(null, "ixml", "$$_ixml");
         this.options = options;
         ixmlns = new HashMap<>();

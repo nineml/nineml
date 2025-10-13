@@ -1,0 +1,8 @@
+ixml version "1.1-nineml" .
+{[+pragma nineml "https://nineml.org/ns/pragma/"]}
+
++uses decimal from "numerics.ixml" .
++shares partno .
+
+{[nineml discard empty]}
+partno: -decimal .

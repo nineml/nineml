@@ -81,8 +81,9 @@ public class AmbiguityTest {
     @Test
     public void horiz1() {
         try {
-            FileInputStream fis = new FileInputStream(new File("src/test/resources/horiz1.ixml"));
-            InvisibleXmlParser parser = invisibleXml.getParserFromIxml(fis, "utf-8");
+            File ginput = new File("src/test/resources/horiz1.ixml");
+            FileInputStream fis = new FileInputStream(ginput);
+            InvisibleXmlParser parser = invisibleXml.getParserFromIxml(fis, ginput.getAbsolutePath(), "utf-8");
             String input = "xay";
             InvisibleXmlDocument doc = parser.parse(input);
             String xml = doc.getTree();

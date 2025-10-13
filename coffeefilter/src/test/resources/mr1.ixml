@@ -1,0 +1,4 @@
++uses declaration from "mr2.ixml" .
++shares procedure .
+
+procedure = "procedure", declaration? .

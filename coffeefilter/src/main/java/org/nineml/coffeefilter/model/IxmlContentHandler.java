@@ -1,23 +1,35 @@
 package org.nineml.coffeefilter.model;
 
+import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.ParserOptions;
+import org.nineml.coffeefilter.util.URIUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.net.URI;
+
 public class IxmlContentHandler extends DefaultHandler {
     private boolean finished = false;
     private boolean simplified = false;
+    private final InvisibleXml invisibleXml;
     private final ParserOptions options;
-    private Ixml ixml = null;
+    private IModule module = null;
     private XNode current = null;
+    private final URI baseUri;
 
     /**
      * Construct a new content handler.
-     * @param options the parser options.
+     * @param invisibleXml The Invisible XML instance
      */
-    public IxmlContentHandler(ParserOptions options) {
-        this.options = options;
+    public IxmlContentHandler(InvisibleXml invisibleXml, String systemId) {
+        this .invisibleXml = invisibleXml;
+        this.options = invisibleXml.getOptions();
+        if (systemId == null) {
+            baseUri = URIUtils.cwd();
+        } else {
+            baseUri = URIUtils.cwd().resolve(systemId);
+        }
     }
 
     /**
@@ -26,21 +38,16 @@ public class IxmlContentHandler extends DefaultHandler {
      * options will have no effect.</p>
      * @return the Ixml grammar
      */
-    public Ixml getIxml() {
+    public IModule getModule() {
         if (!finished) {
             return null;
         }
 
-        if (ixml == null) {
-            throw new NullPointerException("No ixml grammar has been loaded");
+        if (module == null) {
+            throw new NullPointerException("No iXML grammar has been loaded");
         }
 
-        if (!simplified) {
-            ixml.simplifyGrammar(options);
-            simplified = true;
-        }
-
-        return ixml;
+        return module;
     }
 
     @Override
@@ -66,8 +73,8 @@ public class IxmlContentHandler extends DefaultHandler {
         }
          */
         if (current == null) {
-            ixml = new Ixml(options);
-            current = ixml;
+            module = new IModule(options, invisibleXml, baseUri);
+            current = module;
         } else {
             current = current.createChild(localName, attributes);
         }

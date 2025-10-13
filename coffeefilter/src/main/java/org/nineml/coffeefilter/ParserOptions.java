@@ -36,6 +36,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
     private String startSymbol = null;
     private final HashSet<String> disabledPragmas;
     private boolean validateVxml = true;
+    private boolean modularity = false;
 
     // FIXME: this list should somehow be connected to the pragmas defined in InvisibleXml
     private static final HashSet<String> knownPragmas = new HashSet<>(Arrays.asList("discard-empty", "ns", "priority", "regex", "rename"));
@@ -89,6 +90,7 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
         disabledPragmas = new HashSet<>(copy.disabledPragmas);
         startSymbol = copy.startSymbol;
         validateVxml = copy.validateVxml;
+        modularity = copy.modularity;
     }
 
     /**
@@ -508,5 +510,21 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
      */
     public void setValidateVxml(boolean validate) {
         validateVxml = validate;
+    }
+
+    /**
+     * Attempt to parse modular grammars?
+     * @return true if the grammar should be parsed with the modularity grammar.
+     */
+    public boolean getModularity() {
+        return modularity;
+    }
+
+    /**
+     * Set the {@link #getModularity()} property.
+     * @param modularity true if a modular parse should be attempted
+     */
+    public void setModularity(boolean modularity) {
+        this.modularity = modularity;
     }
 }
