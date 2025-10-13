@@ -16,6 +16,27 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v330">
+<revnumber>3.3.0</revnumber>
+<date>2025-10-12</date>
+<revdescription>
+<itemizedlist audience="coffeefilter">
+<listitem><para>Updated the underlying Invisible XML grammars for the current working
+draft to the latest versions.</para>
+</listitem>
+<listitem><para>Added experimental support for
+<link xlink:href="/coffeefilter/modularity.html">modular grammars</link>. This is
+an area of active development in the Community Group. Incompatible changes
+are likely in the future.</para>
+</listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem><para>Added a <option>--modular</option> option to enable
+modular grammars.</para>
+</listitem>
+</itemizedlist>
+</revdescription>
+</revision>
 <revision xml:id="v329">
 <revnumber>3.2.9</revnumber>
 <date>2025-03-03</date>

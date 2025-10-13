@@ -277,6 +277,13 @@ ambiguities on nonterminals that aren’t suppressed.)
 </para>
 </listitem>
 </varlistentry>
+<varlistentry xml:id="_modular">
+<term><option>--modular</option></term>
+<listitem>
+<para>Enables parsing of modular grammars.
+</para>
+</listitem>
+</varlistentry>
 <varlistentry xml:id="_normalize">
 <term><option>--normalize</option></term>
 <listitem>
