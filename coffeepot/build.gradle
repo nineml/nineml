@@ -2,7 +2,7 @@ buildscript {
   repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://dev.saxonica.com/maven" }
+    maven { url "https://maven.saxonica.com/maven" }
   }
 
   configurations.all {
@@ -39,7 +39,7 @@ import com.nwalsh.gradle.docker.DockerContainer
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url "https://dev.saxonica.com/maven" }
+  maven { url "https://maven.saxonica.com/maven" }
 }
 
 configurations.all {
@@ -69,21 +69,34 @@ dependencies {
   implementation (
     [group: 'com.beust', name: 'jcommander', version: '1.81' ],
     [group: 'org.fusesource.jansi', name: 'jansi', version: '2.4.0'],
-    [group: saxonGroup, name: saxonEdition, version: saxonVersion],
     fileTree(dir: "${projectDir}/lib", include: '*.jar')
   )
+
+  implementation ("${saxonGroup}:${saxonEdition}") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
+
   documentation (
     project(':coffeegrinder'),
     project(':coffeefilter'),
     project(':coffeesacks'),
     [group: 'com.beust', name: 'jcommander', version: '1.81' ],
     [group: 'org.fusesource.jansi', name: 'jansi', version: '2.4.0'],
-    [group: saxonGroup, name: saxonEdition, version: saxonVersion],
     [group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion],
     [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion],
     [group: 'com.saxonica', name: 'xmldoclet', version: xmldocletVersion],
     fileTree(dir: "${projectDir}/lib", include: '*.jar')
   )
+
+  documentation("${saxonGroup}:${saxonEdition}") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
 }
 
 testing {

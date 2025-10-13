@@ -2,7 +2,7 @@ buildscript {
   repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://dev.saxonica.com/maven" }
+    maven { url "https://maven.saxonica.com/maven" }
   }
 
   configurations.all {
@@ -40,7 +40,7 @@ import java.nio.file.Files
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url "https://dev.saxonica.com/maven" }
+  maven { url "https://maven.saxonica.com/maven" }
 }
 
 configurations.all {
@@ -58,9 +58,14 @@ configurations {
 dependencies {
   implementation project(':coffeegrinder')
   implementation project(':coffeefilter')
-  implementation (
-    [group: 'net.sf.saxon', name: 'Saxon-HE', version: saxonVersion],
-  )
+
+  implementation ("${saxonGroup}:${saxonEdition}") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
+
   documentation (
     project(':coffeegrinder'),
     project(':coffeefilter'),
@@ -69,6 +74,13 @@ dependencies {
     [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion],
     [group: 'com.saxonica', name: 'xmldoclet', version: xmldocletVersion],
   )
+
+  documentation("${saxonGroup}:${saxonEdition}") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
 }
 
 testing {

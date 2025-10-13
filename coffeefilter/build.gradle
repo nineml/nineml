@@ -2,7 +2,7 @@ buildscript {
   repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://dev.saxonica.com/maven" }
+    maven { url "https://maven.saxonica.com/maven" }
   }
 
   configurations.all {
@@ -40,7 +40,7 @@ import java.nio.file.Files
 repositories {
   mavenLocal()
   mavenCentral()
-  maven { url "https://dev.saxonica.com/maven" }
+  maven { url "https://maven.saxonica.com/maven" }
 }
 
 // Set saxonLicenseDir in gradle.properties, or from the
@@ -73,24 +73,45 @@ dependencies {
     [group: 'org.relaxng', name: 'jing', version: jingVersion]
   )
 
+  implementation ("${saxonGroup}:${saxonEdition}") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
+
   testImplementation (
-    [group: 'com.saxonica', name: 'Saxon-EE', version: saxonVersion],
     [group: 'org.relaxng', name: 'jing', version: jingVersion],
     files(saxonLicenseDir)
   )
+
+  testImplementation("com.saxonica:Saxon-EE") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
+
   testsuite (
     files("${buildDir}/classes/java/main"),
     files("${buildDir}/classes/java/test"),
     files("${buildDir}/resources/main"),
     files("${buildDir}/resources/test")
   )
+
   documentation (
     project(':coffeegrinder'),
-    [group: saxonGroup, name: saxonEdition, version: saxonVersion],
     [group: 'org.docbook', name: 'schemas-docbook', version: docbookVersion],
     [group: 'org.docbook', name: 'docbook-xslTNG', version: xslTNGversion],
     [group: 'com.saxonica', name: 'xmldoclet', version: xmldocletVersion],
   )
+
+  documentation("${saxonGroup}:${saxonEdition}") {
+    exclude group: "net.sf.saxon", module: "Saxon-HE"
+    version {
+      strictly "${saxonVersion}"
+    }
+  }
 }
 
 testing {
