@@ -1,0 +1,4 @@
++uses decimal from "moderrdec.ixml" .
++uses hexadecimal from "moderrhex.ixml" .
+
+partno = -decimal | -hexadecimal .

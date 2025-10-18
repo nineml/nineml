@@ -1,5 +1,6 @@
 package org.nineml.coffeefilter;
 
+import net.sf.saxon.Configuration;
 import org.nineml.coffeefilter.model.RuleRewriter;
 import org.nineml.logging.DefaultLogger;
 import org.nineml.logging.Logger;
@@ -14,6 +15,7 @@ import java.util.HashSet;
  * getters and setters when it began to develop options that were not entirely independent.</p>
  */
 public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions {
+    private Configuration saxonConfiguration = null;
     private boolean ignoreTrailingWhitespace = false;
     private boolean trailingNewlineOnOutput = false;
     private boolean allowUndefinedSymbols = false;
@@ -526,5 +528,25 @@ public class ParserOptions extends org.nineml.coffeegrinder.parser.ParserOptions
      */
     public void setModularity(boolean modularity) {
         this.modularity = modularity;
+    }
+
+    /**
+     * Get the Saxon configuration that will be used by CoffeeFilter.
+     * <p>A processor is required when managing modular grammars.</p>
+     * @return the processor
+     */
+    public Configuration getSaxonConfiguration() {
+        if (saxonConfiguration == null) {
+            saxonConfiguration = Configuration.newConfiguration();
+        }
+        return saxonConfiguration;
+    }
+
+    /**
+     * Set the Saxon configuration to be used by this instance of CoffeeFilter.
+     * @param saxonConfiguration the configuration
+     */
+    public void setSaxonConfiguration(Configuration saxonConfiguration) {
+        this.saxonConfiguration = saxonConfiguration;
     }
 }

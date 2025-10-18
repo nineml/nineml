@@ -1,5 +1,6 @@
 package org.nineml.coffeefilter.model;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.nineml.coffeefilter.InvisibleXml;
 import org.nineml.coffeefilter.ParserOptions;
 import org.nineml.coffeefilter.exceptions.IxmlException;
@@ -31,6 +32,7 @@ public class Ixml extends XNonterminal {
     protected IRule emptyProduction = null;
     protected String version = "1.0";
     protected final RuleRewriter ruleRewriter;
+    public XdmNode modularGrammar = null;
 
     /**
      * Construct an Ixml.

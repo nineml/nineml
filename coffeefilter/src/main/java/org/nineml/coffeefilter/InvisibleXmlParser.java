@@ -1,5 +1,6 @@
 package org.nineml.coffeefilter;
 
+import net.sf.saxon.s9api.XdmNode;
 import org.nineml.coffeefilter.exceptions.IxmlException;
 import org.nineml.coffeefilter.model.IPragma;
 import org.nineml.coffeefilter.model.IPragmaMetadata;
@@ -30,23 +31,27 @@ public class InvisibleXmlParser {
     private HygieneReport hygieneReport = null;
     private InvisibleXmlDocument failedParse;
     private boolean shownMessage = false;
+    public final XdmNode modularGrammar;
 
     protected InvisibleXmlParser(Ixml ixml, ParserOptions options) {
         this.ixml = ixml;
-        this.parseTime = -1;
-        failedParse = null;
         this.options = options;
+        modularGrammar = ixml.modularGrammar;
+        parseTime = -1;
+        failedParse = null;
     }
 
     protected InvisibleXmlParser(Ixml ixml, ParserOptions options, long parseMillis) {
         this.ixml = ixml;
-        this.parseTime = parseMillis;
-        failedParse = null;
         this.options = options;
+        modularGrammar = ixml.modularGrammar;
+        parseTime = parseMillis;
+        failedParse = null;
     }
 
     protected InvisibleXmlParser(InvisibleXmlDocument failed, ParserOptions options, long parseMillis) {
         ixml = null;
+        modularGrammar = null;
         parseTime = parseMillis;
         failedParse = failed;
         this.options = options;

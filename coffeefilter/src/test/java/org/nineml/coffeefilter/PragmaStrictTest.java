@@ -1,18 +1,10 @@
 package org.nineml.coffeefilter;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.nineml.coffeefilter.exceptions.IxmlException;
-import org.nineml.coffeegrinder.parser.Grammar;
-import org.nineml.coffeegrinder.util.DefaultProgressMonitor;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.fail;
 

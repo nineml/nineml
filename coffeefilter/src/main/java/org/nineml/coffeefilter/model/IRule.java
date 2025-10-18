@@ -65,13 +65,6 @@ public class IRule extends XNonterminal {
             return newName;
         }
 
-        if (rename != null) {
-            Ixml ixml = getRoot();
-            if (!InvisibleXml.satisfiesVersion11(ixml.getIxmlVersion())) {
-                throw IxmlException.renameUnavailable(name, rename);
-            }
-        }
-
         return rename;
     }
 
