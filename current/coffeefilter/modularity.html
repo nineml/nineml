@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 3. Modularity</title><link href="../css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-10-13T16:42:23Z"/><meta name="generator" content="DocBook xslTNG version 2.5.0 / 855db8f2 / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04ch02.html"/><link rel="next" href="bk04ch04.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 2. Pragmas" href="bk04ch02.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 4. Limitations" href="bk04ch04.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_modularity" db-chunk="modularity.html" db-id="d491e5462" class="chapter component"><header><h2>Chapter <span class="label">3</span><span class="sep">. </span>Modularity</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Chapter 3. Modularity</title><link href="../css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-10-18T15:52:41Z"/><meta name="generator" content="DocBook xslTNG version 2.6.1 / SNAPSHOT / SAXON HE 12.5"/><link href="../css/docbook-toc.css" rel="stylesheet"/><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="bk04ch02.html"/><link rel="next" href="bk04ch04.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/copy-verbatim.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeFilter.png" rel="shortcut icon"/><link href="../css/coffeefilter.css" rel="stylesheet"/></head><body class="chapter component"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="Chapter 2. Pragmas" href="bk04ch02.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 4. Limitations" href="bk04ch04.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="cf_modularity" db-chunk="modularity.html" db-id="d491e5491" class="chapter component"><header><h2>Chapter <span class="label">3</span><span class="sep">. </span>Modularity</h2></header>
 
 
 <p>Modularity is an experimental feature introduced in version 3.3.0. It’s
@@ -47,20 +47,20 @@ the explicitly shared symbols may be used by another grammar. If there’s no sh
 clause, 👀 any symbol may be used by another grammar.</p>
 
 <p>The effect of requesting modularity is to 👀 parse the input grammar against
-a variant iXML grammar that defines a <code class="literal">module</code>. The relevant
+a variant iXML grammar that includes the new features. The relevant
 productions are:</p>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>       module: s, (prolog, RS)?, (( ((uses; shares), RS)+, ixml) | ixml) .</code></span></span>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>         ixml: s, (prolog, RS)?, ((uses; shares), RS)*, rule++RS, s.</code></span></span>
 <span class="line"><span class="ld"><code>         uses: -"+uses", RS, mfrom++(-";", s), s, -'.' .</code></span></span>
 <span class="line"><span class="ld"><code>       shares: -"+shares", RS, entries, s, -'.' .</code></span></span>
-<span class="line"><span class="ld"><code>   mfrom&gt;from: entries, RS, -"from", RS, source.</code></span></span>
+<span class="line"><span class="ld"><code>   mfrom&gt;from: entries, RS, -"from", RS, source .</code></span></span>
 <span class="line"><span class="ld"><code>     -entries: share++(-",", s).</code></span></span>
 <span class="line"><span class="ld"><code>        share: @name.</code></span></span>
 <span class="line"><span class="ld"><code>      @source: string .</code></span></span></pre></div>
 
-<p>As with a normal iXML grammar, the prolog comes first.  In a module, that’s
-followed by optional uses and shares clauses that may be repeated, followed by
-the iXML itself. The 👀 grammar URIs are quoted and 👀 each clause ends with a full stop.</p>
+<p>These changes allow optional <code>uses</code> and <code>shares</code>
+statements to appear before the first rule. The 👀 grammar URIs are quoted and
+👀 each clause ends with a full stop.</p>
 
 <p>It is an error to define a rule for a symobol that is used from another grammar.</p>
 
@@ -83,15 +83,10 @@ a rule the symbol).</p>
 
 <div id="ex.mod.partno" class="example formalobject"><header><div class="title">Example <span class="label">3<span class="sep">.</span>3</span><span class="sep">. </span>A modular grammar for part numbers, <code class="filename">partno.ixml</code></div></header>
 
-<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>ixml version "1.1-nineml" .</code></span></span>
-<span class="line"><span class="ld"><code> </code></span></span>
-<span class="line"><span class="ld"><code>+uses decimal from "numerics.ixml" .</code></span></span>
+<div class="pre-wrap programlisting-wrap"><pre class="language-none programlisting verbatim verblines"><span class="line"><span class="ld"><code>+uses decimal from "numerics.ixml" .</code></span></span>
 <span class="line"><span class="ld"><code> </code></span></span>
 <span class="line"><span class="ld"><code>partno: -decimal .</code></span></span></pre></div>
 </div>
-
-<p>A 👀 modular grammar uses the renaming feature and must be in “version 1.1”. (This is
-an arbitrary limitation but reinforces the experimental nature of the feature.)</p>
 
 <p>Observe that the nonterminal <code class="literal">hexadecimal</code> is
 used in two grammars and has different definitions. The processor is
@@ -99,75 +94,29 @@ responsible for making sure that a correct grammar is constructed. The
 renaming feature, introduced recently in Invisible XML, allows the processor to rename
 nonterminals while preserving the correct serialization.</p>
 
-<p>The composed grammar is included in the debugging output:</p>
+<p>The composed grammar is included in the debugging output, if the
+modularity option is used:</p>
 
-<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;module&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;prolog&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;version</span><span class="w"> </span><span class="na">string=</span><span class="s">"1.1-nineml"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/prolog&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;ixml&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"partno"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"decimal"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"-"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"number"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"decimal"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"hexadecimal"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"decimal"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;repeat1&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">               </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"digit"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;/repeat1&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"hexadecimal"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;repeat1&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">               </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"hexdigit"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;/repeat1&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"digit"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"-"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;inclusion&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">               </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">from=</span><span class="s">"0"</span><span class="w"> </span><span class="na">to=</span><span class="s">"9"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;/inclusion&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"hexdigit"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"-"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
+<div class="pre-wrap programlisting-wrap highlight"><pre class="language-xml programlisting verbatim verblines"><span class="line"><span class="ld"><code><span class="nt">&lt;ixml&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"partno"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;alt&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"decimal"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"-"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"decimal"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;alt&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;repeat1&gt;</span></code></span></span>
 <span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"digit"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;nonterminal</span><span class="w"> </span><span class="na">name=</span><span class="s">"_1_hexadecimal"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"_1_hexadecimal"</span><span class="w"> </span><span class="na">alias=</span><span class="s">"hexadecimal"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"-"</span><span class="nt">&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;inclusion&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">               </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">from=</span><span class="s">"A"</span><span class="w"> </span><span class="na">to=</span><span class="s">"F"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">               </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">from=</span><span class="s">"a"</span><span class="w"> </span><span class="na">to=</span><span class="s">"f"</span><span class="nt">/&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;/inclusion&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/ixml&gt;</span></code></span></span>
-<span class="line"><span class="ld"><code><span class="nt">&lt;/module&gt;</span></code></span></span></pre></div>
-
-<p>Note how one of the <code class="literal">hexadecimal</code> nonterminals was
-renamed. Nonterminals are only renamed if there are collisions and the nonterminals
-in the “top level” grammar are never renamed.</p>
-
-<div class="admonition note"><div><div class="icon">ⓘ</div><div class="body"><header><div class="title">Note</div></header><div>
-<p>All of the rules from the three grammars are included in the composed
-grammar. This is a bug in the current implementation. It’s harmless, but
-nonterminals that are not reachable from shared symbols could easily be
-ignored during construction.</p>
-</div></div></div></div>
+<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/repeat1&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;rule</span><span class="w"> </span><span class="na">name=</span><span class="s">"digit"</span><span class="w"> </span><span class="na">mark=</span><span class="s">"-"</span><span class="nt">&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;alt&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;inclusion&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">            </span><span class="nt">&lt;member</span><span class="w"> </span><span class="na">from=</span><span class="s">"0"</span><span class="w"> </span><span class="na">to=</span><span class="s">"9"</span><span class="nt">/&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">         </span><span class="nt">&lt;/inclusion&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">      </span><span class="nt">&lt;/alt&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="w">   </span><span class="nt">&lt;/rule&gt;</span></code></span></span>
+<span class="line"><span class="ld"><code><span class="nt">&lt;/ixml&gt;</span></code></span></span></pre></div>
 
 </section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="Chapter 2. Pragmas" href="bk04ch02.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Chapter 4. Limitations" href="bk04ch04.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="bk04ch02.html">Chapter <span class="label">2</span><span class="sep">. </span>Pragmas</a></div><div class="navmiddle"><a title="CoffeeFilter" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk04ch04.html">Chapter <span class="label">4</span><span class="sep">. </span>Limitations</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>
