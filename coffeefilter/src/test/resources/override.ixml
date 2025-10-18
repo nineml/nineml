@@ -1,0 +1,7 @@
+ixml version "1.1-nineml" .
+
++uses decimal from "numerics.ixml" overrides digit .
++shares partno .
+
+partno = -decimal .
+-digit = ["0"-"9" | "a"-"f" | "A"-"F" ] .

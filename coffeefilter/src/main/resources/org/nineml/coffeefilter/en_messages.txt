@@ -14,6 +14,10 @@ E015: Symbol renaming is not supported in 1.0 grammars: %1 > %2.
 E016: Pragma cannot be repeated: %1 (%2, %3).
 E017: The start symbol specified does not appear in the grammar: %1.
 E018: Invalid schema: %1 (%2).
+E019: Local declaration for externally defined symbol: %1.
+E020: No declaration for shared symbol: %1.
+E021: No declaration for override symbol: %1.
+E022: Multiple overrides for %2 from grammar: %1.
 I001: Internal error: failed to load ixml specification grammar: %1.
 I002: Internal error: failed to load ixml specification grammar: %1.
 I003: Internal error: %1.

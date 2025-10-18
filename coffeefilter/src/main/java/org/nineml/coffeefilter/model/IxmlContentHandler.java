@@ -14,7 +14,7 @@ public class IxmlContentHandler extends DefaultHandler {
     private boolean simplified = false;
     private final InvisibleXml invisibleXml;
     private final ParserOptions options;
-    private IModule module = null;
+    private Ixml ixml = null;
     private XNode current = null;
     private final URI baseUri;
 
@@ -38,16 +38,16 @@ public class IxmlContentHandler extends DefaultHandler {
      * options will have no effect.</p>
      * @return the Ixml grammar
      */
-    public IModule getModule() {
+    public Ixml getIxml() {
         if (!finished) {
             return null;
         }
 
-        if (module == null) {
+        if (ixml == null) {
             throw new NullPointerException("No iXML grammar has been loaded");
         }
 
-        return module;
+        return ixml;
     }
 
     @Override
@@ -59,6 +59,16 @@ public class IxmlContentHandler extends DefaultHandler {
     @Override
     public void endDocument () throws SAXException {
         finished = true;
+        for (XNode child : ixml.children) {
+            if (child instanceof IUses || child instanceof IShares) {
+                ModularGrammar module = new ModularGrammar(options, invisibleXml, baseUri);
+                ixml = module.getIxml();
+                ixml.modularGrammar = module.getModularGrammar();
+                return;
+            }
+        }
+
+        ixml.simplifyGrammar(options);
     }
 
     @Override
@@ -73,8 +83,8 @@ public class IxmlContentHandler extends DefaultHandler {
         }
          */
         if (current == null) {
-            module = new IModule(options, invisibleXml, baseUri);
-            current = module;
+            ixml = new Ixml(options);
+            current = ixml;
         } else {
             current = current.createChild(localName, attributes);
         }

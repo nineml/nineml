@@ -100,6 +100,11 @@ public class IxmlException extends RuntimeException {
     public static IxmlException noSuchSymbol(String name) { return getException("E017", name); }
     public static IxmlException invalidVxmlGrammar(String schema, String message) { return getException("E018", new String[] {schema, message}); }
 
+    public static IxmlException usedSymbolDeclaredLocally(String name) { return getException("E019", name); }
+    public static IxmlException sharedSymbolUndeclared(String name) { return getException("E020", name); }
+    public static IxmlException overrideUndeclared(String name) { return getException("E021", name); }
+    public static IxmlException multipleOverrides(String grammar, String symbols) { return getException("E022", new String[] {grammar, symbols}); }
+
     private static String symbolList(Set<NonterminalSymbol> symbols) {
         StringBuilder sb = new StringBuilder();
         String sep = "";

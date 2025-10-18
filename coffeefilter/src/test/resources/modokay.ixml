@@ -1,0 +1,6 @@
++uses decimal from "moderrdec.ixml" .
++uses hexadecimal from "modokhex.ixml" .
+
+{ This grammar doesn't actually work for hex. }
+
+partno = -decimal | -hexadecimal .

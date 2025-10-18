@@ -1,0 +1,2 @@
+number = digit+ .
+-digit = ["0"-"9"] .

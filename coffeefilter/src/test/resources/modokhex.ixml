@@ -1,0 +1,4 @@
++uses number from "moderrbase.ixml" .
+
+hexadecimal = -number .
+

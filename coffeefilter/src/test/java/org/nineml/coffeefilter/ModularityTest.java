@@ -1,20 +1,22 @@
 package org.nineml.coffeefilter;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.nineml.coffeegrinder.parser.Grammar;
-import org.nineml.coffeegrinder.util.DefaultProgressMonitor;
+import net.sf.saxon.s9api.*;
+import net.sf.saxon.trans.XPathException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.nineml.coffeefilter.exceptions.IxmlException;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ModularityTest {
     private ParserOptions options;
     private InvisibleXml invisibleXml;
+    private XsltTransformer transpiler = null;
 
     @BeforeEach
     public void setup() {
@@ -53,7 +55,7 @@ public class ModularityTest {
             InvisibleXmlParser parser = invisibleXml.getParser();
             InvisibleXmlDocument doc = parser.parse(new File("src/test/resources/date.ixml"));
             String xml = doc.getTree();
-            Assertions.assertTrue(xml.startsWith("<module>"));
+            Assertions.assertTrue(xml.startsWith("<ixml>"));
         } catch (Exception ex) {
             fail();
         }
@@ -76,6 +78,63 @@ public class ModularityTest {
     }
 
     @Test
+    public void modular() {
+        try {
+            InvisibleXmlParser parser = loadModularGrammarTest("modular");
+            InvisibleXmlDocument doc = parser.parse("123");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<partno>123</partno>", xml);
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void overrides() {
+        try {
+            InvisibleXmlParser parser = loadModularGrammarTest("override");
+            InvisibleXmlDocument doc = parser.parse("123ABC");
+            String xml = doc.getTree();
+            Assertions.assertEquals("<partno>123ABC</partno>", xml);
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void invalidModularity() {
+        try {
+            InvisibleXmlParser parser = loadModularGrammarTest("moderror");
+            Assertions.assertFalse(parser.constructed());
+
+            Exception ex = parser.getException();
+            if (ex instanceof IxmlException) {
+                IxmlException ie = (IxmlException) ex;
+                Assertions.assertEquals("E022", ie.getCode());
+            } else {
+                fail(ex.getMessage());
+            }
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+    @Test
+    public void okayModularity() {
+        try {
+            InvisibleXmlParser parser = loadModularGrammarTest("modokay");
+            InvisibleXmlDocument doc = parser.parse("123");
+            String xml = doc.getTree();
+            System.err.println("OUTPUT: " + xml);
+            Assertions.assertTrue(xml.contains(">123</partno>"));
+            Assertions.assertTrue(xml.contains("ambiguous"));
+        } catch (Exception ex) {
+            System.err.println("ERROR: " + ex.getMessage());
+            fail();
+        }
+    }
+
+    @Test
     public void mutuallyrecursive() {
         try {
             InvisibleXmlParser parser = invisibleXml.getParser(new File("src/test/resources/mr1.ixml"));
@@ -85,6 +144,81 @@ public class ModularityTest {
         } catch (Exception ex) {
             fail();
         }
+    }
+
+    private InvisibleXmlParser loadModularGrammarTest(String basename) {
+        try {
+            InvisibleXmlParser parser = invisibleXml.getParser(new File("src/test/resources/" + basename + ".ixml"));
+            if (!parser.constructed()) {
+                return parser;
+            }
+
+            if (parser.modularGrammar == null) {
+                throw new RuntimeException("Failed to return modular grammar; maybe enable modularity?");
+            }
+
+            Processor processor = parser.modularGrammar.getProcessor();
+            DocumentBuilder builder = processor.newDocumentBuilder();
+            XdmNode schematron = builder.build(new File("src/test/resources/" + basename + ".sch"));
+
+            checkAssertions(parser.modularGrammar, schematron);
+
+            return parser;
+        } catch (SaxonApiException | XPathException | IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private void checkAssertions(XdmNode modularGrammar, XdmNode schematron) throws SaxonApiException, XPathException {
+        Processor processor = schematron.getProcessor();
+        XsltCompiler compiler = processor.newXsltCompiler();
+
+        if (transpiler == null) {
+            XsltExecutable exec = compiler.compile(new File("src/test/resources/schxslt2-1.4.4/transpile.xsl"));
+            transpiler = exec.load();
+        }
+
+        XdmDestination destination = new XdmDestination();
+
+        transpiler.setInitialContextNode(schematron);
+        transpiler.setDestination(destination);
+        transpiler.transform();
+
+        XdmNode compiledSchema = destination.getXdmNode();
+        XsltExecutable exec = compiler.compile(compiledSchema.asSource());
+        Xslt30Transformer transformer = exec.load30();
+
+        destination = new XdmDestination();
+        transformer.applyTemplates(modularGrammar.asSource(), destination);
+
+        XdmNode result = destination.getXdmNode();
+
+        String error = evaluateXPath(result, "//svrl:failed-assert");
+        if (!"".equals(error)) {
+            fail(error);
+        }
+    }
+
+    private String evaluateXPath(XdmNode doc, String xpath) throws SaxonApiException, XPathException {
+        XPathExecutable exec = getCompiler(doc).compile(xpath);
+        XPathSelector selector = exec.load();
+        selector.setContextItem(doc);
+        return selector.evaluate().getUnderlyingValue().getStringValue();
+    }
+
+    private XdmNode getNode(XdmNode doc, String xpath) throws SaxonApiException {
+        XPathExecutable exec = getCompiler(doc).compile(xpath);
+        XPathSelector selector = exec.load();
+        selector.setContextItem(doc);
+        XdmValue result = selector.evaluate();
+        return (XdmNode) result;
+    }
+
+    private XPathCompiler getCompiler(XdmNode doc) {
+        XPathCompiler compiler = doc.getProcessor().newXPathCompiler();
+        compiler.declareNamespace("s", "http://purl.oclc.org/dsdl/schematron");
+        compiler.declareNamespace("svrl", "http://purl.oclc.org/dsdl/svrl");
+        return compiler;
     }
 
 }

@@ -280,7 +280,9 @@ ambiguities on nonterminals that aren’t suppressed.)
 <varlistentry xml:id="_modular">
 <term><option>--modular</option></term>
 <listitem>
-<para>Enables parsing of modular grammars.
+<para>This flag is no longer necessary to use modular grammars, however, if it is provided,
+an XML representation of the composed grammar will be logged at the debug level. The XML will
+also be provided on the parser object, if you’re using the internal APIs.
 </para>
 </listitem>
 </varlistentry>

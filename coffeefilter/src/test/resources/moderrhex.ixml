@@ -1,0 +1,4 @@
++uses number from "moderrbase.ixml" overrides digit .
+
+hexadecimal = -number .
+digit = ["0"-"9" | "a"-"f" | "A"-"F" ] .

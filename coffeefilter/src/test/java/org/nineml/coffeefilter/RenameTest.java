@@ -8,14 +8,6 @@ public class RenameTest {
     private static InvisibleXml invisibleXml = new InvisibleXml();
 
     @Test
-    public void renameAtoB_10() {
-        String ixml = "S: A .\n" +
-                "A>B: 'b' .\n";
-        InvisibleXmlParser parser = invisibleXml.getParserFromIxml(ixml);
-        Assertions.assertFalse(parser.constructed());
-    }
-
-    @Test
     public void renameAtoB_11() {
         String ixml = "ixml version '1.1-nineml' .\n" +
                 "S: A .\n" +

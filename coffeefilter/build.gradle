@@ -62,6 +62,12 @@ configurations.all {
   }
 }
 
+test {
+  testLogging {
+    events "PASSED", "SKIPPED", "FAILED", "STANDARD_OUT", "STANDARD_ERROR"
+  }
+}
+
 configurations {
   transform.extendsFrom documentation
   testsuite.extendsFrom testImplementation

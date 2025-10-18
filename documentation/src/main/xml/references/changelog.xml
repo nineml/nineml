@@ -16,6 +16,36 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v333">
+<revnumber>3.3.3</revnumber>
+<date>2025-10-18</date>
+<revdescription>
+<itemizedlist audience="coffeefilter">
+<listitem><para>Modularity has been refactored. The top-level “module” production
+has been removed and modularity is integrated directly into the “ixml” production.
+</para></listitem>
+<listitem><para>The modularity option is no longer necessary to process modular grammars.
+</para></listitem>
+<listitem><para>The composed grammar created by resolving the modularity is available on
+the parser, if the modularity option is enabled.
+</para></listitem>
+<listitem><para>The composed grammar no longer contains unreachable productions caused
+by including all of the used grammars, even rules that weren’t actually necessary.
+</para></listitem>
+<listitem><para>Grammars no longer need an explicit “version 1.1” declaration to use the renaming
+feature. They also don’t need it to use the modularity feature.
+</para></listitem>
+<listitem><para>The modularity and renaming features are not available in pedantic mode.
+</para></listitem>
+</itemizedlist>
+<itemizedlist audience="coffeepot">
+<listitem><para>The <code>--modularity</code> flag is no longer necessary to process a modular
+grammar, but if it’s provided the composed grammar created by resolving modularity will be
+logged at the “debug” level.
+</para></listitem>
+</itemizedlist>
+</revdescription>
+</revision>
 <revision xml:id="v332">
 <revnumber>3.3.2</revnumber>
 <date>2025-10-13</date>

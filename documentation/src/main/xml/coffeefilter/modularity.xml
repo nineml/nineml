@@ -54,20 +54,20 @@ the explicitly shared symbols may be used by another grammar. If there’s no sh
 clause, 👀 any symbol may be used by another grammar.</para>
 
 <para>The effect of requesting modularity is to 👀 parse the input grammar against
-a variant iXML grammar that defines a <literal>module</literal>. The relevant
+a variant iXML grammar that includes the new features. The relevant
 productions are:</para>
 
-<programlisting>       module: s, (prolog, RS)?, (( ((uses; shares), RS)+, ixml) | ixml) .
+<programlisting>         ixml: s, (prolog, RS)?, ((uses; shares), RS)*, rule++RS, s.
          uses: -"+uses", RS, mfrom++(-";", s), s, -'.' .
        shares: -"+shares", RS, entries, s, -'.' .
-   mfrom>from: entries, RS, -"from", RS, source.
+   mfrom>from: entries, RS, -"from", RS, source .
      -entries: share++(-",", s).
         share: @name.
       @source: string .</programlisting>
 
-<para>As with a normal iXML grammar, the prolog comes first.  In a module, that’s
-followed by optional uses and shares clauses that may be repeated, followed by
-the iXML itself. The 👀 grammar URIs are quoted and 👀 each clause ends with a full stop.</para>
+<para>These changes allow optional <code>uses</code> and <code>shares</code>
+statements to appear before the first rule. The 👀 grammar URIs are quoted and
+👀 each clause ends with a full stop.</para>
 
 <para>It is an error to define a rule for a symobol that is used from another grammar.</para>
 
@@ -90,15 +90,10 @@ a rule the symbol).</para>
 
 <example xml:id="ex.mod.partno">
 <title>A modular grammar for part numbers, <filename>partno.ixml</filename></title>
-<programlisting>ixml version "1.1-nineml" .
-
-+uses decimal from "numerics.ixml" .
+<programlisting>+uses decimal from "numerics.ixml" .
 
 partno: -decimal .</programlisting>
 </example>
-
-<para>A 👀 modular grammar uses the renaming feature and must be in “version 1.1”. (This is
-an arbitrary limitation but reinforces the experimental nature of the feature.)</para>
 
 <para>Observe that the nonterminal <literal>hexadecimal</literal> is
 used in two grammars and has different definitions. The processor is
@@ -106,75 +101,29 @@ responsible for making sure that a correct grammar is constructed. The
 renaming feature, introduced recently in Invisible XML, allows the processor to rename
 nonterminals while preserving the correct serialization.</para>
 
-<para>The composed grammar is included in the debugging output:</para>
+<para>The composed grammar is included in the debugging output, if the
+modularity option is used:</para>
 
-<programlisting language="xml"><![CDATA[<module>
-   <prolog>
-      <version string="1.1-nineml"/>
-   </prolog>
-   <ixml>
-      <rule name="partno">
-         <alt>
-            <nonterminal name="decimal" mark="-"/>
-         </alt>
-      </rule>
-      <rule name="number">
-         <alt>
-            <nonterminal name="decimal"/>
-         </alt>
-         <alt>
-            <nonterminal name="hexadecimal"/>
-         </alt>
-      </rule>
-      <rule name="decimal">
-         <alt>
-            <repeat1>
-               <nonterminal name="digit"/>
-            </repeat1>
-         </alt>
-      </rule>
-      <rule name="hexadecimal">
-         <alt>
-            <repeat1>
-               <nonterminal name="hexdigit"/>
-            </repeat1>
-         </alt>
-      </rule>
-      <rule name="digit" mark="-">
-         <alt>
-            <inclusion>
-               <member from="0" to="9"/>
-            </inclusion>
-         </alt>
-      </rule>
-      <rule name="hexdigit" mark="-">
-         <alt>
+<programlisting language="xml"><![CDATA[<ixml>
+   <rule name="partno">
+      <alt>
+         <nonterminal name="decimal" mark="-"/>
+      </alt>
+   </rule>
+   <rule name="decimal">
+      <alt>
+         <repeat1>
             <nonterminal name="digit"/>
-         </alt>
-         <alt>
-            <nonterminal name="_1_hexadecimal"/>
-         </alt>
-      </rule>
-      <rule name="_1_hexadecimal" alias="hexadecimal" mark="-">
-         <alt>
-            <inclusion>
-               <member from="A" to="F"/>
-               <member from="a" to="f"/>
-            </inclusion>
-         </alt>
-      </rule>
-   </ixml>
-</module>]]></programlisting>
-
-<para>Note how one of the <literal>hexadecimal</literal> nonterminals was
-renamed. Nonterminals are only renamed if there are collisions and the nonterminals
-in the “top level” grammar are never renamed.</para>
-
-<note>
-<para>All of the rules from the three grammars are included in the composed
-grammar. This is a bug in the current implementation. It’s harmless, but
-nonterminals that are not reachable from shared symbols could easily be
-ignored during construction.</para>
-</note>
+         </repeat1>
+      </alt>
+   </rule>
+   <rule name="digit" mark="-">
+      <alt>
+         <inclusion>
+            <member from="0" to="9"/>
+         </inclusion>
+      </alt>
+   </rule>
+</ixml>]]></programlisting>
 
 </chapter>

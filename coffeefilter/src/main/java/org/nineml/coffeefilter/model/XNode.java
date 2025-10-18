@@ -237,6 +237,9 @@ public abstract class XNode {
                 String href = attributes.getValue("source");
                 child = new IFrom(this, href);
                 break;
+            case "overrides":
+                child = new IOverrides(this);
+                break;
             case "shares":
                 child = new IShares(this);
                 break;

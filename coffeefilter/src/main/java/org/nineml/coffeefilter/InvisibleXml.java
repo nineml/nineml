@@ -1,7 +1,6 @@
 package org.nineml.coffeefilter;
 
 import org.nineml.coffeefilter.exceptions.IxmlException;
-import org.nineml.coffeefilter.model.IModule;
 import org.nineml.coffeefilter.model.IPragma;
 import org.nineml.coffeefilter.model.Ixml;
 import org.nineml.coffeefilter.model.IxmlContentHandler;
@@ -94,9 +93,6 @@ public class InvisibleXml {
     public InvisibleXml(ParserOptions options) {
         String ixml = ixml_ixml;
         if (!options.getPedantic()) {
-            ixml = pragmas_ixml;
-        }
-        if (options.getModularity()) {
             ixml = modular_ixml;
         }
 
@@ -112,12 +108,7 @@ public class InvisibleXml {
 
             // Kinda hacky. The start symbol doesn't apply here.
             String startSymbol = options.getStartSymbol();
-
-            if (options.getModularity()) {
-                options.setStartSymbol("module");
-            } else {
-                options.setStartSymbol("ixml");
-            }
+            options.setStartSymbol("ixml");
 
             ixmlForIxml = getParserFromVxml(stream, resource.toString(), true);
             options.setStartSymbol(startSymbol);
@@ -347,8 +338,7 @@ public class InvisibleXml {
             SAXParser parser = factory.newSAXParser();
             long startMillis = Calendar.getInstance().getTimeInMillis();
             parser.parse(stream, handler, systemId);
-            IModule module = handler.getModule();
-            Ixml ixml = module.getIxml();
+            Ixml ixml = handler.getIxml();
             long parseMillis = Calendar.getInstance().getTimeInMillis() - startMillis;
             return new InvisibleXmlParser(ixml, options, parseMillis);
         } catch (ParserConfigurationException | SAXException | CoffeeGrinderException ex) {
@@ -382,8 +372,7 @@ public class InvisibleXml {
         try {
             IxmlContentHandler handler = new IxmlContentHandler(this, systemId);
             doc.getTree(handler, builderOptions);
-            IModule module = handler.getModule();
-            Ixml ixml = module.getIxml();
+            Ixml ixml = handler.getIxml();
 
             InvisibleXmlParser parser = new InvisibleXmlParser(ixml, options, doc.getResult().getParseTime());
 
