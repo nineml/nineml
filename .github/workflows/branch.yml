@@ -92,11 +92,11 @@ jobs:
         run: |
           curl -s -o `pwd`/secret.gpg ${{ secrets.GPGKEYURI }}
           echo "Start build distribution"
-          ./gradlew -PparserType=earley -PsaxonGroup=com.saxonica -PsaxonEdition=Saxon-EE \
+          ./gradlew -PparserType=earley \
                     -Psigning.keyId="${{ secrets.SIGNKEY }}" \
                     -Psigning.password="${{ secrets.SIGNPSW }}" \
                     -Psigning.secretKeyRingFile=`pwd`/secret.gpg \
-                    clean dist docset website
+                    clean dist docset website mavenReleaseArtifact
           rm -f `pwd`/secret.gpg
 
       - name: Publish coffeegrinder release

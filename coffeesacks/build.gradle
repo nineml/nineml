@@ -274,7 +274,6 @@ task mavenReleaseArtifact(type: Zip) {
   from(layout.buildDirectory.dir("maven"))
   archiveFileName = "maven-coffeesacks-${ninemlVersion}.zip"
 }
-zipDist.finalizedBy mavenReleaseArtifact
 
 signing {
   sign publishing.publications
