@@ -10,6 +10,7 @@ import org.nineml.coffeegrinder.parser.NonterminalSymbol;
 import org.nineml.coffeegrinder.tokens.Token;
 import org.nineml.coffeegrinder.trees.TreeBuilder;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import java.util.*;
@@ -84,6 +85,7 @@ public class ContentHandlerAdapter implements TreeBuilder {
         }
 
         try {
+            handler.setDocumentLocator(new NullLocator());
             handler.startDocument();
             doc.serialize();
             handler.endDocument();
@@ -437,6 +439,28 @@ public class ContentHandlerAdapter implements TreeBuilder {
         @Override
         public String toString() {
             return getStringValue();
+        }
+    }
+
+    private class NullLocator implements Locator {
+        @Override
+        public String getPublicId() {
+            return null;
+        }
+
+        @Override
+        public String getSystemId() {
+            return null;
+        }
+
+        @Override
+        public int getLineNumber() {
+            return -1;
+        }
+
+        @Override
+        public int getColumnNumber() {
+            return -1;
         }
     }
 }
