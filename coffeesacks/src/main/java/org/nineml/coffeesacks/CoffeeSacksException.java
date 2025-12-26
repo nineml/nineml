@@ -24,6 +24,7 @@ public class CoffeeSacksException extends XPathException {
     public static final String ERR_INVALID_CHOICE = "CSIF0002";
     public static final String ERR_TREE_CONSTRUCTION = "CSIN0001";
     public static final String ERR_NAMESPACE_CONSTRUCTION = "CSIN0002";
+    public static final String PARSE_FAILED = "CSPA0001";
 
     public CoffeeSacksException(String errCode, String message) {
         super(message);

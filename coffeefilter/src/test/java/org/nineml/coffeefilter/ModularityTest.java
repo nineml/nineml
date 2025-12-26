@@ -7,7 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nineml.coffeefilter.exceptions.IxmlException;
+import org.xml.sax.InputSource;
 
+import javax.xml.transform.sax.SAXSource;
 import java.io.File;
 import java.io.IOException;
 
@@ -174,7 +176,8 @@ public class ModularityTest {
         XsltCompiler compiler = processor.newXsltCompiler();
 
         if (transpiler == null) {
-            XsltExecutable exec = compiler.compile(new File("src/test/resources/schxslt2-1.4.4/transpile.xsl"));
+            SAXSource source = new SAXSource(new InputSource("src/test/resources/schxslt2-1.4.4/transpile.xsl"));
+            XsltExecutable exec = compiler.compile(source);
             transpiler = exec.load();
         }
 
