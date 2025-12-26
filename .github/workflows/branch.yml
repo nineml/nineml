@@ -88,7 +88,12 @@ jobs:
           echo "Start test gll/coffeefilter"
           ./gradlew -PparserType=gll clean :coffeefilter:testSuite
 
-      - name: Build distribution
+      - name: Build the distribution
+        run: |
+          ./gradlew -PparserType=earley -PsaxonGroup=com.saxonica -PsaxonEdition=Saxon-EE \
+                    clean dist docset website
+
+      - name: Build the Maven artifacts
         run: |
           curl -s -o `pwd`/secret.gpg ${{ secrets.GPGKEYURI }}
           echo "Start build distribution"
@@ -96,7 +101,7 @@ jobs:
                     -Psigning.keyId="${{ secrets.SIGNKEY }}" \
                     -Psigning.password="${{ secrets.SIGNPSW }}" \
                     -Psigning.secretKeyRingFile=`pwd`/secret.gpg \
-                    clean dist docset website mavenReleaseArtifact
+                    mavenReleaseArtifact
           rm -f `pwd`/secret.gpg
 
       - name: Publish coffeegrinder release
