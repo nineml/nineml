@@ -102,6 +102,15 @@ public class InvisibleXmlFailureDocument extends InvisibleXmlDocument {
                         }
                         handler.startElement("", "unexpected", "unexpected", attrs);
                         String value = tchar.getValue();
+
+                        int cp = tchar.getCodepoint();
+                        if (!(cp == '\t' || cp == '\n' || cp == '\r'
+                                || (cp >= 0x20 && cp <= 0xD7FF)
+                                || (cp >= 0xE00 && cp <= 0xFFFD)
+                                || (cp >= 0x10000 && cp <= 0x10FFFF))) {
+                            value = String.format("U+%04X", cp);
+                        }
+
                         handler.characters(value.toCharArray(), 0, value.length());
                         handler.endElement("", "unexpected", "unexpected");
                     } else {
