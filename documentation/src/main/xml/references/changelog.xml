@@ -16,6 +16,39 @@ N.B.: the log is used automatically in the release notes for each component.
 -->
 
 <revhistory role="changelog">
+<revision xml:id="v334">
+<revnumber>3.3.4</revnumber>
+<date>2025-12-26</date>
+<revdescription>
+<itemizedlist audience="coffeefilter">
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/95">#95</link>.
+Fixed a corner case where enabling line numbering in the document builder
+could cause a null pointer exception.
+</para></listitem>
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/79">#79</link>.
+The error document produced when a parse fails no longer contains non-XML
+characters, even if the input parse failed on a non-XML character.
+</para></listitem>
+<listitem><para>Corrected the error that accidentally caused the Maven POM for
+CoffeeFilter to depend on Saxon-EE instead of Saxon-HE.
+</para></listitem>
+</itemizedlist>
+<itemizedlist audience="coffeesacks">
+<listitem><para>Fixed issue
+<link xlink:href="https://github.com/nineml/nineml/issues/80">#80</link>.
+If the parse fails, the parsing function now throws a specific error code,
+<code>cse:CSPA0001</code>, where the <code>cse</code> prefix is bound
+to <code>http://nineml.com/ns/coffeesacks/errors</code>.
+</para></listitem>
+</itemizedlist>
+<itemizedlist>
+<listitem><para>Upgraded the default Saxon 12 release to Saxon 12.9.
+</para></listitem>
+</itemizedlist>
+</revdescription>
+</revision>
 <revision xml:id="v333">
 <revnumber>3.3.3</revnumber>
 <date>2025-10-18</date>
