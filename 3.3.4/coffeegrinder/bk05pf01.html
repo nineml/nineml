@@ -1,0 +1,41 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Introduction</title><link href="../css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-12-26T17:16:43Z"/><meta name="generator" content="DocBook xslTNG version 2.6.1 / SNAPSHOT / SAXON HE 12.9"/><link href="../css/docbook-toc.css" rel="stylesheet"/><link href="../css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="../css/coldark-cold.css" rel="stylesheet"/><link href="../css/nineml.css" rel="stylesheet"/><link href="../css/ninemlset.css" rel="stylesheet"/><link href="../icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="index.html"/><link rel="next" href="bk05ch01.html"/><link rel="up" href="index.html"/><link rel="home" href="../index.html"/><script src="../js/persistent-toc.js" defer="defer"></script><script src="../js/chunk-nav.js" defer="defer"></script><link href="../icon/CoffeeGrinder.png" rel="shortcut icon"/><link href="../css/coffeepot.css" rel="stylesheet"/></head><body class="component preface"><nav class="top"><span class="nav"><a title="" href="../index.html"><i class="fas fa-home"></i></a> <a title="CoffeeGrinder" href="index.html"><i class="fas fa-arrow-left"></i></a> <a title="CoffeeGrinder" href="index.html"><i class="fas fa-arrow-up"></i></a> <a title="Chapter 1. General use" href="bk05ch01.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="pref" db-chunk="bk05pf01.html" db-id="d490e7458" class="component preface"><header><h2>Introduction</h2></header><div class="db-bfs">
+
+
+<p>This package provides an implementation of two different parsers:
+an
+<a href="https://en.wikipedia.org/wiki/Earley_parser" class="link">Earley parser</a>
+and a
+<a href="https://pure.royalholloway.ac.uk/portal/en/publications/gll-parsing(94ca4516-d72c-41ff-b11f-24b14ba15f2d).html" class="link">Generalized LL (GLL) parser</a>.
+Both parsing algorithms are able to use grammars that are ambiguous. These APIs
+parse a sequence of tokens and return a parse forest.
+Individual parse trees can be obtained from the forest.</p>
+
+</div><section id="pref_s1" class="section"><header><h2>Why two parsers?</h2></header>
+
+
+<p>After implementing the Earley parser, I decided to implement the
+GLL parser in the hopes that it would be substantially faster than the
+Earley parser. After investing some effort optimizing the GLL
+implementation it appears to be a faster than the Earley parser, but
+not dramatically so. (Both parsers are “fast enough” for a lot of
+projects, but if your goal is parsing megabytes of input, you may be
+disappointed.)</p>
+
+<p>Both parser implementations expose the same interface. The
+Earley parser has one feature that the GLL parser does not: it is
+possible to extract a “prefix parse” and restart parsing after the
+prefix. Suppose for example, you have a grammar that recognizes
+<code>a+</code>. If you give it the input “<code class="literal">aaabbb</code>,
+you can extract the graph for the recognized prefix “aaa” even though
+parse as a whole did not succeed. You can subsequently restart parsing
+at “bbb” with the same or a different parser.</p>
+
+<p>Conversely, the GLL parser represents derivations not with a
+shared packed parse forest (SPPF) directly, but with binary subtree
+sets (BSRs). It may be possible to improve the performance of the GLL
+parser further by directly extracting trees from the BSRs rather than
+converting it into an SPPF first. But my initial explorations of this
+idea were unsuccessful. (There’s part of the paper that describes BSRs
+that I don’t understand.)</p>
+</section>
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="CoffeeGrinder" href="index.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="../index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Chapter 1. General use" href="bk05ch01.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="index.html">CoffeeGrinder</a></div><div class="navmiddle"><a title="CoffeeGrinder" href="index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="bk05ch01.html">Chapter <span class="label">1</span><span class="sep">. </span>General use</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="../">Loading…</div></script></nav><script src="../js/sectmarks.js"></script></body></html>

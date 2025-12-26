@@ -1,0 +1,581 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Unified change log</title><link href="./css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-12-26T17:16:43Z"/><meta name="generator" content="DocBook xslTNG version 2.6.1 / SNAPSHOT / SAXON HE 12.9"/><link href="./css/docbook-toc.css" rel="stylesheet"/><link href="./css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="./css/coldark-cold.css" rel="stylesheet"/><link href="./css/nineml.css" rel="stylesheet"/><link href="./css/ninemlset.css" rel="stylesheet"/><link href="./icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="references/index.html"/><link rel="next" href="references/bk06appb.html"/><link rel="up" href="references/index.html"/><link rel="home" href="index.html"/><script src="./js/persistent-toc.js" defer="defer"></script><script src="./js/chunk-nav.js" defer="defer"></script><link href="./icon/nineml.png" rel="shortcut icon"/><link href="./css/references.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="index.html"><i class="fas fa-home"></i></a> <a title="References" href="references/index.html"><i class="fas fa-arrow-left"></i></a> <a title="References" href="references/index.html"><i class="fas fa-arrow-up"></i></a> <a title="Appendix B. Unicode Character Classes" href="references/bk06appb.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="changelog" db-chunk="../changelog.html" db-id="d490e12212" class="appendix component"><header><h2>Appendix <span class="label">A</span><span class="sep">. </span>Unified change log</h2></header>
+
+
+<p>This appendix is a unified change log for all of the NineML
+components in this repository.</p>
+
+
+
+<div class="changelog revhistory"><header><div class="title">Revision History</div></header><ul><li id="v334" class="revision"><div class="revnumber"><span class="revnumber">3.3.4</span>, <span class="date" time="2025-12-26">26 Dec 2025</span></div><div class="description"><div class="revdescription"><ul class="itemizedlist">
+<li><p>Upgraded the default Saxon 12 release to Saxon 12.9.
+</p></li>
+</ul><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/95" class="link">#95</a>.
+Fixed a corner case where enabling line numbering in the document builder
+could cause a null pointer exception.
+</p></li>
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/79" class="link">#79</a>.
+The error document produced when a parse fails no longer contains non-XML
+characters, even if the input parse failed on a non-XML character.
+</p></li>
+<li><p>Corrected the error that accidentally caused the Maven POM for
+CoffeeFilter to depend on Saxon-EE instead of Saxon-HE.
+</p></li>
+</ul></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/80" class="link">#80</a>.
+If the parse fails, the parsing function now throws a specific error code,
+<code>cse:CSPA0001</code>, where the <code>cse</code> prefix is bound
+to <code>http://nineml.com/ns/coffeesacks/errors</code>.
+</p></li>
+</ul></dd></div></dl></div></div></li><li id="v333" class="revision"><div class="revnumber"><span class="revnumber">3.3.3</span>, <span class="date" time="2025-10-18">18 Oct 2025</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li><p>Modularity has been refactored. The top-level “module” production
+has been removed and modularity is integrated directly into the “ixml” production.
+</p></li>
+<li><p>The modularity option is no longer necessary to process modular grammars.
+</p></li>
+<li><p>The composed grammar created by resolving the modularity is available on
+the parser, if the modularity option is enabled.
+</p></li>
+<li><p>The composed grammar no longer contains unreachable productions caused
+by including all of the used grammars, even rules that weren’t actually necessary.
+</p></li>
+<li><p>Grammars no longer need an explicit “version 1.1” declaration to use the renaming
+feature. They also don’t need it to use the modularity feature.
+</p></li>
+<li><p>The modularity and renaming features are not available in pedantic mode.
+</p></li>
+</ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+<li><p>The <code>--modularity</code> flag is no longer necessary to process a modular
+grammar, but if it’s provided the composed grammar created by resolving modularity will be
+logged at the “debug” level.
+</p></li>
+</ul></dd></div></dl></div></div></li><li id="v332" class="revision"><div class="revnumber"><span class="revnumber">3.3.2</span>, <span class="date" time="2025-10-13">13 Oct 2025</span></div><div class="description"><div class="revdescription"><ul class="itemizedlist">
+<li><p>There are no actual changes in this release, it’s
+just to fix build and release issues that caused the 3.3.0 and 3.3.1 releases to be only
+partly deployed.</p>
+</li>
+</ul><dl></dl></div></div></li><li id="v330" class="revision"><div class="revnumber"><span class="revnumber">3.3.0</span>, <span class="date" time="2025-10-12">12 Oct 2025</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li><p>Updated the underlying Invisible XML grammars for the current working
+draft to the latest versions.</p>
+</li>
+<li><p>Added experimental support for
+<a href="/coffeefilter/modularity.html" class="link">modular grammars</a>. This is
+an area of active development in the Community Group. Incompatible changes
+are likely in the future.</p>
+</li>
+</ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+<li><p>Added a <code class="option">--modular</code> option to enable
+modular grammars.</p>
+</li>
+</ul></dd></div></dl></div></div></li><li id="v329" class="revision"><div class="revnumber"><span class="revnumber">3.2.9</span>, <span class="date" time="2025-03-03">03 Mar 2025</span></div><div class="description"><div class="revdescription"><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/64" class="link">#64</a>.
+Corrected typo in the README file.
+</p></li>
+<li><p>Various other documentation improvements. Updated the examples
+in the “Finding Errors” chapter.
+</p></li>
+</ul><dl><div><dt>CoffeeGrinder</dt><dd><ul class="itemizedlist">
+<li><p>Substantially improved the usefulness of the output in a failure
+document when parsing with the Earley parser. (Or at least I’ve tried
+to!)</p>
+</li>
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/65" class="link">#65</a>.
+Make sure that the failure document includes a namespace declaration for the iXML namespace
+even when the “simple tree” output method is used.
+</p></li>
+</ul></dd></div><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/70" class="link">#70</a>.
+Maybe I should say “fixed”. Allow the output to be a single text node unless in
+pedantic mode. This violates the constraint that the output must be well-formed
+XML.
+</p></li>
+</ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+<li><p>Fixed a bug where the <code class="option">--graph</code> was ignored when the parse failed.
+</p></li>
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/66" class="link">#66</a>.
+Documented <code>-i:-</code> to read input from standard input.
+</p></li>
+</ul></dd></div></dl></div></div></li><li id="v328" class="revision"><div class="revnumber"><span class="revnumber">3.2.8</span>, <span class="date" time="2025-02-23">23 Feb 2025</span></div><div class="description"><div class="revdescription"><ul class="itemizedlist">
+<li><p>Fixed issues
+<a href="https://github.com/nineml/nineml/issues/44" class="link">#44</a>
+and 
+<a href="https://github.com/nineml/nineml/issues/50" class="link">#50</a>,
+a couple of documentation bugs.
+</p></li>
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/53" class="link">#53</a>.
+Escape HTML markup used in the generation of SVG graphs more carefully.
+</p></li>
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/51" class="link">#51</a>,
+typos in the documentation.
+</p></li>
+<li><p>Updated the ixml repository submodule to the latest.
+</p></li>
+<li><p>Fixed some JavaDoc problems.
+</p></li>
+<li><p>Fussed with some build issues in GitHub actions.
+They work now, I think, but not because I actually understood and resolved the issue.
+(The issue is, I think, more than one version of Xerces on the class path.)
+</p></li>
+</ul><dl><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/54" class="link">#54</a>.
+The CoffeeSacks function was not correctly detecting parse errors and
+reporting them.</p></li>
+</ul></dd></div></dl></div></div></li><li id="v327" class="revision"><div class="revnumber"><span class="revnumber">3.2.7</span>, <span class="date" time="2024-10-29">29 Oct 2024</span></div><div class="description"><div class="revdescription"><p>One of the new features in iXML (new since 1.0) is the ability to
+<a href="https://invisiblexml.org/current/#rules" class="link">rename
+elements</a> in the serialized output. Using a <code>&gt;</code> after a nonterminal
+will rename it. In a rule, <code>A&gt;B</code>, means match the nonterminal <code>A</code>,
+but serialize the result as <code>B</code>.</p><p>Apparently, I implemented a very early draft of that idea because the specification
+calls the new name an <code>alias</code> where <em>CoffeeFilter</em> called
+it a <code>rename</code>.</p><dl><div><dt>CoffeeFilter</dt><dd><p>Rename “<code>rename</code>” to “<code>alias</code>” in the
+XML serialization of iXML grammars. This upgrade invalidates any XML serializations using
+the renaming feature that were generated with an earlier version of <em>CoffeeFilter</em>.
+</p></dd></div><div><dt>CoffeeGrinder, CoffeeSacks, CoffeePot</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li id="v326" class="revision"><div class="revnumber"><span class="revnumber">3.2.6</span>, <span class="date" time="2023-09-04">04 Sep 2023</span></div><div class="description"><div class="revdescription"><p>This release is partly a patch to get the current version aligned
+with the documentation. A build oversight meant that updates after 3.2.5
+were being published in the 3.2.5 documentation. That’s potentially confusing;
+releasing 3.2.6 brings the documentation and the release back into alignment.
+Apologies for any confusion.</p><dl><div><dt>CoffeeFilter</dt><dd><p>Restore support for the <code>csv-columns</code>
+and <code>csv-heading</code> pragmas. Added support for validating VXML grammars (i.e., 
+iXML grammars in XML format) before using them. Cleaned up a few small
+problems in the iXML grammar for iXML with pragmas.</p></dd></div><div><dt>CoffeePot</dt><dd><p>Restore support for the <code>csv-columns</code>
+and <code>csv-heading</code> pragmas. Added a <code>validate-vxml</code> configuration
+property.</p></dd></div><div><dt>CoffeeGrinder, CoffeeSacks</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li id="v325" class="revision"><div class="revnumber"><span class="revnumber">3.2.5</span>, <span class="date" time="2023-09-02">02 Sep 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Allow undefined tokens in grammars
+by defining them such that they match nothing. Fixed a bug where
+undefined symbols were not identified as unreachable (even when
+they were). Fixed (or worked around a bug) where extracting a tree
+from the GLL parse forest could fail.
+</p></dd></div><div><dt>CoffeeFilter</dt><dd><p>Moved the pragmas documentation from
+CoffeePot to CoffeeFilter. Implemented the “strict” pragma.</p></dd></div><div><dt>CoffeeSacks</dt><dd><p>Fixed a bug where the
+choose alternatives function couldn’t be a curried function.
+</p></dd></div><div><dt>CoffeePot</dt><dd><p>Moved the pragmas documentation from
+CoffeePot to CoffeeFilter.</p></dd></div></dl></div></div></li><li id="v324" class="revision"><div class="revnumber"><span class="revnumber">3.2.4</span>, <span class="date" time="2023-08-28">28 Aug 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeePot</dt><dd><p>Fix the bug where <code class="filename">.nineml.properties</code>
+was loaded from the <em>current</em> directory, not the user’s home directory
+as documented. To maintain compatibility, it now looks in the current directory then
+the home directory.</p></dd></div><div><dt>CoffeeGrinder, CoffeeFilter, CoffeeSacks</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li id="v323" class="revision"><div class="revnumber"><span class="revnumber">3.2.3</span>, <span class="date" time="2023-08-27">27 Aug 2023</span></div><div class="description"><div class="revdescription"><p>Fixes a bug in the Maven POM file (the version range reference was incorrect).
+There are other changes in this release.
+</p><dl></dl></div></div></li><li id="v322" class="revision"><div class="revnumber"><span class="revnumber">3.2.2</span>, <span class="date" time="2023-08-26">26 Aug 2023</span></div><div class="description"><div class="revdescription"><p>This release is mostly a large refactor of how the documentation
+is organized, managed, and produced. There are also significant new
+sections about the CoffeeGrinder and CoffeeFilter APIs.
+</p><p>Other aspects of the build have also been improved: the Maven artifacts now
+explicitly identify either Saxon 11 or Saxon 12 as dependencies; build automation now
+tests against both versions of Saxon, and the default build dependency is
+Saxon-HE.</p><dl><div><dt>CoffeeGrinder</dt><dd><p>Javadoc clarifications and improvements. Made parser options
+more consistent in parsers and results.</p></dd></div><div><dt>CoffeeFilter</dt><dd><p>Javadoc clarifications and improvements.</p></dd></div><div><dt>CoffeePot</dt><dd><p>Javadoc clarifications and improvements.</p></dd></div><div><dt>CoffeeSacks</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li id="v321" class="revision"><div class="revnumber"><span class="revnumber">3.2.1</span>, <span class="date" time="2023-08-06">06 Aug 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Fixes
+<a href="https://github.com/nineml/nineml/issues/17" class="link">a bug</a> in
+prefix parsing.</p></dd></div><div><dt>CoffeeFilter, CoffeeSacks, CoffeePot</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li id="v320" class="revision"><div class="revnumber"><span class="revnumber">3.2.0</span>, <span class="date" time="2023-08-04">04 Aug 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Reworked how the <code class="classname">Arborist</code> classes track
+and provide descriptions of how ambiguity was resolved.</p></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+<li>
+<p>Fixed a bug in the construction of the graph that
+an <code class="classname">XPathAxe</code> gets to inspect. Nodes were inadvertantly being
+processed many (many!) times in ambiguous forests making the construction very slow.</p>
+</li>
+<li>
+<p>Changed the <code class="classname">XmlForest</code> used for resolving ambiguities in the
+<code class="classname">XPathAxe</code> so that it includes nodes for intermediate states.
+</p>
+</li>
+</ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+<li>
+<p>The <code class="option">--describe-ambiguity</code> option was broken in
+the previous 3.x releases. It was a fair bit of effort to restore it. The descriptions
+have changed a bit and the <code class="literal">api-xml</code> option has been removed (the “API” flavor
+is returned by the <code class="literal">xml</code> option).
+</p>
+</li>
+<li>
+<p>Added an <code class="option">--axe</code> option and support for a <code class="literal">random</code> axe.
+</p>
+</li>
+<li>
+<p>Added a <code class="option">--trim</code> option to trim leading and trailing whitespace off
+the input. (This can be handy if you have input in a file, your editor automatically adds
+a newline at the end of the file, and your grammar doesn’t support trailing whitespace.)
+</p>
+</li>
+</ul></dd></div><div><dt>CoffeeFilter</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li id="v310" class="revision"><div class="revnumber"><span class="revnumber">3.1.0</span>, <span class="date" time="2023-08-01">01 Aug 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><ul class="itemizedlist">
+<li>
+<p>Added support for marking horizontal ambiguities with processing
+instructions.</p>
+</li>
+</ul></dd></div><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li>
+<p>Added support for specifying an alternate start symbol for parsing.
+This is not conformant behavior, but is useful for converted grammars that may
+have otherwise unreachable states.</p>
+</li>
+<li>
+<p>Added more checks for grammars provided in XML form. Removed some unused rules
+from the internal pragmas grammar.</p>
+</li>
+<li>
+<p>Improved the way ambiguity is detected and reported.</p>
+</li>
+</ul></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+<li>
+<p>Refactored the way parser options are constructed. There’s now a separate
+options object for each grammar and parser.
+</p>
+</li>
+<li>
+<p>Cleaned up the names of the parser options that can be passed in the XPath
+options map.</p>
+</li>
+<li>
+<p>Fixed a bug where the default Axe failed to report ambiguous choices if there
+were no selectors (XPath expressions or functions) provided at all.
+</p>
+</li>
+</ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+<li>
+<p>Hygiene issues with the grammar are now logged at the debug level.
+</p>
+</li>
+<li>
+<p>Added a <code class="option">--start-symbol</code> option to select an alternate start symbol.
+</p>
+</li>
+</ul></dd></div></dl></div></div></li><li id="v300" class="revision"><div class="revnumber"><span class="revnumber">3.0.0</span>, <span class="date" time="2023-07-29">29 Jul 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><ul class="itemizedlist">
+<li>
+<p>Many improvements and bug fixes in the GLL parser. It is now often (slightly)
+faster than the Earley parser and should be just as reliable.
+</p>
+</li>
+<li>
+<p>Refactored how trees are returned from the forest. In principle, it is possible
+to retrieve all of the trees.</p>
+</li>
+<li>
+<p>When prefix parsing is enabled, it is now possible to continue the parse with
+a different parser.</p>
+</li>
+<li>
+<p>Refactored tests to use JUnit 5 exclusively, many new and improved tests.</p>
+</li>
+<li>
+<p>Refactored and improved how and where terminals can be matched with regular
+expressions. Regular expression matches work with both parsers.</p>
+</li>
+<li>
+<p>Many improvements to the <code class="filename">forest2dot.xsl</code> stylesheet that
+produces forest diagrams.</p>
+</li>
+<li><p>Added an option to analyze the grammar for ambiguity
+with Anders Møller’s
+<a href="https://www.brics.dk/grammar/" class="link">ambiguity analyzer</a>.
+(Note that the analyzer jar file is included in the repository, but
+it isn’t bundled with CoffeeGrinder, you need to add it to your class
+path. It is bundled with CoffeePot.)</p>
+</li>
+<li>
+<p>Parser attributes (used internally to track marks and other
+features) have been renamed so that they’re all URIs. Added an
+attribute to track nonterminal priority. (To guide selection in
+ambiguous forests.)
+</p>
+</li>
+<li>
+<p>Added an option to normalize line endings on input.
+</p>
+</li>
+<li>
+<p>Added an option to mark ambiguities. When enabled, this option
+identifies places in the tree where an ambiguous choice was made.
+(It currently only works for “vertical” ambiguities between nonterminals.)
+</p>
+</li>
+</ul></dd></div><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li>
+<p>All of the NineML core components have been updated to version 3.0.0; 
+CoffeeFilter incorporates the changes in
+<a href="https://coffeegrinder.nineml.org/changelog.html#v300" class="link">CoffeeGrinder</a>
+3.0.0.</p>
+</li>
+<li>
+<p>Added support for the <a href="https://invisiblexml.org/pr/193/index.html" class="link">renaming
+proposal</a> provided that the grammar identifies itself as version 1.1 (or 1.1-nineml).
+</p>
+</li>
+<li>
+<p>Refactored how pragmas are processed; removed the unused “token” pragma.</p>
+</li>
+<li><p>Removed the “rewrite” pragma; it can be replaced with standard features:
+deletion and insertion. Removed the default priority pragma because it didn’t actually seem
+useful.
+</p></li>
+<li><p>Removed the notion of compiled grammars and the cache of compiled grammars.
+</p></li>
+<li>
+<p>Added an option to omit headers when generating CSV output.</p>
+</li>
+<li>
+<p>Added support for the “mark ambiguities” option. When enabled
+<code>n:ambiguous="true"</code> attributes are added to the XML
+trees.</p>
+</li>
+</ul></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+<li>
+<p>All of the NineML core components have been updated to version 3.0.0; 
+CoffeeSacks incorporates the changes in
+<a href="https://coffeegrinder.nineml.org/changelog.html#v300" class="link">CoffeeGrinder</a>
+and
+<a href="https://coffeefilter.nineml.org/changelog.html#v300" class="link">CoffeeFilter</a>
+3.0.0.</p>
+</li>
+<li>
+<p>The API for resolving ambiguities has been completely refactored to align with 
+CoffeeGrinder.</p>
+</li>
+</ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+<li>
+<p>All of the NineML core components have been updated to version 3.0.0; 
+CoffeePot incorporates the changes in
+<a href="https://coffeegrinder.nineml.org/changelog.html#v300" class="link">CoffeeGrinder</a>,
+<a href="https://coffeefilter.nineml.org/changelog.html#v300" class="link">CoffeeFilter</a>,
+and
+<a href="https://coffeesacks.nineml.org/changelog.html#v300" class="link">CoffeeSacks</a>,
+3.0.0.</p>
+</li>
+<li>
+<p>Many new command line options and configuration properties have been
+added; a few have been renamed or removed.</p>
+</li>
+<li>
+<p>CoffeePot will now work with either Saxon 11 or Saxon 12.</p>
+</li>
+<li><p>Undefined symbols are no longer allowed, even when not in pedantic mode.
+Undefined symbols are almost always an error and lead to very confusing error messages.
+</p></li>
+<li><p>Added an option to analyze the grammar for ambiguity
+with Anders Møller’s <a href="https://www.brics.dk/grammar/" class="link">ambiguity analyzer</a>.
+</p>
+</li>
+<li>
+<p>Support for compiled grammars and grammar compilation has been removed.
+</p>
+</li>
+<li>
+<p>Fixed a number of small serialization bugs.</p>
+</li>
+</ul></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.2.3</span>, <span class="date" time="2023-06-15">15 Jun 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><p>Fixed a typo: <code class="methodname">setStrictAmbiguity</code> was setting the wrong
+internal flag.</p></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+    <li>
+    <p>If a user-supplied function is called to choose an alternative, assume an
+    <em>unambiguous</em> choice has always been made.
+    Support the <code class="literal">strictAmbiguity</code> option to override this behavior.
+    </p>
+    </li>
+    <li>
+    <p>Support the <code>disablePragmas</code> and <code>enablePragmas</code> options
+    to selectively disable or enable individual pragma types.
+    </p>
+    </li>
+    </ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+    <li>
+    <p>Support <code>disable-pragmas</code> and <code>enable-pragmas</code> in the
+    options property file and <code>--disable-pragma</code> and <code>--enable-pragma</code>
+    on the command line.</p>
+    </li>
+    <li>
+    <p>Support <code>--graph-svg-option</code> on the command line to set options for
+    the SVG graph output.</p>
+    </li>
+    <li>
+    <p>Improved support for reporting infinitely ambiguous
+    grammars. A loop that extends through several non-terminals will
+    now be detected and reported <em>if</em> the parse
+    tree generated attempted to traverse that loop. The processor
+    doesn’t enumerate every possible parse, so it may fail to detect
+    loops that are on branches it does not explore.</p>
+    </li>
+    </ul></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.2.2</span>, <span class="date" time="2023-06-15">15 Jun 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li>
+<p>Added options to enable and disable pragmas. Individual pragmas can be enabled or
+disabled by name. Specify the name <code>#all</code> to enable or disable them all.</p>
+</li>
+<li>
+<p>Added a <code>strictAmbiguity</code> option. If <code>strictAmbiguity</code> is true,
+then a grammar will be marked ambiguous even if user-supplied priorities uniquely determined
+every outcome. Added an event builder option to track whether or not any ambiguous choices
+were made.</p>
+</li>
+<li>
+<p>Added a warning message if a priority pragma is applied to a literal. Parsing doesn’t
+distinguish between different occurrences of literals so the priority is unavailable when
+resolving ambiguities.</p>
+</li>
+</ul></dd></div><div><dt>CoffeeSacks</dt><dd><p>Never released.</p></dd></div><div><dt>CoffeePot</dt><dd><p>Fixed bug where CoffeePot had a runtime dependency on
+    Saxon EE. (It can use Saxon EE, and EE is required for loading dynamic function
+    libraries, but EE isn’t required for basic functionality.)</p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.2.1</span>, <span class="date" time="2023-05-17">17 May 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Fixed a small bug in the presentation of alternative parses when
+there is ambiguity. Nonterminal symbols in the alternative choices did
+not necessarily have the correct attributes.</p></dd></div><div><dt>CoffeeSacks</dt><dd><p>Further refined the way XML is constructed for choosing alternatives. The
+    “left” and “right” sides of each alternative are now sorted so that the “left” alternative
+    always matches input tokens that precede the “right” alternative. The CoffeeGrinder update
+    also assures that the attributes associated with nonterminal symbols are correct.
+    </p></dd></div><div><dt>CoffeePot</dt><dd><p>Fixed bug where choices were not always presented in a
+    logical order (earlier matches before later matches) when
+    displaying alternatives. Updated CoffeeGrinder and fixed
+    stylesheet so that marks on nonterminals are included when
+    describing ambiguity.</p></dd></div><div><dt>CoffeeFilter</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.2.0</span>, <span class="date" time="2023-05-06">06 May 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><ul class="itemizedlist">
+<li>
+<p>CoffeeGrinder now carefully distinguishes between nonterminals
+with different attributes. This introduces new nonterminals into
+the grammar. These can be examined by calling
+<code class="methodname">resolveDuplicates</code> on the
+<code class="classname">SourceGrammar</code>.</p>
+<p>If, for example, you have two instances of a nonterminal
+“B” in the grammar, where one has a mark attribute of “^” and the
+other a mark attribute of “@”, after resolving duplicates there
+will be two nonterminals in the grammar, “B” and “B₁”. They will
+match the same inputs, but is now possible to distinguish between
+them in the parse forest.</p>
+<p>One particular use for this feature is the priority attribute
+supported by CoffeeFilter. This attribute allows the grammar author
+to associate priorities with nonterminals in ambiguous grammars to
+guide the parse.</p>
+</li>
+<li>
+<p>All of the infrastructure associated with “pruning” nonterminals
+that lead to ε has been removed. (It hasn’t actually be used for at
+least a couple of releases.)
+</p>
+</li>
+</ul></dd></div><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li>
+<p>Leveraging changes to the CoffeeGrinder implementation, the priority
+pragma now works correctly.
+</p>
+</li>
+<li>
+<p>References to “pruning” nonterminals has been removed (because it’s been
+removed from CoffeeGrinder).
+</p>
+</li>
+</ul></dd></div><div><dt>CoffeeSacks</dt><dd><p>Updated the way the <a href="coffeepot/bk02ch06.html" class="link">choose alternative</a>
+    function is called to assure that the first element in the list is always the
+    current “best” choice.</p></dd></div><div><dt>CoffeePot</dt><dd><p>Changed the <a href="coffeepot/bk02ch02.html#cli" class="link">--show-grammar</a> option to display the
+    grammar after duplicates have been resolved. Also changed the display to include marks.
+    Documented the <code class="literal"><a href="coffeefilter/bk04ch02.html#pragma-priority">priority</a></code> pragma.
+    Removed the <code class="literal">combine</code>
+    and <code class="literal">regex</code> pragmas from the documentation; I’m not convinced they work
+    correctly.</p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.1.0</span>, <span class="date" time="2023-04-23">23 Apr 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Updated the API for choosing among
+  alternatives to supply the immediate context.</p></dd></div><div><dt>CoffeeSacks</dt><dd><p>Added <a href="coffeepot/bk02ch06.html" class="link">support</a>
+    for providing a function to choose among alternative parses.</p></dd></div><div><dt>CoffeePot</dt><dd><p>Added <a href="coffeepot/bk02ch06.html" class="link">support</a>
+    for choosing between ambiguous parses using either an extension function or
+    XPath expressions.</p></dd></div><div><dt>CoffeeFilter</dt><dd><p>No significant changes; dependencies updated to the latest version.</p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.0.3</span>, <span class="date" time="2023-04-15">15 Apr 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><p>Corrected the encoding of the C0 and C1 control characters. Changed the encoding of
+    <code class="literal">&gt;</code> so that it is always encoded as <code class="literal">&amp;gt;</code>. (This assures
+    that the output will never accidentally enclude <code class="literal">]]&gt;</code> which marks
+    the end of a CDATA section.)</p></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+      <li>
+        <p>If a UTF-8 grammar or input file begins with a byte-order-mark (BOM), the
+        BOM is ignored. Set the “ignore BOM” option to
+        <code class="literal">false</code> to disable this behavior.</p>
+      </li>
+      <li>
+        <p>Updated to use CoffeeFilter version 2.0.3 which supports ignoring the BOM
+        and fixes errors in the serialization fo control characters (that’s not actually
+        relevant to CoffeeSacks which doesn’t serialize the results).
+        </p>
+      </li>
+      <li>
+        <p>The build system has been updated to use Gradle version 8.0.2.</p>
+      </li>
+    </ul></dd></div><div><dt>CoffeePot</dt><dd><ul class="itemizedlist">
+      <li>
+        <p>Updated to use CoffeeFilter version 2.0.3 which corrects errors in
+        the serialization of control characters in attributes and text content (and changes
+        the serialization of <code class="literal">&gt;</code> to always be <code class="literal">&amp;gt;</code>).
+        </p>
+      </li>
+      <li>
+        <p>If a UTF-8 grammar or input file begins with a byte-order-mark (BOM), the
+        BOM is ignored. A new configuration property <code class="literal">ignore-bom</code> can be
+        set to <code class="literal">false</code> to disable this behavior.</p>
+      </li>
+      <li>
+        <p>The build system has been updated to use Gradle version 8.0.2.</p>
+      </li>
+    </ul></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.0.2</span>, <span class="date" time="2023-04-14">14 Apr 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><p>Fix encoding of characters per the
+  <a href="https://www.w3.org/TR/xslt-xquery-serialization-31/#xml-output" class="link">XML Output Method</a>
+  of <cite class="citetitle">XSLT and XQuery Serialization 3.1</cite>.</p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.0.1</span>, <span class="date" time="2023-04-13">13 Apr 2023</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+      <li>
+        <p>Fixed <a href="https://github.com/nineml/coffeefilter/issues/98" class="link">#98</a>.
+        Added an option to ignore the Unicode BOM on UTF-8 files. It’s
+        enabled by default.</p>
+      </li>
+      <li>
+        <p>Resolved <a href="https://github.com/nineml/coffeefilter/pull/97" class="link">#97</a>.
+        Improved the encoding of carriage returns in the output. If a
+        carriage return in the output is not followed by a line feed,
+        it will be encoded as <code>&amp;#d;</code> so that an XML
+        parse of the output won’t normalize it away.</p>
+      </li>
+      <li>
+        <p>Fixed <a href="https://github.com/nineml/coffeefilter/issues/96" class="link">#96</a>.
+        Improved error reporting. In the case where a parse fails with
+        an unexpected character, if the character is not a visible ASCII character,
+        the output includes the codepoint of the character.</p>
+      </li>
+      <li>
+        <p>Tinkered with the GitHub branch workflow so that it won’t attempt to use the SSH private
+        key if it isn’t configured as a secret.</p>
+      </li>
+    </ul></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">2.0.0</span>, <span class="date" time="2023-04-10">10 Apr 2023</span></div><div class="description"><div class="revdescription"><p>Making the 2.x code base the current release.</p><dl></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">1.99.1</span>, <span class="date" time="2022-06-17">17 Jun 2022</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Second pre-release with GLL support;
+  substantial refactoring of the internals and a new API for getting
+  trees from the parse forest.
+  </p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">1.99.0</span>, <span class="date" time="2022-06-08">08 Jun 2022</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>First pre-release that included GLL parser support. Updated to the
+Invisible XML 1.0 grammar.</p></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">1.1.0</span>, <span class="date" time="2022-04-16">16 Apr 2022</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeGrinder</dt><dd><p>Internal changes to support the 15 April 2022 Invisible XML “insertions” feature, version 1.1.0</p></dd></div><div><dt>CoffeeFilter</dt><dd><p>Support for the 15 April 2022 specification, version 1.1.0</p><p>The most significant changes are:</p><ol class="orderedlist" type="1">
+      <li><p>The “<span class="symbol">repeat0</span>” and “<span class="symbol">repeat1</span>”
+      separator characters are now doubled: “<code class="literal">item*','</code>” becomes
+      “<code class="literal">item**','</code>”, and “<code class="literal">item+','</code>” becomes
+      “<code class="literal">item++','</code>”.</p>
+      </li>
+      <li><p>The semantics of “^” before a literal have changed. It now
+      signals an insertion. The grammar fragment “<code class="literal">'a', ^'-', 'b'</code>”
+      matches an “a” followed <em>immediately</em> by a “b”, but the
+      XML output will be “a-b”. The text marked “^” matches nothing but is inserted
+      in the output. The insertion character
+      <a href="https://github.com/invisibleXML/ixml/issues/72" class="link">may change</a>.
+    </p>
+      </li>
+      <li><p>At least one whitespace character or comment is required
+      between rules. (This is very unlikely to have any practical consequence
+      since most grammar authors start a new rule on a new line. But where
+      “<code class="literal">a:'1'.b:'2'.</code> used to be allowed, you must now
+      write “<code class="literal">a:'1'. b:'2'.</code>. This avoids
+      <a href="https://github.com/invisibleXML/ixml/issues/48" class="link">an ambiguity</a>
+      in the grammar.)</p>
+      </li>
+    </ol></dd></div><div><dt>CoffeeSacks</dt><dd><p>Support for the 15 April 2022 specification, version 1.1.0</p></dd></div><div><dt>CoffeePot</dt><dd><p>Support for the 15 April 2022 specification, version 1.1.0</p><p>The most significant changes are:</p><ol class="orderedlist" type="1">
+      <li><p>The “<span class="symbol">repeat0</span>” and “<span class="symbol">repeat1</span>”
+      separator characters are now doubled: “<code class="literal">item*','</code>” becomes
+      “<code class="literal">item**','</code>”, and “<code class="literal">item+','</code>” becomes
+      “<code class="literal">item++','</code>”.</p>
+      </li>
+      <li><p>The semantics of “^” before a literal have changed. It now
+      signals an insertion. The grammar fragment “<code class="literal">'a', ^'-', 'b'</code>”
+      matches an “a” followed <em>immediately</em> by a “b”, but the
+      XML output will be “a-b”. The text marked “^” matches nothing but is inserted
+      in the output. The insertion character
+      <a href="https://github.com/invisibleXML/ixml/issues/72" class="link">may change</a>.
+    </p>
+      </li>
+      <li><p>At least one whitespace character or comment is required
+      between rules. (This is very unlikely to have any practical consequence
+      since most grammar authors start a new rule on a new line. But where
+      “<code class="literal">a:'1'.b:'2'.</code> used to be allowed, you must now
+      write “<code class="literal">a:'1'. b:'2'.</code>. This avoids
+      <a href="https://github.com/invisibleXML/ixml/issues/48" class="link">an ambiguity</a>
+      in the grammar.)</p>
+      </li>
+    </ol></dd></div></dl></div></div></li><li class="revision"><div class="revnumber"><span class="revnumber">1.0.0</span>, <span class="date" time="2022-03-20">20 Mar 2022</span></div><div class="description"><div class="revdescription"><p>Initial release, version 1.0.0</p><dl></dl></div></div></li></ul></div>
+
+</section></main><nav class="bottom"><div class="navrow"><div class="navleft"><a title="References" href="references/index.html"><i class="fas fa-arrow-left"></i></a></div><div class="navmiddle"><a title="NineML" href="index.html"><i class="fas fa-home"></i></a></div><div class="navright"><a title="Appendix B. Unicode Character Classes" href="references/bk06appb.html"><i class="fas fa-arrow-right"></i></a></div></div><div class="navrow"><div class="navleft navtitle"><a href="references/index.html">References</a></div><div class="navmiddle"><a title="References" href="references/index.html"><i class="fas fa-arrow-up"></i></a></div><div class="navright navtitle"><a href="references/bk06appb.html">Appendix <span class="label">B</span><span class="sep">. </span>Unicode Character Classes</a></div></div><div class="infofooter"><span class="copyrightfooter">Copyright © 2022–2023 Norman Walsh.</span></div><nav class="tocopen"></nav><nav class="toc"></nav><!-- Hide ToC details from user agents that don’t support JS --><script type="text/html" class="tocopen"><i class="far fa-book"></i></script><script type="text/html" class="toc"><header><span>Table of Contents</span><span class="close"><i class="far fa-window-close"></i></span><p class="ptoc-search"><input class="ptoc-search" placeholder="Search" style="width: 80%"/></p></header><div db-persistent-toc="persistent-toc.html" db-prefix="">Loading…</div></script></nav><script src="./js/sectmarks.js"></script></body></html>
