@@ -78,10 +78,10 @@ jobs:
           echo "Start test coffeepot/11.6"
           ./gradlew -PsaxonVersion=11.6 clean :coffeepot:test
 
-      - name: Test CoffeePot with 12.5
+      - name: Test CoffeePot with 12.9
         run: |
-          echo "Start test coffeepot/12.5"
-          ./gradlew -PsaxonVersion=12.5 clean :coffeepot:test
+          echo "Start test coffeepot/12.9"
+          ./gradlew -PsaxonVersion=12.9 clean :coffeepot:test
 
       - name: Test CoffeeFilter with GLL
         run: |
