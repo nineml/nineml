@@ -253,4 +253,21 @@ public class StylesheetTests extends TestConfiguration {
         Assertions.assertEquals("<doc><S>a</S></doc>", xml);
     }
 
+    @Test
+    public void errorCodeX() {
+        XdmNode stylesheet = loadStylesheet("src/test/resources/error-code.xsl");
+
+        Map<String,String> params = new HashMap<>();
+        params.put("start-symbol", "S");
+
+        try {
+            XdmNode result = transform(stylesheet, stylesheet, params);
+            String xml = serialize(result);
+            Assertions.assertEquals("<pass/>", xml);
+        } catch (Exception ex) {
+            fail();
+        }
+    }
+
+
 }

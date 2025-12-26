@@ -8,10 +8,7 @@ import net.sf.saxon.functions.CallableFunction;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.ma.map.MapType;
-import net.sf.saxon.om.GroundedValue;
-import net.sf.saxon.om.Item;
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.Sequence;
+import net.sf.saxon.om.*;
 import net.sf.saxon.pattern.NodeKindTest;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.XPathException;
@@ -490,7 +487,13 @@ public abstract class CommonDefinition extends ExtensionFunctionDefinition {
                 if (document instanceof InvisibleXmlFailureDocument) {
                     InvisibleXmlFailureDocument failure = (InvisibleXmlFailureDocument) document;
                     String message = failure.getTree();
-                    throw new XPathException(message);
+
+                    StructuredQName errCode = new StructuredQName(CoffeeSacksException.COFFEE_SACKS_ERROR_PREFIX,
+                            CoffeeSacksException.COFFEE_SACKS_ERROR_NAMESPACE,
+                            CoffeeSacksException.PARSE_FAILED);
+                    XPathException ex = new XPathException(message);
+                    ex.setErrorCodeQName(errCode);
+                    throw ex;
                 }
 
                 final XmlForest forest;
