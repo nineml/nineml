@@ -1,4 +1,4 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Unified change log</title><link href="./css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-12-26T16:54:11Z"/><meta name="generator" content="DocBook xslTNG version 2.6.1 / SNAPSHOT / SAXON HE 12.9"/><link href="./css/docbook-toc.css" rel="stylesheet"/><link href="./css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="./css/coldark-cold.css" rel="stylesheet"/><link href="./css/nineml.css" rel="stylesheet"/><link href="./css/ninemlset.css" rel="stylesheet"/><link href="./icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="references/index.html"/><link rel="next" href="references/bk06appb.html"/><link rel="up" href="references/index.html"/><link rel="home" href="index.html"/><script src="./js/persistent-toc.js" defer="defer"></script><script src="./js/chunk-nav.js" defer="defer"></script><link href="./icon/nineml.png" rel="shortcut icon"/><link href="./css/references.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="index.html"><i class="fas fa-home"></i></a> <a title="References" href="references/index.html"><i class="fas fa-arrow-left"></i></a> <a title="References" href="references/index.html"><i class="fas fa-arrow-up"></i></a> <a title="Appendix B. Unicode Character Classes" href="references/bk06appb.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="changelog" db-chunk="../changelog.html" db-id="d490e12212" class="appendix component"><header><h2>Appendix <span class="label">A</span><span class="sep">. </span>Unified change log</h2></header>
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="no-js"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script><title>Appendix A. Unified change log</title><link href="./css/pygments.css" rel="stylesheet"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><link href="https://purl.org/dc/elements/1.1/" rel="schema.dc"/><meta name="dc.modified" content="2025-12-26T17:16:06Z"/><meta name="generator" content="DocBook xslTNG version 2.6.1 / SNAPSHOT / SAXON HE 12.9"/><link href="./css/docbook-toc.css" rel="stylesheet"/><link href="./css/docbook.css" rel="stylesheet" media="screen"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><script src="https://kit.fontawesome.com/498b6706f0.js" type="text/javascript" crossorigin="anonymous"></script><link href="./css/coldark-cold.css" rel="stylesheet"/><link href="./css/nineml.css" rel="stylesheet"/><link href="./css/ninemlset.css" rel="stylesheet"/><link href="./icon/nineml.png" rel="shortcut icon"/><link rel="prev" href="references/index.html"/><link rel="next" href="references/bk06appb.html"/><link rel="up" href="references/index.html"/><link rel="home" href="index.html"/><script src="./js/persistent-toc.js" defer="defer"></script><script src="./js/chunk-nav.js" defer="defer"></script><link href="./icon/nineml.png" rel="shortcut icon"/><link href="./css/references.css" rel="stylesheet"/></head><body class="appendix component"><nav class="top"><span class="nav"><a title="" href="index.html"><i class="fas fa-home"></i></a> <a title="References" href="references/index.html"><i class="fas fa-arrow-left"></i></a> <a title="References" href="references/index.html"><i class="fas fa-arrow-up"></i></a> <a title="Appendix B. Unicode Character Classes" href="references/bk06appb.html"><i class="fas fa-arrow-right"></i></a></span><span class="title"><i class="title">NineML</i></span></nav><main><section id="changelog" db-chunk="../changelog.html" db-id="d490e12212" class="appendix component"><header><h2>Appendix <span class="label">A</span><span class="sep">. </span>Unified change log</h2></header>
 
 
 <p>This appendix is a unified change log for all of the NineML
@@ -6,7 +6,31 @@ components in this repository.</p>
 
 
 
-<div class="changelog revhistory"><header><div class="title">Revision History</div></header><ul><li id="v333" class="revision"><div class="revnumber"><span class="revnumber">3.3.3</span>, <span class="date" time="2025-10-18">18 Oct 2025</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<div class="changelog revhistory"><header><div class="title">Revision History</div></header><ul><li id="v334" class="revision"><div class="revnumber"><span class="revnumber">3.3.4</span>, <span class="date" time="2025-12-26">26 Dec 2025</span></div><div class="description"><div class="revdescription"><ul class="itemizedlist">
+<li><p>Upgraded the default Saxon 12 release to Saxon 12.9.
+</p></li>
+</ul><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/95" class="link">#95</a>.
+Fixed a corner case where enabling line numbering in the document builder
+could cause a null pointer exception.
+</p></li>
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/79" class="link">#79</a>.
+The error document produced when a parse fails no longer contains non-XML
+characters, even if the input parse failed on a non-XML character.
+</p></li>
+<li><p>Corrected the error that accidentally caused the Maven POM for
+CoffeeFilter to depend on Saxon-EE instead of Saxon-HE.
+</p></li>
+</ul></dd></div><div><dt>CoffeeSacks</dt><dd><ul class="itemizedlist">
+<li><p>Fixed issue
+<a href="https://github.com/nineml/nineml/issues/80" class="link">#80</a>.
+If the parse fails, the parsing function now throws a specific error code,
+<code>cse:CSPA0001</code>, where the <code>cse</code> prefix is bound
+to <code>http://nineml.com/ns/coffeesacks/errors</code>.
+</p></li>
+</ul></dd></div></dl></div></div></li><li id="v333" class="revision"><div class="revnumber"><span class="revnumber">3.3.3</span>, <span class="date" time="2025-10-18">18 Oct 2025</span></div><div class="description"><div class="revdescription"><dl><div><dt>CoffeeFilter</dt><dd><ul class="itemizedlist">
 <li><p>Modularity has been refactored. The top-level “module” production
 has been removed and modularity is integrated directly into the “ixml” production.
 </p></li>
