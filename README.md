@@ -1,14 +1,5 @@
-# nineml
+# Moved to Codeberg
 
-A family of Earley and Generalized LL (GLL) parsing tools.
+To follow this project, please see https://codeberg.org/NineML/nineml
 
-This repository hosts the sources for
-[CoffeeGrinder](https://coffeegrinder.nineml.org/),
-[CoffeeFilter](https://coffeefilter.nineml.org/),
-[CoffeeSacks](https://coffeesacks.nineml.org/),
-[CoffeePot](https://coffeepot.nineml.org/), and the main
-[nineml.org](https://nineml.org/) website. These files used to be in
-separate GitHub repositories, but have been consolidated into subprojects in
-a single repository for convenience. The original repositories still exist,
-partly to point here, but also to host the release packages and
-pages for the individual websites.
+To retrieve the last state of this project on GitHub, roll back one commit.
